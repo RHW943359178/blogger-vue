@@ -1,0 +1,134 @@
+.b_home {
+  background: #F5F5F5;
+  position: fixed;
+  width: 100%;
+  // 使用fix之后需要将高度减去一定的值
+  height: calc(100% - 70px);
+  overflow: auto;
+  .back_to_top {
+    height: 100%;
+    width: 100%;
+    background-color: #f2f5f6;
+    box-shadow: 0 0 6px rgba(0,0,0, .12);
+    text-align: center;
+    line-height: 40px;
+    color: #1989fa;
+  }
+  .b_home_body {
+    margin: auto;
+    min-width: 1196px;
+    width: 80%;
+    height: calc(100% -64px);
+    display: flex;
+    padding: 10px 0;
+    .b_content_box {
+      width: 70%;
+      margin-right: 20px;
+      .article_box {
+        height: 150px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        background: #FFFFFF;
+        padding: 10px 20px;
+        .article_title {
+          font-size: 20px;
+        }
+        .article_summary {
+          margin: 10px 0;
+          font-size: 16px;
+          color: #111111;
+          height: 70px;
+        }
+        .article_footer {
+          display: flex;
+          line-height: 34px;
+          & > div {
+            & > i {
+              margin-right: 5px;
+            }
+            margin-right: 20px;
+          }
+          .category {
+            & > i {
+              color: 	#DB7093;
+            }
+            & > span {
+              color: #228B22;
+            }
+          }
+          .time {
+            & > i {
+              color: #87CEEB;
+            }
+          }
+        }
+      }
+    }
+    .b_home_wall {
+      // flex: 1;
+      width: 30%;
+      background: #FFFFFF;
+      .b_home_bg {
+        position: relative;
+        & > img:nth-child(1) {
+          width: 100%;
+        }
+        & > img:nth-child(2) {
+          position: absolute;
+          bottom: -10px;
+          left: calc(50% - 50px);
+          border-radius: 100px / 80px;
+        }
+      }
+      .introduce {
+        padding:  20px;
+        & > div:nth-child(1), :nth-child(2) {
+          text-align: center;
+        }
+        .title {
+          font-size: 20px;
+          font-weight: bold;
+          margin: 10px 0;
+        }
+        .title_sub {
+          font-size: 18px;
+          color: #7CCD7C;
+          margin-bottom: 10px;
+        }
+        .content {
+          line-height: 30px;
+          color: #555555;
+        }
+      }
+      .spiit_line {
+        height: 4px;
+        background: #cccccc;
+      }
+      .category {
+        .title {
+          font-size: 20px;
+          font-weight: bold;
+          margin: 10px;
+        }
+        .category_box {
+          padding: 30px 20px;
+          display: flex;
+          flex-wrap: wrap;
+          & > div {
+            font-size: 14px;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin: 0 15px 10px 0;
+            cursor: pointer;
+            transition: .4s all;
+          }
+          & > div:hover {
+            transform: scale(1.2);
+          }
+        }
+      }
+    }
+  }
+
+}
