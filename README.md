@@ -19,6 +19,7 @@ npm run build
 ```
 npm run lint
 ```
+### GRANT ALL ON blogger.* TO 'RHW'@'%'
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

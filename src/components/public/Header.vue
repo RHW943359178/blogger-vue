@@ -22,7 +22,8 @@ export default {
         { id: 1, label: '首页', url: '/' },
         { id: 2, label: '文章', url: '/artical' },
         { id: 3, label: '评论', url: '/comment' },
-        { id: 3, label: '我的', url: '/my' }
+        { id: 3, label: '我的', url: '/my' },
+        { id: 4, label: '设置', url: '/set' },
       ]
     }
   }
