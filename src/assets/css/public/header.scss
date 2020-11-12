@@ -19,6 +19,14 @@
       transform: scale(1.1);
       color: #666666;
     }
+    .b_header_middle {
+      .el-input {
+        input {
+          background: red;
+        }
+      }
+
+    }
     .b_header_right {
       ul {
         display: flex;

@@ -41,7 +41,7 @@
         <div class="category">
           <div class="title">分类云</div>
           <div class="category_box">
-            <div class="category_each" v-for="item in categoryList" :key="item.id" :style="returnColor(item.color)">{{ item.label }}</div>
+            <div class="category_each" v-for="item in categoryList" :key="item.id" :style="returnColor(item.color)">{{ item.categoryName }}</div>
           </div>
         </div>
       </div>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import HOME from '../api/home'
 export default {
   data () {
     return {
@@ -84,14 +85,28 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.handleGetAllCategory()
+  },
   methods: {
     //  返回分类云背景颜色
     returnColor(cl) {
+      console.log(cl, 'cl')
       //  如果没有color值，就默认指定
       if (!cl) {
-        `background: #FF6347`
+        return `background: #FF6347;`
       }
-      return `background: ${cl}`
+      return `background: ${cl};`
+    },
+    //  获取所有分类
+    handleGetAllCategory() {
+      HOME.handleGetAllCategory().then(result => {
+        if (result && result.code == 200) {
+          this.categoryList = result.data
+        } else {
+          this.$message({type: 'error', message: result.message})
+        }
+      })
     }
   }
 }
