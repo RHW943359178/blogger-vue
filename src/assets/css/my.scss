@@ -1,0 +1,18 @@
+// @import ''
+.b_my {
+  width: 100%;
+  margin: auto;
+  height: calc(100% - 70px);
+  position: fixed;
+  .b_my_body {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    .b_left {
+      width: 30%;
+      background: gray;
+  
+    }
+  }
+}

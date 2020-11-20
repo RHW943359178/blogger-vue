@@ -112,8 +112,8 @@ export default {
     }
   },
   mounted() {
-    this.handleGetAllCategory()
-    this.$root.eventHub.$emit('handleGetArticleList', this.handleGetArticleList())
+    // this.handleGetAllCategory()
+    // this.$root.eventHub.$emit('handleGetArticleList', this.handleGetArticleList())
   },
   computed: {
     condition() { //  当前过滤条件
