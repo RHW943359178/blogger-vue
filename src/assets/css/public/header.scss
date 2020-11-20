@@ -20,11 +20,13 @@
       color: #666666;
     }
     .b_header_middle {
-      .el-input {
-        input {
+      .el-input-group {
+        /* el-input__inner 是全局样式，在 scoped 属性下是不能生效的 */
+        .el-input__inner {
           background: red;
         }
       }
+
 
     }
     .b_header_right {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './route/router.js'
 import ElementUI from 'element-ui'
+import store from './store/index'
 import 'element-ui/lib/theme-chalk/index.css'
 
 //  请求超时时间
@@ -10,5 +11,9 @@ Vue.use(ElementUI)
 
 new Vue({
   router,
+  store,
   render: h => h(App),
+  data: {
+    eventHub: new Vue()
+  }
 }).$mount('#app')

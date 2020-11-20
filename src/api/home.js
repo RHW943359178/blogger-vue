@@ -2,7 +2,11 @@
 import service from '../utils/request'
 
 export default {
-  handleGetAllCategory: (params) => {
+  //  获取全部分类
+  handleGetAllCategory: params => {
     return service.get('/home/category', params)
+  },
+  handleGetAllArticle: params => {
+    return service.get('/home/article', params)
   }
 }
