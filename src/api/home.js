@@ -6,7 +6,8 @@ export default {
   handleGetAllCategory: params => {
     return service.get('/home/category', params)
   },
+  //  获取文章列表
   handleGetAllArticle: params => {
     return service.get('/home/article', params)
-  }
+  },
 }

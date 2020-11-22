@@ -6,6 +6,8 @@ const home = {
     categoryId: '',
     //  文章分类id集合
     categoryIdList: [],
+    //  全部的文章分类
+    categoryAll: [],
     //  文章列表
     articleList: [],
   },
@@ -19,6 +21,10 @@ const home = {
     //  更新选中的分类id
     updateCategoryIdList(state, param) {
       state.categoryIdList = param
+    },
+    //  更新全部文章分类
+    updateCategoryAll(state, param) {
+      state.categoryAll = param
     },
     //  更新文章列表
     updateArticleList(state, param) {

@@ -39,13 +39,14 @@
         </div>
       </div>
       <div class="b_right">
-        
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   data() {
     return {

@@ -5,7 +5,7 @@
         <span>我的博客</span>
       </div>
       <div class="b_header_middle">
-        <el-input v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
+        <el-input v-show="$route.path === '/'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
           <el-button slot="append" size="mini" icon="el-icon-search" @click="searchArticles"></el-button>
         </el-input>
       </div>
@@ -26,14 +26,17 @@ export default {
     return {
       home_search: '',
       placeholder: 'css',  //  用于首页搜索框展示
+      activeRouter: 1,
       navigators: [
         { id: 1, label: '首页', url: '/' },
-        { id: 2, label: '文章', url: '/artical' },
+        { id: 2, label: '投稿', url: '/articleEditor' },
         { id: 3, label: '评论', url: '/comment' },
         { id: 3, label: '我的', url: '/my' },
         { id: 4, label: '设置', url: '/set' },
       ]
     }
+  },
+  mounted () {
   },
   computed: {
     categoryIdList() {  //  当前选中分类
@@ -49,6 +52,11 @@ export default {
     }
   },
   methods: {
+    //  当前选中路由切换
+    activeChange(item) {
+      console.log(item)
+      this.activeRouter = item.id
+    },
     //  站内搜索出发焦点
     searchFocus() {
       this.home_search = this.placeholder

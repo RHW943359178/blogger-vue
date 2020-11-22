@@ -1,0 +1,15 @@
+.article_editor {
+  width: 100%;
+  height: calc(100% - 70px);
+  position: fixed;
+  background: #F5F5F5;
+  .editor_box {
+    width: 80%;
+    height: calc(100% - 58px);
+    margin: 10px auto;
+    .buttons {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+  }
+}

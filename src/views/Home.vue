@@ -61,7 +61,7 @@
             </div>
           </div>
           <div class="category_box">
-            <div class="category_each" @click="handleCategoryChange(item)" v-for="item in categoryList" :key="item.categoryId" :style="returnColor(item.color)">{{ item.categoryName }}</div>
+            <div class="category_each" @click="handleCategoryChange(item)" v-for="item in categoryAll" :key="item.categoryId" :style="returnColor(item.color)">{{ item.categoryName }}</div>
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@ export default {
     }
   },
   mounted() {
-    // this.handleGetAllCategory()
+    this.handleGetAllCategory()
     // this.$root.eventHub.$emit('handleGetArticleList', this.handleGetArticleList())
   },
   computed: {
@@ -124,6 +124,9 @@ export default {
     },
     articleList() {
       return this.$store.state.home.articleList
+    },
+    categoryAll() {
+      return this.$store.state.home.categoryAll
     }
   },
   watch: {
@@ -149,7 +152,8 @@ export default {
     handleGetAllCategory() {
       HOME.handleGetAllCategory().then(result => {
         if (result && result.code == 200) {
-          this.categoryList = result.data
+          // this.categoryList = result.data
+          this.$store.commit('updateCategoryAll', result.data)
         } else {
           this.$message({type: 'error', message: result.message})
         }
