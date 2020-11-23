@@ -14,7 +14,7 @@
         @imgDel="imgDel"></mavon-editor>
     </div>
     <!-- 提交保存的内容dialog框 -->
-    <el-dialog :visible="dialog.visible" width="400px" title="投稿内容保存" @open="dialogOpen" :close-on-click-modal="true" @close="dialogClose" append-to-body>
+    <el-dialog :visible="dialog.visible" width="400px" title="投稿内容保存" @open="dialogOpen" @close="dialogClose" append-to-body>
       <el-form label-width="80px" label-position="80px" size="small" :model="dialog.form" :rules="rules" ref="ruleForm">
         <el-form-item label="文章标题" required prop="title">
           <el-input v-model="dialog.form.title" placeholder="请输入文章标题" clearable style="width: 200px"></el-input>
@@ -24,7 +24,7 @@
         </el-form-item>
         <el-form-item label="所属分类" required prop="category">
           <el-select v-model="dialog.form.category" style="width: 200px">
-            <el-option v-show="item.catagoryId != 1" v-for="item in categoryAll" :key="item.categoryId" :label="item.categoryName"></el-option>
+            <el-option v-show="item.catagoryId != 1" v-for="item in categoryAll" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -93,8 +93,18 @@ export default {
     contentSave() {
       let params = {
         content: this.editorContent,
-        // summary
+        summary: this.dialog.form.summary,
+        categoryId: this.dialog.form.category,
+        title: this.dialog.form.title,
+        username: "RHW",
+        viewCount: 1,
+        commentCount: 1
       }
+      ARTICLE_EDITOR.handleArticleSave(params).then(result => {
+        if (result && result.code == 200) {
+          this.$message({type: 'success', message: result.message})
+        }
+      })
     },
     //  dialog框关闭
     dialogClose() {

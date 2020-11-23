@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import HOME from '../../api/home'
+// import HOME from '../../api/home'
 export default {
   data () {
     return {

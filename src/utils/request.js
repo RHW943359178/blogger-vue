@@ -9,7 +9,10 @@
 const service = axios.create({
   // baseURL: process.env.BASE_API,
   // 超时时间 单位是ms
-  timeout: 5000
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8'
+  }
 })
 
 /**
