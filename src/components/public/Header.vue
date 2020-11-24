@@ -12,7 +12,7 @@
       <div class="b_header_right">
         <ul>
           <!-- 用<router-link> 来代替 <li>标签实现页面顶部 tab 也路由切换 -->
-          <router-link v-for="item in navigators" :key="item.id" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
+          <router-link v-for="(item, index) in navigators" :key="index" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
         </ul>
       </div>
     </div>

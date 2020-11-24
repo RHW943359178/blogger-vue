@@ -212,7 +212,8 @@ export default {
     //  跳转进入具体文章信息
     getArticleDetail(item) {
       this.$router.push({
-        path: `/blogger/article/${item.id}`
+        path: `/blogger/article`,
+        query: {id: item.id}
       })
     }
   }

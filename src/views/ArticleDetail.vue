@@ -1,6 +1,11 @@
 <template>
   <div class="b_article_detail">
-    hello
+    <div class="detail_box">
+      <div class="article">
+        hello
+      </div>
+      <div class="recommand"></div>
+    </div>
   </div>
 </template>
 
@@ -9,5 +14,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '../assets/css/articleDetail.scss';
 </style>

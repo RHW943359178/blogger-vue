@@ -1,0 +1,23 @@
+.b_article_detail {
+  width: 100%;
+  height: calc(100% - 70px);
+  position: fixed;
+  background: #F5F5F5;
+  .detail_box {
+    width: 80%;
+    height: 100%;
+    margin: 10px auto;
+    display: flex;
+    .article {
+      width: 80%;
+      height: calc(100% - 20px);
+      margin-left: 50px;
+      background: #E8E8E8;
+      border-radius: 5px;
+    }
+    .recommand {
+      width: 20%;
+      height: calc(100% - 20px);
+    }
+  }
+}
