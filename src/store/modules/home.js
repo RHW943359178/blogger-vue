@@ -10,6 +10,12 @@ const home = {
     categoryAll: [],
     //  文章列表
     articleList: [],
+    //  当前页码数
+    pageNum: 1,
+    //  当前页码范围
+    pageSize: 10,
+    //  当前文章总条数
+    total: 0
   },
   mutations: {
     updateSearchCondition(state, param) {
@@ -30,6 +36,18 @@ const home = {
     updateArticleList(state, param) {
       state.articleList = param
     },
+    //  更新页码数
+    updatePageNum(state, param) {
+      state.pageNum = param
+    },
+    //  更新页码范围
+    updatePageSize(state, param) {
+      state.pageSize = param
+    },
+    //  更新页码范围
+    updateTotal(state, param) {
+      state.total = param
+    },   
   },
 }
 

@@ -102,6 +102,8 @@ export default {
       }
       ARTICLE_EDITOR.handleArticleSave(params).then(result => {
         if (result && result.code == 200) {
+          this.dialog.visible = false
+          this.editorContent = ''
           this.$message({type: 'success', message: result.message})
         }
       })

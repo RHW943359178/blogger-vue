@@ -5,7 +5,7 @@
         <span>我的博客</span>
       </div>
       <div class="b_header_middle">
-        <el-input v-show="$route.path === '/'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
+        <el-input v-show="$route.path === '/blogger'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
           <el-button slot="append" size="mini" icon="el-icon-search" @click="searchArticles"></el-button>
         </el-input>
       </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-// import HOME from '../../api/home'
+import HOME from '../../api/home'
 export default {
   data () {
     return {
@@ -28,11 +28,11 @@ export default {
       placeholder: 'css',  //  用于首页搜索框展示
       activeRouter: 1,
       navigators: [
-        { id: 1, label: '首页', url: '/' },
-        { id: 2, label: '投稿', url: '/articleEditor' },
-        { id: 3, label: '评论', url: '/comment' },
-        { id: 3, label: '我的', url: '/my' },
-        { id: 4, label: '设置', url: '/set' },
+        { id: 1, label: '首页', url: '/blogger' },
+        { id: 2, label: '投稿', url: '/blogger/articleEditor' },
+        { id: 3, label: '评论', url: '/blogger/comment' },
+        { id: 3, label: '我的', url: '/blogger/my' },
+        { id: 4, label: '设置', url: '/blogger/set' },
       ]
     }
   },
@@ -44,7 +44,13 @@ export default {
     },
     articleList() { //  文章列表
       return this.$store.state.home.articleList
-    }
+    },
+    pageNum() { //  页码数
+      return this.$store.state.home.pageNum
+    },
+    pageSize() { //  页码范围
+      return this.$store.state.home.pageSize
+    },    
   },
   watch: {
     home_search: function() {
@@ -63,19 +69,19 @@ export default {
     },
     //  站内搜索所有文章
     searchArticles() {
-      // let arr = this.categoryIdList.join()
-      // let params = {
-      //   condition: this.home_search,
-      //   categoryId: arr,
-      //   pageNum: 1,
-      //   pageSize: 10
-      // }
-      // HOME.handleGetAllArticle({params}).then(result => {
-      //   if (result && result.code == 200) {
-      //     this.$store.commit('updateArticleList', result.data)
-      //   }
-      // })
-      this.$root.eventHub.$on('handleGetArticleList')
+      let arr = this.categoryIdList.join()
+      let params = {
+        condition: this.home_search,
+        categoryId: arr,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      HOME.handleGetAllArticle({params}).then(result => {
+        if (result && result.code == 200) {
+          this.$store.commit('updateArticleList', result.data.list)
+          this.$store.commit('updateTotal', result.data.count)
+        }
+      })
     },
 
   }

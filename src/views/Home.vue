@@ -2,25 +2,25 @@
   <div class="b_home">
     <div class="b_home_body">
       <div class="b_content_box">
-        <div class="article_box" v-for="item in articleList" :key="item.id">
+        <div class="article_box" v-for="item in articleList" :key="item.id" @click="getArticleDetail(item)">
           <div class="article_title">{{ item.title }}</div>
           <div class="article_summary">{{ item.summary }}</div>
           <div class="article_footer">
             <div class="category">
               <i class="el-icon-paperclip"></i>
-              <span>{{ item.category }}</span>
+              <span>{{ returnCategory(item.categoryId) }}</span>
             </div>
             <div class="time">
               <i class="el-icon-time"></i>
-              <span>{{ item.time }}</span>
+              <span>{{ item.createTime }}</span>
             </div>
             <div class=view_count>
               <i class="el-icon-view"></i>
-              <span>浏览({{ item.view_count }})</span>
+              <span>浏览({{ item.viewCount }})</span>
             </div>
             <div class="comment_view">
               <i class="el-icon-chat-dot-round"></i>
-              <span>评论({{ item.comment_count }})</span>
+              <span>评论({{ item.commentCount }})</span>
             </div>
           </div>
         </div>
@@ -29,11 +29,14 @@
             small
             background
             layout="prev, pager, next, total"
-            :total="pagination.total"
+            :total="total"
             @current-change="currentChange"
             @size-change="sizeChange">
           </el-pagination>
         </div>
+      </div>
+      <div>
+        
       </div>
       <div class="b_home_wall">
         <div class="b_home_bg">
@@ -79,20 +82,6 @@ import HOME from '../api/home'
 export default {
   data () {
     return {
-      //  主页文章列表
-      // articleList: [
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      //   {id: '1', title: '5qi go', summary: 'abc fd', category: 'css/html', time: '2019-10-26 15:52:49', view_count: 1, comment_count: 0},
-      // ],
       //  分类云列表
       categoryList: [
         {id: 1, label: 'css/html', color: '#FF6347'},
@@ -108,11 +97,14 @@ export default {
         pageNum: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      //  
+      detailType: 1,
     }
   },
   mounted() {
     this.handleGetAllCategory()
+    this.handleGetArticleList()
     // this.$root.eventHub.$emit('handleGetArticleList', this.handleGetArticleList())
   },
   computed: {
@@ -127,6 +119,9 @@ export default {
     },
     categoryAll() {
       return this.$store.state.home.categoryAll
+    },
+    total() {
+      return this.$store.state.home.total
     }
   },
   watch: {
@@ -187,19 +182,39 @@ export default {
         if (result && result.code == 200) {
           this.pagination.total = result.data.count
           this.$store.commit('updateArticleList', result.data.list)
+          this.$store.commit('updateTotal', result.data.count)
         }
       })
     },
     //  pageNum改变
     currentChange(num) {
       this.pagination.pageNum = num
+      this.$store.commit('updatePageNum', num)
       this.handleGetArticleList()
     },
     //  pageSize改变
     sizeChange(size) {
       this.pagination.pageSize = size
+      this.$store.commit('updatePageSize', size)
       this.handleGetArticleList()
     },
+    //  返回分类中文
+    returnCategory(id) {
+      if (id) {
+        return this.categoryAll.filter(item => {
+          return item.categoryId == id
+        })[0].categoryName
+      } else {
+        return ''
+      }
+    },
+    //  时间处理
+    //  跳转进入具体文章信息
+    getArticleDetail(item) {
+      this.$router.push({
+        path: `/blogger/article/${item.id}`
+      })
+    }
   }
 }
 </script>

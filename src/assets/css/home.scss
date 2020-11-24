@@ -30,6 +30,9 @@
         border-radius: 4px;
         background: #FFFFFF;
         padding: 10px 20px;
+        transition: .6s all;
+        
+        cursor: pointer;
         .article_title {
           font-size: 20px;
         }
@@ -62,6 +65,9 @@
             }
           }
         }
+      }
+      .article_box:hover {
+        transform: scale(1.02);
       }
     }
     .b_home_wall {
