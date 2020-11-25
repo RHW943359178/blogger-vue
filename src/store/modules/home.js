@@ -15,7 +15,9 @@ const home = {
     //  当前页码范围
     pageSize: 10,
     //  当前文章总条数
-    total: 0
+    total: 0,
+    //  当前选中的文章id
+    articleId: 0,
   },
   mutations: {
     updateSearchCondition(state, param) {
@@ -47,7 +49,11 @@ const home = {
     //  更新页码范围
     updateTotal(state, param) {
       state.total = param
-    },   
+    },
+    //  跟新文章id
+    updateArticleId(state, param) {
+      state.articleId = param
+    }
   },
 }
 

@@ -215,6 +215,7 @@ export default {
         path: `/blogger/article`,
         query: {id: item.id}
       })
+      this.$store.commit('updateArticleId', item.id)
     }
   }
 }

@@ -4,18 +4,54 @@
   position: fixed;
   background: #F5F5F5;
   .detail_box {
-    width: 80%;
+    width: 70%;
     height: 100%;
     margin: 10px auto;
     display: flex;
     .article {
       width: 80%;
       height: calc(100% - 20px);
+      overflow: auto;
       margin-left: 50px;
       background: #E8E8E8;
       border-radius: 5px;
+      padding: 10px 20px;
+      .title {
+        font-size: 28px;
+        color: #555555;
+        margin: 10px 0 20px;
+      }
+      .introduce {
+        display: flex;
+        height: 50px;
+        // line-height: 50px;
+        color: #969696;
+        .icon {
+          img {
+            height: 48px;
+            width: 48px;
+            border-radius: 48px;
+            margin: 0 15px;
+          }
+        }
+        .info {
+          .name {
+            line-height: 25px;
+          }
+          .write_info {
+            line-height: 25px;
+            span {
+              margin-right: 20px;
+            }
+          }
+        }
+
+      }
+      .content {
+        margin-top: 15px;
+      }
     }
-    .recommand {
+    .recommend {
       width: 20%;
       height: calc(100% - 20px);
     }
