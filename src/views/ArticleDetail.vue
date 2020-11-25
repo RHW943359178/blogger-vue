@@ -11,7 +11,7 @@
             <div class="name">RHW</div>
             <div class="write_info">
               <span>2020.11.25 15:16:36</span>
-              <span>字数 300</span>
+              <span>字数 {{ contentLength }}</span>
               <span>阅读 {{ articleInfo.viewCout }}</span>
               <span>评论 {{ articleInfo.commentCout }}</span>
               <span v-show="articleInfo.updateTime">上次更新 {{ articleInfo.updateTime }}</span>
@@ -28,22 +28,11 @@
 <script>
 import ARTICLE_DETAIL from '../api/articleDetail'
 import marked from 'marked'
-import hljs from 'highlight.js'
-import Vue from 'vue'
-//封装成一个指令
-// Vue.directive('highlight', (el) => {
-//   let blocks = el.querySelectorAll('pre code')
-//   blocks.forEach((block) => {
-//       hljs.highlightBlock(block)
-//   })
-//   // hljs.highlightBlock(block)
-//   console.log(123)
-// })
-
 export default {
   data() {
     return {
-      articleInfo: ''
+      articleInfo: '',
+      contentLength: 0
     }
   },
   mounted() {
@@ -65,7 +54,7 @@ export default {
           this.articleInfo = result.data
           //  使用marked插件将markdown语法渲染成html语法
           this.articleInfo.content = marked(this.articleInfo.content)
-          console.log(31)
+          this.contentLength = this.articleInfo.content.length
         }
       })
     }
