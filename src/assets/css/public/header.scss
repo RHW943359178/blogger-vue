@@ -13,7 +13,12 @@
       font-size: 24px;
       color: #444444;
       cursor: pointer;
-      transition: all .2s;
+      display: flex;
+      align-items: center;
+      // transition: all .2s;
+      img {
+        width: 50px;
+      }
     }
     .b_header_left:hover {
       transform: scale(1.1);
@@ -28,6 +33,12 @@
       }
     }
     .b_header_right {
+      display: flex;
+      .sign {
+        line-height: 84px;
+        color: #409eff;
+        // background: #b3d8ff;
+      }
       ul {
         display: flex;
         li {

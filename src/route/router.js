@@ -4,6 +4,8 @@ import Home from '../views/Home'
 import My from '../views/My'
 import ArticleEditor from '../views/ArticleEditor'
 import ArticleDetail from '../views/ArticleDetail'
+import signIn from '../views/SignIn'
+import signUp from '../views/SignUp'
 
 Vue.use(Router)
 
@@ -13,6 +15,8 @@ const router = new Router({
     {path: '/blogger/articleEditor', name: 'articleEditor', component: ArticleEditor},
     {path: '/blogger/my', name: 'my', component: My},
     {path: '/blogger/article', name: 'articleDetail', component: ArticleDetail},
+    {path: '/blogger/signIn', name: 'articleDetail', component: signIn},
+    {path: '/blogger/signUp', name: 'articleDetail', component: signUp},
   ]
 })
 

@@ -1,8 +1,9 @@
 <template>
   <div class="b_header_box">
     <div class="b_header">
-      <div class="b_header_left">
-        <span>我的博客</span>
+      <div class="b_header_left" @click="bancToHome">
+        <img src="../../assets/img/logo.png" alt="">
+        <span>博客</span>
       </div>
       <div class="b_header_middle">
         <el-input v-show="$route.path === '/blogger'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
@@ -10,6 +11,10 @@
         </el-input>
       </div>
       <div class="b_header_right">
+        <div class="sign">
+          <el-button type="text" @click="jumpToSignIn">注册</el-button>
+          <el-button type="text" @click="jumpToSignUp">登录</el-button>
+        </div>
         <ul>
           <!-- 用<router-link> 来代替 <li>标签实现页面顶部 tab 也路由切换 -->
           <router-link v-for="(item, index) in navigators" :key="index" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
@@ -58,9 +63,12 @@ export default {
     }
   },
   methods: {
+    //  点击回到主页
+    bancToHome() {
+      this.$router.push('/blogger')
+    },
     //  当前选中路由切换
     activeChange(item) {
-      console.log(item)
       this.activeRouter = item.id
     },
     //  站内搜索出发焦点
@@ -83,7 +91,14 @@ export default {
         }
       })
     },
-
+    //  跳转到注册页面
+    jumpToSignIn() {
+      this.$router.push('/blogger/signin')
+    },
+    //  跳转到登录页面
+    jumpToSignUp() {
+      this.$router.push('/blogger/signup')
+    },
   }
 }
 </script>
