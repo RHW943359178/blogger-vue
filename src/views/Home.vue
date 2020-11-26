@@ -12,7 +12,8 @@
             </div>
             <div class="time">
               <i class="el-icon-time"></i>
-              <span>{{ item.createTime }}</span>
+              <!-- <span>{{ item.createTime }}</span> -->
+              <span>{{ dateReturn(item.createTime) }}</span>
             </div>
             <div class=view_count>
               <i class="el-icon-view"></i>
@@ -79,18 +80,12 @@
 
 <script>
 import HOME from '../api/home'
+import common from '../utils/common'
 export default {
   data () {
     return {
       //  分类云列表
-      categoryList: [
-        {id: 1, label: 'css/html', color: '#FF6347'},
-        {id: 2, label: '后端开发', color: '#FF8C00'},
-        {id: 3, label: 'Java开发', color: '#CD5C5C'},
-        {id: 4, label: 'C++开发', color: '#EECFA1'},
-        {id: 5, label: 'Golang开发', color: '#90EE90'},
-        {id: 6, label: '架构剖析', color: '#9ACD32'},
-      ],
+      categoryList: [],
       //  选中分类云的集合
       categoryTags: [],
       pagination: { //  首页文章翻页
@@ -105,7 +100,6 @@ export default {
   mounted() {
     this.handleGetAllCategory()
     this.handleGetArticleList()
-    // this.$root.eventHub.$emit('handleGetArticleList', this.handleGetArticleList())
   },
   computed: {
     condition() { //  当前过滤条件
@@ -122,7 +116,7 @@ export default {
     },
     total() {
       return this.$store.state.home.total
-    }
+    },
   },
   watch: {
     categoryTags: function() {  //  监听分类 id 的属性变化
@@ -209,6 +203,11 @@ export default {
       }
     },
     //  时间处理
+    dateReturn(time) {
+      if (time) {
+        return common.timeToDate(time)
+      }
+    },
     //  跳转进入具体文章信息
     getArticleDetail(item) {
       this.$router.push({
