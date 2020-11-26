@@ -93,11 +93,11 @@ export default {
     },
     //  跳转到注册页面
     jumpToSignIn() {
-      this.$router.push('/blogger/signin')
+      this.$router.push('/blogger/signIn')
     },
     //  跳转到登录页面
     jumpToSignUp() {
-      this.$router.push('/blogger/signup')
+      this.$router.push('/blogger/signUp')
     },
   }
 }

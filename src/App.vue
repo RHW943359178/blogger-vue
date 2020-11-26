@@ -15,6 +15,10 @@ export default {
     currentPath() {
       return this.$route.path === '/blogger/signIn' || this.$route.path === '/blogger/signUp'
     }
+  },
+  mounted() {
+    console.log(this.$route.path, 'this.$route.path')
+    console.log(this.currentPath, 'currentPath')
   }
 }
 </script>
