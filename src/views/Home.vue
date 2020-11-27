@@ -98,8 +98,8 @@ export default {
     }
   },
   mounted() {
-    // this.handleGetAllCategory()
-    // this.handleGetArticleList()
+    this.handleGetAllCategory()
+    this.handleGetArticleList()
   },
   computed: {
     condition() { //  当前过滤条件

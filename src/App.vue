@@ -17,8 +17,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route.path, 'this.$route.path')
-    console.log(this.currentPath, 'currentPath')
   }
 }
 </script>

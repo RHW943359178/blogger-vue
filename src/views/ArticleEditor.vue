@@ -74,6 +74,9 @@ export default {
       return this.$store.state.home.categoryAll
     }
   },
+  mounted() {
+    console.log(this.categoryAll, 123)
+  },
   methods: {
     //  清空文本
     clearContext() {
