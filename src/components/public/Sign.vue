@@ -8,6 +8,10 @@
     </div>
     <div class="sign_body">
       <div class="container">
+      <div class="header_logo">
+        <img src="../../assets/img/logo_blue.png" alt="">
+        <span>博客</span>
+      </div>
         <div class="title">
           <ul>
             <li>
@@ -22,6 +26,7 @@
         <div class="body">
           <el-form :model="form" :rules="rules" ref="ruleForm">
             <el-form-item prop="username">
+               <!-- @blur="usernameValidate(form.username)" -->
               <el-input v-model="form.username" prefix-icon="el-icon-user-solid" placeholder="你的昵称"></el-input>
             </el-form-item>
             <el-form-item v-if="signType() === 2" prop="email">
@@ -34,10 +39,31 @@
               <el-input v-model="form.cpwd" type="password" prefix-icon="el-icon-lock" placeholder="确认密码"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button v-if="signType() === 2" type="success" round @click="submitForm(2, 'ruleForm')">注册</el-button>
+              <el-button v-if="signType() === 2" type="success" :loading="loginFlag" :disabled="loginFlag" round @click="submitForm(2, 'ruleForm')">注册</el-button>
               <el-button v-if="signType() === 1" type="primary" round @click="submitForm(1, 'ruleForm')">登录</el-button>
+              <div class="loginInfo" v-if="loginFlag" ref="loginInfo">
+                即将跳转到登录页
+                <span v-for="(item, index) in jumpTime" :key="index">.</span>
+                </div>
             </el-form-item>
           </el-form>
+        </div>
+        <div class="footer">
+          <div class="motto">
+            <div class="line"></div>
+            <div class="content">
+              <div>积累</div>
+              <div class="split"></div>
+              <div>坚持</div>
+              <div class="split"></div>
+              <div>自律</div>
+            </div>
+            <div class="line"></div>
+          </div>
+          <!-- <div class="footer_logo">
+            <img src="../../assets/img/logo_blue.png" alt="">
+            <span>博客</span>
+          </div> -->
         </div>
       </div>
     </div>
@@ -46,6 +72,7 @@
 
 <script>
 import common from '../../utils/common'
+import USER from '../../api/user'
 export default {
   data () {
     return {
@@ -62,7 +89,21 @@ export default {
         username: [
           {required: true, message: '请输入昵称', trigger: 'blur'},
           {min:2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur'},
-          {validator: this.usernameExist(), trigger: "blur"}
+          {validator: (rule, value, callback) => {
+            let params = {
+              condition: this.form.username
+            }
+            //  检查用户名是否存在异步校验
+            USER.handleUsernameVaildate({params}).then(result => {
+              if (result && result.code == 200) {
+                if (result.data === 0) {
+                  callback()
+                } else {
+                  callback(new Error('用户名已存在'))
+                }
+              }
+            })
+          }, trigger: "blur"}
         ],
         email: [
           {validator: common.validateMailFormat(), trigger: "blur"}
@@ -82,12 +123,15 @@ export default {
             }
           }
         ]
-      }
+      },
+      loginFlag: false,
+      jumpTime: 3,  //  跳转时间
     }
   },
   computed: {
   },
   mounted() {
+
   },
   methods: {
     //  判断当前路由  1 登录 2 注册
@@ -98,10 +142,6 @@ export default {
         return 2
       }
     },
-    //  校验username在数据库中是否存在
-    usernameExist() {
-
-    },
     //  表单验证
     submitForm(type, formName) {
       this.$refs[formName].validate(valid => {
@@ -109,7 +149,7 @@ export default {
           if (type === 1) {
 
           } else {
-
+            this.handleSignIn()
           }
         } else {
           console.log(valid, 123)
@@ -119,7 +159,26 @@ export default {
     },
     //  注册
     handleSignIn() {
-
+      let params = {
+        username: this.form.username,
+        email: this.form.email,
+        password: this.form.password
+      }
+      USER.handleUserSave(params).then(result => {
+        if (result && result.code == 200) {
+          this.$message({type: 'success', message: result.message})
+          //  注册过程中将状态置灰
+          this.loginFlag = true
+          let time = setInterval(() => {
+            this.jumpTime --
+            if (this.jumpTime == 0) {
+              clearInterval(time)
+              //  跳转到登录页
+              this.$router.push('blogger/signUp')
+            }
+          }, 1000)
+        }
+      })
     },
     //  登录
     handleSignUp() {
