@@ -90,11 +90,15 @@ export default {
           {required: true, message: '请输入昵称', trigger: 'blur'},
           {min:2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur'},
           {validator: (rule, value, callback) => {
+            //  当前为登录操作时不校验
+            if (this.signType() === 1) {
+              return
+            }
             let params = {
               condition: this.form.username
             }
             //  检查用户名是否存在异步校验
-            USER.handleUsernameVaildate({params}).then(result => {
+            USER.handleUsernameValidate({params}).then(result => {
               if (result && result.code == 200) {
                 if (result.data === 0) {
                   callback()
@@ -152,7 +156,6 @@ export default {
             this.handleSignIn()
           }
         } else {
-          console.log(valid, 123)
           return false
         }
       })
@@ -162,7 +165,7 @@ export default {
       let params = {
         username: this.form.username,
         email: this.form.email,
-        password: this.form.password
+        password: this.form.pwd
       }
       USER.handleUserSave(params).then(result => {
         if (result && result.code == 200) {
@@ -174,7 +177,7 @@ export default {
             if (this.jumpTime == 0) {
               clearInterval(time)
               //  跳转到登录页
-              this.$router.push('blogger/signUp')
+              this.$router.push('/blogger/signUp')
             }
           }, 1000)
         }
