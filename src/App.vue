@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     currentPath() {
-      return this.$route.path === '/blogger/signIn' || this.$route.path === '/blogger/signUp'
+      return this.$route.path === '/blogger/signIn' || this.$route.path === '/blogger/signUp' || this.$route.path === '/blogger/404'
     }
   },
   mounted() {
