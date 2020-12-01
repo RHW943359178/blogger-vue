@@ -151,7 +151,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (type === 1) {
-
+            this.handleSignUp()
           } else {
             this.handleSignIn()
           }
@@ -185,7 +185,17 @@ export default {
     },
     //  登录
     handleSignUp() {
-
+      let params = {
+        username: this.form.username,
+        password: this.form.password
+      }
+      USER.handleUerLoginValidat(params).then(result => {
+        if (result && result.code == 200 && result.data.status == 2) {
+          //  跳转到主页
+          this.$router.push('/blogger')
+          console.log(result, 'result')
+        }
+      })
     }
   }
 }
