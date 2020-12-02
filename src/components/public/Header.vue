@@ -55,7 +55,10 @@ export default {
     },
     pageSize() { //  页码范围
       return this.$store.state.home.pageSize
-    },    
+    }, 
+    user() {  //  当前登陆人员的信息
+
+    }  
   },
   watch: {
     home_search: function() {
