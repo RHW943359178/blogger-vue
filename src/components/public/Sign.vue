@@ -24,9 +24,8 @@
           </ul>
         </div>
         <div class="body">
-          <el-form :model="form" :rules="rules" ref="ruleForm">
+          <el-form :model="form" :rules="signType() === 1 ? rules2 : rules1" ref="ruleForm">
             <el-form-item prop="username">
-               <!-- @blur="usernameValidate(form.username)" -->
               <el-input v-model="form.username" prefix-icon="el-icon-user-solid" placeholder="你的昵称"></el-input>
             </el-form-item>
             <el-form-item v-if="signType() === 2" prop="email">
@@ -83,9 +82,7 @@ export default {
         pwd: '',    //  密码
         cpwd: '', //    确认密码
       },
-      test: 1,
-      //  表单验证
-      rules: {
+      rules1: {
         username: [
           {required: true, message: '请输入昵称', trigger: 'blur'},
           {min:2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur'},
@@ -128,6 +125,16 @@ export default {
           }
         ]
       },
+      rules2: {
+        username: [
+          {required: true, message: '请输入昵称', trigger: 'blur'},
+          {min:2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur'},
+        ],
+        pwd: [
+          {validator: common.validatePwd(), trigger: "blur"}
+        ]
+      },
+      test: 1,
       loginFlag: false,
       jumpTime: 3,  //  跳转时间
     }
@@ -149,6 +156,7 @@ export default {
     //  表单验证
     submitForm(type, formName) {
       this.$refs[formName].validate(valid => {
+        console.log(valid, 12)
         if (valid) {
           if (type === 1) {
             this.handleSignUp()
@@ -187,13 +195,15 @@ export default {
     handleSignUp() {
       let params = {
         username: this.form.username,
-        password: this.form.password
+        password: this.form.pwd
       }
-      USER.handleUerLoginValidat(params).then(result => {
+      USER.handleUerLoginValidate(params).then(result => {
         if (result && result.code == 200 && result.data.status == 2) {
           //  跳转到主页
           this.$router.push('/blogger')
-          console.log(result, 'result')
+          this.$store.commit('updateUserInfo', result.data)
+        } else {
+          this.$message({type: 'error', message: result.message})
         }
       })
     }
