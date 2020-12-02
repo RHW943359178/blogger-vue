@@ -15,13 +15,28 @@
         </div>
       </a>
     </div>
-    
+    <div class="body">
+      <div class="picture">
+        <img src="../assets/img/404.png" alt="">
+      </div>
+      <div class="content">
+        <p>您要找的页面不存在</p>
+        <p>可能是因为您的链接地址有误、该文章已经被作者删除或转为私密状态。</p>
+        <p>
+          <el-button type="success" round @click="backToHome">返回「博客」首页</el-button>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  
+  methods: {
+    backToHome() {
+      this.$router.push('/blogger')
+    }
+  }
 }
 </script>
 

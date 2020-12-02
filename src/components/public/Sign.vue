@@ -156,7 +156,6 @@ export default {
     //  表单验证
     submitForm(type, formName) {
       this.$refs[formName].validate(valid => {
-        console.log(valid, 12)
         if (valid) {
           if (type === 1) {
             this.handleSignUp()
