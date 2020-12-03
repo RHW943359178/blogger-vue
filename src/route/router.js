@@ -12,14 +12,66 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
-    {path: '/blogger', name: 'home', component: Home},
-    {path: '/blogger/articleEditor', name: 'articleEditor', component: ArticleEditor},
-    {path: '/blogger/my', name: 'my', component: My},
-    {path: '/blogger/article', name: 'articleDetail', component: ArticleDetail},
-    {path: '/blogger/signIn', name: 'articleDetail', component: signIn},
-    {path: '/blogger/signUp', name: 'articleDetail', component: signUp},
-    {path: '/blogger/404', name: 'errorPage', component: errorPage},
-    {path: '*', redirect: '/blogger/404',}
+    { // 主页
+      path: '/blogger',
+      name: 'home', 
+      component: Home,
+      meta: {
+        isLogin: false
+      }
+    },
+    { //  投稿
+      path: '/blogger/articleEditor', 
+      name: 'articleEditor', 
+      component: ArticleEditor,
+      meta: {
+        isLogin: true
+      }
+    },
+    { //  我的
+      path: '/blogger/my', 
+      name: 'my', 
+      component: My,
+      meta: {
+        isLogin: true
+      }
+    },
+    { //  文章详情
+      path: '/blogger/article', 
+      name: 'articleDetail', 
+      component: ArticleDetail,
+      meta: {
+        isLogin: false
+      }
+    },
+    { //  注册
+      path: '/blogger/signIn',
+      name: 'articleDetail', 
+      component: signIn,
+      meta: {
+        isLogin: false
+      }
+    },
+    { //  登录
+      path: '/blogger/signUp', 
+      name: 'articleDetail', 
+      component: signUp,
+      meta: {
+        isLogin: false
+      }
+    },
+    {
+      path: '/blogger/404', 
+      name: 'errorPage', 
+      component: errorPage,
+      meta: {
+        isLogin: false
+      }
+    },
+    {
+      path: '*', 
+      redirect: '/blogger/404',
+    }
   ]
 })
 

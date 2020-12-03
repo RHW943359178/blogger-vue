@@ -22,6 +22,11 @@
         <el-form-item label="文章梗概">
           <el-input v-model="dialog.form.summary" placeholder="请输入文章梗概" clearable style="width: 200px"></el-input>
         </el-form-item>
+        <el-form-item label="是否公开" required>
+          <el-select v-model="dialog.form.openFalg" style="width: 200px">
+            <el-option v-for="item in openFlags" :key="item.key" :value="item.key" :label="item.text"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="所属分类" required prop="category">
           <el-select v-model="dialog.form.category" style="width: 200px">
             <el-option v-show="item.catagoryId != 1" v-for="item in categoryAll" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
@@ -54,9 +59,14 @@ export default {
         form: {
           title: '',
           summary: '',
-          category: ''
+          category: '',
+          openFalg: 1
         }
       },
+      openFlags: [
+        {key: 1, text: '公开'},
+        {key: 2, text: '不公开'},
+      ],
       //  表单验证规则
       rules: {
         title: [
@@ -117,7 +127,8 @@ export default {
       this.dialog.form = {
         title: '',
         summary: '',
-        category: ''
+        category: '',
+        openFalg: 1
       }
     },
     //  dialog框开启

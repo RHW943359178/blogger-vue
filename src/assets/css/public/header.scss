@@ -34,10 +34,19 @@
     }
     .b_header_right {
       display: flex;
+      align-items: center;
+      height: 64px;
       .sign {
         line-height: 84px;
         color: #409eff;
-        // background: #b3d8ff;
+      }
+      .isLogin {
+        display: flex;
+        align-items: center;
+        span {
+          margin: 0 10px;
+          color: #777;
+        }
       }
       ul {
         display: flex;

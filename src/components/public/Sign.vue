@@ -200,7 +200,13 @@ export default {
         if (result && result.code == 200 && result.data.status == 2) {
           //  跳转到主页
           this.$router.push('/blogger')
-          this.$store.commit('updateUserInfo', result.data)
+          //  提交用户登录状态
+          this.$store.dispatch('userLogin', true)
+          //  保存到 localStore
+          localStorage.setItem('username', result.data.user.username)
+          localStorage.setItem('flag', 'isLogin')
+          //  提交用户信息状态
+          this.$store.dispatch('userInfo', result.data.user)
         } else {
           this.$message({type: 'error', message: result.message})
         }

@@ -13,6 +13,34 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
 
+//  路由校验
+router.beforeEach((to, from, next) => {
+  //  获取用户登录成功后储存的登录状态
+  let getFlag = localStorage.getItem("flag")
+  if (getFlag === "isLogin") {
+    //  设置vuex登录状态为已登录
+    store.state.isLogin = true
+    next()
+    //  如果已经登录，还想进入登录主页页面，则定向回首页
+    // if (!to.meta.isLogin) {
+    //   ElementUI.Message({type: 'warning', message: '请先退出登录', duration: 3000})
+    //   next({
+    //     path: '/blogger'
+    //   })
+    // }
+  } else {
+    //  用户想进入需要登录的页面，则定向回登录页面
+    if(to.meta.isLogin) {
+      next({
+        path: '/blogger/signUp'
+      })
+      ElementUI.Message({type: 'warning', message: '请先登录', duration: 3000})
+    } else {
+      next()
+    }
+  }
+})
+
 Vue.directive('highlight',function (el) {
   let blocks = el.querySelectorAll('pre code');
   blocks.forEach((block)=>{

@@ -11,7 +11,14 @@
         </el-input>
       </div>
       <div class="b_header_right">
-        <div class="sign">
+        <div class="isLogin" v-if="isLogin()">
+          <el-avatar :size="50" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" @error="errorHandler">
+            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+          </el-avatar>
+          <span>{{ loginUser() }}</span>
+          <el-button type="text" @click="quitLogin">退出</el-button>
+        </div>
+        <div class="sign" v-else>
           <el-button type="text" @click="jumpToSignIn">注册</el-button>
           <el-button type="text" @click="jumpToSignUp">登录</el-button>
         </div>
@@ -55,10 +62,7 @@ export default {
     },
     pageSize() { //  页码范围
       return this.$store.state.home.pageSize
-    }, 
-    user() {  //  当前登陆人员的信息
-
-    }  
+    },
   },
   watch: {
     home_search: function() {
@@ -101,6 +105,29 @@ export default {
     //  跳转到登录页面
     jumpToSignUp() {
       this.$router.push('/blogger/signUp')
+    },
+    //  判断当前用户登录状态的条件
+    isLogin() {
+      return localStorage.getItem('flag') === 'isLogin' && localStorage.getItem('username')
+    },
+    //  当前登录人信息
+    loginUser() {
+      return localStorage.getItem('username')
+    },
+    errorHandler() {
+      return true
+    },
+    //  退出登录
+    quitLogin() {
+      this.$confirm('确定退出当前登录吗？', '确定', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        localStorage.removeItem('flag')
+        //  刷新当前页面
+        location.reload()
+      }).catch(() => {})
     },
   }
 }
