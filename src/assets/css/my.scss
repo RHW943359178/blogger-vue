@@ -19,11 +19,11 @@
       .header {
         .username {
           // text-align: center;
-          font-size: 28px;
+          font-size: 22px;
         }
         .user_avatar {
-          width: 100px;
-          height: 100px;
+          width: 80px;
+          height: 80px;
           border: 1px solid #ccc;
           border-radius: 50px;
           margin: auto;
@@ -44,12 +44,12 @@
           background: #409eff;
         }
         .row {
-          width: 30px;
+          width: 20px;
           height: 3px;
         }
         .column {
           width: 3px;
-          height: 50px;
+          height: 40px;
         }
         .top {
           top: 0;
@@ -74,8 +74,8 @@
           .category_list {
             display: flex;
             .category {
-              width: calc(100% / 3);
-              height: 40px;
+              width: calc(100% / 2);
+              height: 35px;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -83,7 +83,7 @@
               transition: .2s all; 
               cursor: pointer;
               img {
-                width: 30px;
+                width: 20px;
                 margin-right: 10px;
               }
             }
@@ -94,6 +94,35 @@
             .category:hover {
               background: #CDC8B1;
               color: #fff;
+            }
+          }
+          .category_body {
+            height: 100%;
+            .body_left {
+              width: 40%;
+              height: 100%;
+              overflow: auto;
+              .category_each {
+                // text-align: center;
+                padding-left: 40px;
+                height: 40px;
+                line-height: 40px;
+                color: #888;
+                cursor: pointer;
+                & > span:nth-child(2) {
+                  margin-left: 3px;
+                }
+              }
+              .category_each:hover {
+                background: #F5F5F5;
+                border-radius: 5px;
+                color: #666;
+                // font-weight: 550;
+              }
+            }
+            .body_right {
+              width: 60%;
+              height: 100%;
             }
           }
         }

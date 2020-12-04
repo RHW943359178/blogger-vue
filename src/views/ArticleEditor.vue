@@ -23,7 +23,7 @@
           <el-input v-model="dialog.form.summary" placeholder="请输入文章梗概" clearable style="width: 200px"></el-input>
         </el-form-item>
         <el-form-item label="是否公开" required>
-          <el-select v-model="dialog.form.openFalg" style="width: 200px">
+          <el-select v-model="dialog.form.openFlag" style="width: 200px">
             <el-option v-for="item in openFlags" :key="item.key" :value="item.key" :label="item.text"></el-option>
           </el-select>
         </el-form-item>
@@ -60,7 +60,7 @@ export default {
           title: '',
           summary: '',
           category: '',
-          openFalg: 1
+          openFlag: 1
         }
       },
       openFlags: [
@@ -109,6 +109,7 @@ export default {
         summary: this.dialog.form.summary,
         categoryId: this.dialog.form.category,
         title: this.dialog.form.title,
+        openFlag: this.dialog.form.openFlag,
         username: "RHW",
         viewCount: 1,
         commentCount: 1

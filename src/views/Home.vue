@@ -65,6 +65,7 @@
             </div>
           </div>
           <div class="category_box">
+            <div class="category_each" @click="handleCategoryChange(0)" style="background: #ccc">全部</div>
             <div class="category_each" @click="handleCategoryChange(item)" v-for="item in categoryAll" :key="item.categoryId" :style="returnColor(item.color)">{{ item.categoryName }}</div>
           </div>
         </div>
@@ -151,7 +152,7 @@ export default {
     //  点击分类云获取文章列表
     handleCategoryChange(item) {
       //  选择多个分类加到 tag 列表里，实现复合查询
-      if (item.categoryId === 1) {  //  当标签为全部时清空数据
+      if (item === 0) {  //  当标签为全部时清空数据
         this.categoryTags = []
       }
       if (this.categoryTags.indexOf(item) === -1 && item.categoryId !== 1) {
@@ -195,9 +196,14 @@ export default {
     //  返回分类中文
     returnCategory(id) {
       if (id) {
-        return this.categoryAll.filter(item => {
+        let arr = this.categoryAll.filter(item => {
           return item.categoryId == id
-        })[0].categoryName
+        })
+        if (arr.length) {
+          return arr[0].categoryName
+        } else {
+          return ''
+        }
       } else {
         return ''
       }
