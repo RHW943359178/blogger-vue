@@ -24,11 +24,20 @@
             <div class="category_body">
               <div class="body_left">
                 <div class="category_each" v-for="item in articleList_category" :key="item.categoryId">
-                  <span>{{ returnCategory(categoryAll, item.categoryId) }}</span>
-                  <span>[{{ item.articleList.length }}]</span>
+                  <div class="title" @click="categoryEachChange(item)" >
+                    <i v-if="!item.flag" class="el-icon-arrow-right"></i>
+                    <i v-if="item.flag" class="el-icon-arrow-down"></i>
+                    <span>{{ returnCategory(categoryAll, item.categoryId) }}</span>
+                    <span>[{{ item.articleList.length }}]</span>
+                  </div>
+                  <div v-show="item.flag" class="detail">
+                    <p :class="{'active': it.articleId === currentArticle}" v-for="(it, idx) in item.articleList" :key="idx" @click="articleChange(it)">{{ it.title }}</p>
+                  </div>
                 </div>
               </div>
-              <div class="body_right"></div>
+              <div class="body_right">
+
+              </div>
             </div>
           </div>
           <div class="motto">
@@ -48,7 +57,15 @@
         </div>
       </div>
       <div class="b_right">
-
+        <mavonEditor
+          class="md"
+          :value="articleInfo.content"
+          :subfield="mavonEditorOption.subfield"
+          :defaultOpen="mavonEditorOption.defaultOpen"
+          :toolbarsFlag="mavonEditorOption.toolbarsFlag"
+          :editable="mavonEditorOption.editable"
+          :scrollStyle="mavonEditorOption.scrollStyle">
+        </mavonEditor>
       </div>
     </div>
   </div>
@@ -56,12 +73,19 @@
 
 <script>
 import MY from '../api/my'
+import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
+import { mavonEditor } from 'mavon-editor'
 export default {
+  components: {
+    mavonEditor
+  },
   data() {
     return {
       //  当前选中的类目
       currentCategory: 1,
+      //  当前选中的文章
+      currentArticle: '',
       categoryList: [
         {id: 1, label: '分类', icon: 'category.png'},
         {id: 2, label: '时间', icon: 'dateTime.png'},
@@ -71,7 +95,22 @@ export default {
       //  文章信息按照分类
       articleList_category: [],
       //  文章信息按照时间
-      articleList_dateTime: []
+      articleList_dateTime: [],
+      //  当前类目下所有的文章列表分类
+      currentItem: [],
+      //  文章信息
+      articleInfo: {
+        content: '',  // 文章正文
+        contentLength: 0, //  文章长度
+      },
+      mavonEditorOption: common.mavonEditorOption()
+      // mavonEditorOption: {
+      //   subfield: false,// 单双栏模式
+      //   defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
+      //   editable: false,
+      //   toolbarsFlag: false,
+      //   scrollStyle: true
+      // }
     }
   },
   mounted() {
@@ -80,7 +119,10 @@ export default {
   computed: {
     categoryAll() {
       return this.$store.state.home.categoryAll
-    }
+    },
+    // mavonEditorOption() {
+    //   return common.mavonEditorOption
+    // }
   },
   methods: {
     //  切换类目
@@ -97,22 +139,38 @@ export default {
         }
       })
     },
+    //  根据文章id获取具体文章信息
+    getArticleInfoById(id) {
+      let params = {
+        articleId: id
+      }
+      ARTICLE_DETAIL.getArticleById({params}).then(result => {
+        if (result && result.code == 200) {
+          this.articleInfo.content = result.data.content
+          // this.articleInfo.content.contentLength = this.articleInfo.content.length
+        }
+      })
+    },
     //  文章数据处理
     handleArticleData(data, type) {
+      this.currentItem = []
       if (type === 1) { //  按照分类排序
         let categoryList = []
         data.forEach(item => {
           if (categoryList.indexOf(item.categoryId == -1)) {
-            categoryList.push({categoryId: item.categoryId, articleList: []})
+            categoryList.push({categoryId: item.categoryId, flag: false, articleList: []})
           }
         })
         categoryList.forEach(item => {
           data.forEach(it => {
             if (item.categoryId === it.categoryId) {
-              item.articleList.push(it.title)
+              item.articleList.push({title: it.title, articleId: it.id})
             }
           })
         })
+        if (categoryList.length) {
+          this.currentItem = categoryList[0]
+        }
         return categoryList
       } else {  //  按照时间排序
       }
@@ -120,6 +178,17 @@ export default {
     //  返回category中文
     returnCategory(data, id) {
       return common.returnCategory(data, id)
+    },
+    //  切换分类获取分类下文章信息
+    categoryEachChange(item) {
+      item.flag = !item.flag
+      this.$set(item, 'flag', item.flag)
+      this.currentItem = item
+    },
+    //  点击文章切换
+    articleChange(val) {
+      this.currentArticle = val.articleId
+      this.getArticleInfoById(val.articleId)
     }
   }
 }

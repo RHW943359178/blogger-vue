@@ -71,4 +71,16 @@ export default {
       return ''
     }
   },
+  /**
+   * 富文本解析器设置只读时参数
+   */
+  mavonEditorOption() {
+    return {
+      subfield: false,// 单双栏模式
+      defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
+      editable: false,
+      toolbarsFlag: false,
+      scrollStyle: true
+    }
+  },
 }
