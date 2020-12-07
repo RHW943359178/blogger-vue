@@ -5,5 +5,9 @@ export default {
   //  获取分类
   getCategory: params => {
     return service.get('/home/getArticleByUserId', params)
+  },
+  //  用户文章信息修改
+  updateArticleInfo: params => {
+    return service.post('/home/updateArticleInfo', params)
   }
 }

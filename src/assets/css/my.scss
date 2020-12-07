@@ -186,6 +186,26 @@
       border-radius: 5px;
       margin-left: 20px;
       overflow: auto;
+      .articleInfo {
+        height: 50px;
+        margin: 10px 0;
+        line-height: 50px;
+        .write_info {
+          padding-left: 30px;
+          color: #969696;
+          span {
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+    .edit_Container {
+      position: absolute;
+      right: calc(10% - 50px);
+      top: 10px;
+      div {
+        margin-bottom: 20px;
+      }
     }
   }
 }

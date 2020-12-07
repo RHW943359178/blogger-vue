@@ -15,11 +15,11 @@ export default {
       if (!value) {
         return callback(new Error('请输入昵称'))
       }
-      if (pwdReg.test(value)) {
-        callback()
-      } else {
-        callback(new Error('密码以字母开头 长度在8~18之间 只能包含字母、数字和下划线'))
-      }
+      // if (pwdReg.test(value)) {
+      //   callback()
+      // } else {
+      //   callback(new Error('密码以字母开头 长度在8~18之间 只能包含字母、数字和下划线'))
+      // }
     }
   },
    /**
