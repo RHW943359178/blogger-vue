@@ -124,6 +124,8 @@
                   p {
                     padding-left: 10%;
                     margin: 8px 0;
+                    word-wrap: break-word;
+                    word-break: normal;
                   }
                   p:hover{
                     color: #555;
@@ -186,6 +188,9 @@
       border-radius: 5px;
       margin-left: 20px;
       overflow: auto;
+      .mavonEditor {
+        // height: calc(100% - 60px);
+      }
       .articleInfo {
         height: 50px;
         margin: 10px 0;

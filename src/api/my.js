@@ -9,5 +9,9 @@ export default {
   //  用户文章信息修改
   updateArticleInfo: params => {
     return service.post('/home/updateArticleInfo', params)
+  },
+  //  用户文章删除
+  deleteArticle: params => {
+    return service.post('/home/article/delete', params)
   }
 }

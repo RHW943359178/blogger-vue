@@ -79,7 +79,7 @@
           </div>
         </div>
         <mavonEditor
-          style="height: 100%"
+          class="mavonEditor"
           v-model="articleInfo.content"
           :subfield="mavonEditorOption.subfield"
           :defaultOpen="mavonEditorOption.defaultOpen"
@@ -101,7 +101,12 @@
         </div>
         <div v-show="editFlag">
           <el-tooltip effect="dark" content="文章保存" placement="right">
-            <el-button type="primary" icon="el-icon-finished" plain circle @click="articleSave(1)"></el-button>
+            <el-button type="primary" icon="el-icon-finished" plain circle @click="articleSave()"></el-button>
+          </el-tooltip>
+        </div>
+        <div>
+          <el-tooltip effect="dark" content="文章删除" placement="right">
+            <el-button type="primary" icon="el-icon-delete" plain circle @click="articleDelete()"></el-button>
           </el-tooltip>
         </div>
       </div>
@@ -236,6 +241,15 @@ export default {
           this.articleList = result.data
           this.articleList_category = this.handleArticleData(result.data, 1)
           //  默认打开第一个类目的，第一篇文章
+          if (this.articleList_category.length) {
+            //  当前用户下，第一个类目
+            let currentCategoryList = this.articleList_category[0]
+            currentCategoryList.flag = true
+            if (currentCategoryList.articleList.length) {
+              this.currentArticle = currentCategoryList.articleList[0].articleId
+              this.getArticleInfoById(this.currentArticle)
+            }
+          }
         }
       })
     },
@@ -243,6 +257,10 @@ export default {
     getArticleInfoById(id) {
       let params = {
         articleId: id
+      }
+      if (!id) {
+        this.$message({type: 'error', message: '文章id不正确'})
+        return
       }
       ARTICLE_DETAIL.getArticleById({params}).then(result => {
         if (result && result.code == 200) {
@@ -255,12 +273,18 @@ export default {
     handleArticleData(data, type) {
       this.currentItem = []
       if (type === 1) { //  按照分类排序
-        let categoryList = []
+        let categoryList = [], tmpList = []
+        console.log(data, 12)
         data.forEach(item => {
-          if (categoryList.indexOf(item.categoryId == -1)) {
-            categoryList.push({categoryId: item.categoryId, flag: false, articleList: []})
+          if (tmpList.indexOf(item.categoryId)  === -1) {
+            tmpList.push(item.categoryId)
           }
         })
+        //  遍历不重复的列表
+        tmpList.forEach(item => {
+          categoryList.push({categoryId: item, flag: false, articleList: []})
+        })
+        console.log(categoryList)
         categoryList.forEach(item => {
           data.forEach(it => {
             if (item.categoryId === it.categoryId) {
@@ -330,7 +354,7 @@ export default {
         }
       })
     },
-    //  像数据库保存文章信息
+    //  向数据库保存文章信息
     save() {
       let params = {
         id: this.currentArticle,
@@ -349,11 +373,35 @@ export default {
         if (result && result.code == 200) {
           this.$message({type: 'success', message: result.message})
           this.getArticleInfoById(this.currentArticle)
+          //  跟新状态分类信息
+          this.getAllArticleByUserId()
           //  修改编辑状态为 false
           this.editFlag = false
           this.dialog.visible = false
         }
       })
+    },
+    //  文章删除
+    articleDelete() {
+      if (!this.currentArticle) {
+        this.$message({type: 'warning', message: '请指定需要删除的文章'})
+        return
+      }
+      this.$confirm('确定删除该文章吗？', '确定', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          id: this.currentArticle
+        }
+        MY.deleteArticle(params).then(result => {
+          if (result && result.code == 200) {
+            this.$message({type: 'success', message: result.message})
+            this.getAllArticleByUserId()
+          }
+        })
+      }).catch(() => {})
     }
   }
 }
