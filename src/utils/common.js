@@ -3,9 +3,15 @@ export default {
    * 将中国标准时间转成date格式（yyyy-mm-dd hh:mm:ss）
    */
   timeToDate(params) {
-    var d = new Date(params)  
-    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' '
-           + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    var d = new Date(params)
+    var month = d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + d.getMonth() + 1
+    var day = d.getDate() > 9 ? d.getDate() : '0' + d.getDate()
+    var hour = d.getHours() > 9 ? d.getHours() : '0' + d.getHours()
+    var min = d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes()
+    var second = d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds()
+
+    return d.getFullYear() + '-' + month + '-' + day + ' '
+           + hour + ':' + min + ':' + second;
   },
   /**
    * 校验用户名

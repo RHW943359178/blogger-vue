@@ -6,6 +6,15 @@
           <div class="username">RHW</div>
           <div class="user_avatar">
             <img src="../assets/img/user_avatar.jpg" alt="">
+            <!-- <el-upload
+              class="avatar-uploader"
+              :action="uploadUrl()"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload> -->
           </div>
         </div>
         <div class="body">
@@ -23,11 +32,12 @@
             </div>
             <div class="category_body">
               <div class="body_left">
-                <div class="category_each" v-for="item in articleList_category" :key="item.categoryId">
+                <div class="category_each" v-for="(item, index) in currentCategory === 1 ? articleList_category : articleList_dateTime" :key="index">
                   <div class="title" @click="categoryEachChange(item)" >
                     <i v-if="!item.flag" class="el-icon-arrow-right"></i>
                     <i v-if="item.flag" class="el-icon-arrow-down"></i>
-                    <span>{{ returnCategory(categoryAll, item.categoryId) }}</span>
+                    <span v-if="currentCategory === 1">{{ returnCategory(categoryAll, item.categoryId) }}</span>
+                    <span v-else>{{ item.datetime }}</span>
                     <span>[{{ item.articleList.length }}]</span>
                   </div>
                   <div v-show="item.flag" class="detail">
@@ -56,26 +66,28 @@
       <div class="b_right">
         <div class="articleInfo" v-show="!editFlag">
           <div class="write_info">
-            <span>
-              <i class="el-icon-time"></i>
-              {{ articleInfo.createTime }}
-            </span>
-            <span>
+            <div class="time">
+              <div>
+                <i class="el-icon-time"></i>
+                创建时间 {{ dateReturn(articleInfo.createTime) }}
+              </div>
+              <div>
+                <i class="el-icon-time"></i>
+                上次更新 {{ dateReturn(articleInfo.updateTime) }}
+              </div>
+            </div>
+            <div>
               <i class="el-icon-tickets"></i>
               字数 {{ articleInfo.contentLength }}
-              </span>
-            <span>
+            </div>
+            <div>
               <i class="el-icon-view"></i>
               阅读 {{ articleInfo.viewCount }}
-            </span>
-            <span>
+            </div>
+            <div>
               <i class="el-icon-chat-dot-round"></i>
               评论 {{ articleInfo.commentCount }}
-            </span>
-            <span v-show="articleInfo.updateTime">
-              <i class="el-icon-time"></i>
-              上次更新 {{ articleInfo.updateTime }}
-            </span>
+            </div>
           </div>
         </div>
         <mavonEditor
@@ -172,6 +184,8 @@ export default {
         {key: 1, text: '公开'},
         {key: 2, text: '不公开'},
       ],
+      //  头像地址
+      imageUrl: '',
       articleInfo: {
         // content: '',  // 文章正文
         // contentLength: 0, //  文章长度
@@ -228,18 +242,26 @@ export default {
     categoryAll() {
       return this.$store.state.home.categoryAll
     },
+    uploadUrl() {
+      return ''
+    }
   },
   methods: {
     //  切换类目
     categoryChange(item) {
       this.currentCategory = item.id
+      if (item.id === 2) {
+        this.articleList_dateTime = this.handleArticleData(this.articleList, item.id)
+      }
     },
     //  获取该用户所有文章信息
     getAllArticleByUserId() {
       MY.getCategory().then(result => {
         if (result && result.code == 200) {
           this.articleList = result.data
+          //  按照分类id显示
           this.articleList_category = this.handleArticleData(result.data, 1)
+          //  按照时间显示
           //  默认打开第一个类目的，第一篇文章
           if (this.articleList_category.length) {
             //  当前用户下，第一个类目
@@ -271,10 +293,10 @@ export default {
     },
     //  文章数据处理
     handleArticleData(data, type) {
-      this.currentItem = []
+      let tmpList = []
       if (type === 1) { //  按照分类排序
-        let categoryList = [], tmpList = []
-        console.log(data, 12)
+        this.currentItem = []
+        let categoryList = []
         data.forEach(item => {
           if (tmpList.indexOf(item.categoryId)  === -1) {
             tmpList.push(item.categoryId)
@@ -284,7 +306,6 @@ export default {
         tmpList.forEach(item => {
           categoryList.push({categoryId: item, flag: false, articleList: []})
         })
-        console.log(categoryList)
         categoryList.forEach(item => {
           data.forEach(it => {
             if (item.categoryId === it.categoryId) {
@@ -297,6 +318,32 @@ export default {
         }
         return categoryList
       } else {  //  按照时间排序
+        let dateList = []
+        data.forEach(item => {
+          if (item.createTime) {
+            //  处理时间格式，只保存日期
+            let time = this.dateReturn(item.createTime).split(' ')[0]
+            tmpList.push(time.substr(0, time.length - 3))
+            // tmpList.push(this.dateReturn(item.createTime).split(' ')[0].subStr(0, ))
+          }
+        })
+        //  通过集合方法给数组去重
+        tmpList = Array.from(new Set(tmpList))
+        //  遍历生成日期数据
+        tmpList.forEach(item => {
+          dateList.push({datetime: item, flag: false, articleList: []})
+        })
+        dateList.forEach(item => {
+          data.forEach(it => {
+            let time = this.dateReturn(it.createTime).split(' ')[0]
+            console.log(time, 123)
+            if (item.datetime == time.substr(0, time.length - 3)) {
+              item.articleList.push({title: it.title, articleId: it.id})
+            }
+          })
+        })
+        return dateList
+                console.log(dateList, 'dateList')
       }
     },
     //  返回category中文
@@ -402,11 +449,37 @@ export default {
           }
         })
       }).catch(() => {})
-    }
+    },
+    //  文件上传成功
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    //  文件上传之前钩子
+    beforeAvatarUpload(file) {
+      console.log(file, 1)
+      console.log(file, 1)
+      const isJPG_PNG = (file.type === 'image/jpeg' || file.type === 'image/png');
+
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG_PNG) {
+        this.$message.warning('上传头像图片只能是 JPG 和 PNG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.warning('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG_PNG && isLt2M;
+    },
+    //  时间处理
+    dateReturn(time) {
+      if (time) {
+        return common.timeToDate(time)
+      }
+    },
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../assets/css/my.scss';
 </style>
