@@ -88,6 +88,7 @@
       }
       .introduce {
         padding:  20px;
+        // height: 80px;
         & > div:nth-child(1), :nth-child(2) {
           text-align: center;
         }
@@ -139,6 +140,7 @@
             padding: 10px;
             background: #F5F5F5;
             margin-top: 5px;
+            border-radius: 5px;
             & > .el-tag:nth-child(1) {
               height: 32px;
               line-height: 30px;

@@ -43,7 +43,9 @@
         :editable="mavonEditorOption.editable"
         :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
       </div>
-      <div class="recommend"></div>
+      <div class="recommend">
+        
+      </div>
     </div>
   </div>
 </template>

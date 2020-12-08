@@ -60,8 +60,8 @@
               <div class="content">当前分类</div>
             </div>
             <div class="category_tag_body">
-              <el-tag v-if="!categoryTags.length" size="small" effect="plain">全部</el-tag>
-              <el-tag v-for="(tag, index) in categoryTags" :key="tag.categoryId" size="samll" effect="plain" @close="tagClose(tag, index)" closable> {{tag.categoryName}}</el-tag>
+              <el-tag v-if="!categoryTags.length" size="mini" effect="plain">全部</el-tag>
+              <el-tag v-else v-for="(tag, index) in categoryTags" :key="tag.categoryId" size="samll" effect="plain" @close="tagClose(tag, index)" closable> {{tag.categoryName}}</el-tag>
             </div>
           </div>
           <div class="category_box">
@@ -154,8 +154,9 @@ export default {
       //  选择多个分类加到 tag 列表里，实现复合查询
       if (item === 0) {  //  当标签为全部时清空数据
         this.categoryTags = []
+        return
       }
-      if (this.categoryTags.indexOf(item) === -1 && item.categoryId !== 1) {
+      if (this.categoryTags.indexOf(item) === -1 && item.categoryId !== 0) {
         this.categoryTags.push(item)
       }
       // this.handleGetArticleList()
