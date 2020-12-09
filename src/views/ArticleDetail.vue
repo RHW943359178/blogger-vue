@@ -12,7 +12,7 @@
             <div class="write_info">
               <span>
                 <i class="el-icon-time"></i>
-                {{ dateReturn(articleInfo.createTime) }}
+                创建时间 {{ dateReturn(articleInfo.createTime) }}
               </span>
               <span>
                 <i class="el-icon-tickets"></i>
@@ -26,25 +26,52 @@
                 <i class="el-icon-chat-dot-round"></i>
                 评论 {{ articleInfo.commentCount }}
               </span>
-              <span v-show="articleInfo.updateTime">
+              <!-- <span v-show="articleInfo.updateTime">
                 <i class="el-icon-time"></i>
                 上次更新 {{ dateReturn(articleInfo.updateTime) }}
-                </span>
+                </span> -->
             </div>
           </div>
         </div>
         <!-- <div class="content" id="articleInfo_content" v-highlight v-html="articleInfo.content"></div> -->
-      <mavonEditor
-          class="md"
-        :value="articleInfo.content"
-        :subfield="mavonEditorOption.subfield"
-        :defaultOpen="mavonEditorOption.defaultOpen"
-        :toolbarsFlag="mavonEditorOption.toolbarsFlag"
-        :editable="mavonEditorOption.editable"
-        :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
+        <mavonEditor
+            class="md"
+          :value="articleInfo.content"
+          :subfield="mavonEditorOption.subfield"
+          :defaultOpen="mavonEditorOption.defaultOpen"
+          :toolbarsFlag="mavonEditorOption.toolbarsFlag"
+          :editable="mavonEditorOption.editable"
+          :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
       </div>
       <div class="recommend">
-        
+        <div class="author">
+          <div class="image">
+            <img src="../assets/img/user_avatar.jpg" alt="">
+          </div>
+          <div class="info">
+            <div class="username">{{ author.username }}</div>
+            <div class="articleInfo">
+              <span>文章数 {{ author.articleCount }}</span>
+              <span>总字数 {{ author.fontCount }}</span>
+            </div>
+          </div>
+          <div class="button">
+            <el-button type="danger" plain round size="mini">关注</el-button>
+          </div>
+        </div>
+        <div class="other_article">
+          <div class="title">
+            <span class="split_line"></span>
+            <span>其他文章</span>
+          </div>
+          <div class="body">
+            <div v-for="(item, index) in otherArticle" :key="index">
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -67,11 +94,19 @@ export default {
         defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
         editable: false,
         toolbarsFlag: false,
-        scrollStyle: true
-      }
+        scrollStyle: true,
+      },  
+      author: { //  当前文章的作者信息
+        // username: '', //  用户名
+        // articleCount: '', //  文章数
+        // fontCount: '' //  总字数
+      },
+      //  当前作者的其他文章
+      otherArticle: [], 
     }
   },
   mounted() {
+    console.log(this.$route.query.id, 123)
     this.getArticleInfo()
   },
   computed: {
@@ -83,12 +118,13 @@ export default {
     //  获取文章具体信息
     getArticleInfo() {
       let params = {
-        articleId: this.articleId
+        articleId: this.$route.query.id
       }
       ARTICLE_DETAIL.getArticleById({params}).then(result => {
         if (result && result.code == 200) {
           this.articleInfo = result.data
           this.contentLength = this.articleInfo.content.length
+          this.getAuthorByUserId(result.data.userId)
         }
       })
     },
@@ -98,6 +134,17 @@ export default {
         return common.timeToDate(time)
       }
     },
+    //  获取用户信息
+    getAuthorByUserId(userId) {
+      if (!userId) {
+        return
+      }
+      ARTICLE_DETAIL.getAuthorByUserId({userId: userId}).then(result => {
+        if (result && result.code == 200) {
+          this.author = result.data
+        }
+      })
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="b_header_box">
     <div class="b_header">
       <div class="b_header_left" @click="bancToHome">
-        <img src="../../assets/img/logo.png" alt="">
+        <img src="../../assets/img/logo_blue.png" alt="">
         <span>博客</span>
       </div>
       <div class="b_header_middle">
