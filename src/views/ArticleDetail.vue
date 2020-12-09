@@ -103,6 +103,11 @@ export default {
       },
       //  当前作者的其他文章
       otherArticle: [], 
+      //  其他文章页码信息
+      otherPage: {
+        pageNum: 1,
+        pageSize: 5,
+      }
     }
   },
   mounted() {
@@ -125,6 +130,7 @@ export default {
           this.articleInfo = result.data
           this.contentLength = this.articleInfo.content.length
           this.getAuthorByUserId(result.data.userId)
+          this.getOtherArticle(result.data.userId, this.$route.query.id)
         }
       })
     },
@@ -142,6 +148,24 @@ export default {
       ARTICLE_DETAIL.getAuthorByUserId({userId: userId}).then(result => {
         if (result && result.code == 200) {
           this.author = result.data
+        }
+      })
+    },
+    //  获取其他文章列表
+    getOtherArticle(userId, articleId) {
+      if (!userId) {
+        return
+      }
+      let params = {
+        userId:userId,
+        articleId: articleId,
+        pageSize: this.otherPage.pageSize,
+        pageNum: this.otherPage.pageNum
+      }
+      //  获取其他文章列表，同时排除当前文章
+      ARTICLE_DETAIL.getOtherArticle(params).then(result => {
+        if (result && result.code == 200) {
+          this.otherArticle = result.data
         }
       })
     }

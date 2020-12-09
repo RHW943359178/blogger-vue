@@ -26,7 +26,6 @@ service.interceptors.response.use(response => {
   //接收到响应数据并成功后的一些共有的处理，关闭loading等
   return response.data
 }, error => {
-  console.log(error.response, 'error.response123')
    /***** 接收到异常响应的处理开始 *****/
   if (error && error.response) {
     // 1.公共错误处理

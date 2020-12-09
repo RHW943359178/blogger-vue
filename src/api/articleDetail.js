@@ -9,5 +9,9 @@ export default {
   //  根据用户id获取用户信息
   getAuthorByUserId: params => {
     return service.post('/user/getUserInfo', params)
+  },
+  //  获取其他文章列表
+  getOtherArticle: params => {
+    return service.post('/home/getOtherArticle', params)
   }
 }
