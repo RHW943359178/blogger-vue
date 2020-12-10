@@ -59,18 +59,40 @@
             <el-button type="danger" plain round size="mini">关注</el-button>
           </div>
         </div>
-        <div class="other_article">
+        <div class="other_article" v-show="otherArticle.length">
           <div class="title">
             <span class="split_line"></span>
             <span>其他文章</span>
           </div>
           <div class="body">
-            <div v-for="(item, index) in otherArticle" :key="index">
-              <div></div>
-              <div></div>
+            <div class="each_article" v-for="(item, index) in otherArticle" :key="index">
+              <div class="other_title">
+                <a :href="'#/blogger/article?id=' + item.id" target="_blank">{{ item.title }}</a>
+              </div>
+              <div class="read">
+                <span>阅读数</span>
+                <span>{{ item.viewCount }}</span>
+              </div>
             </div>
           </div>
-
+        </div>
+        <div class="recommend_read other_article">
+          <div class="title">
+            <span class="split_line"></span>
+            <span>推荐阅读</span>
+            <el-button style="position: absolute; right: 20px;" type="text" icon="el-icon-refresh">换一批</el-button>
+          </div>
+          <div class="body">
+            <div class="each_article" v-for="(item, index) in recommandArticle" :key="index">
+              <div class="other_title">
+                <a :href="'#/blogger/article?id=' + item.id" target="_blank">{{ item.title }}</a>
+              </div>
+              <div class="read">
+                <span>阅读数</span>
+                <span>{{ item.viewCount }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -103,15 +125,18 @@ export default {
       },
       //  当前作者的其他文章
       otherArticle: [], 
+      //  推荐文章
+      recommandArticle: [],
       //  其他文章页码信息
       otherPage: {
         pageNum: 1,
         pageSize: 5,
-      }
+      },
+      //  推荐文章条数 0 < x <= 10
+      recommendRange: 5,
     }
   },
   mounted() {
-    console.log(this.$route.query.id, 123)
     this.getArticleInfo()
   },
   computed: {
@@ -131,6 +156,7 @@ export default {
           this.contentLength = this.articleInfo.content.length
           this.getAuthorByUserId(result.data.userId)
           this.getOtherArticle(result.data.userId, this.$route.query.id)
+          this.getRecommendArticle(result.data.categoryId)
         }
       })
     },
@@ -157,8 +183,8 @@ export default {
         return
       }
       let params = {
-        userId:userId,
-        articleId: articleId,
+        userId: userId,
+        articleId: parseInt(articleId),
         pageSize: this.otherPage.pageSize,
         pageNum: this.otherPage.pageNum
       }
@@ -166,6 +192,21 @@ export default {
       ARTICLE_DETAIL.getOtherArticle(params).then(result => {
         if (result && result.code == 200) {
           this.otherArticle = result.data
+        }
+      })
+    },
+    //  获取推荐阅读文章列表
+    getRecommendArticle(categoryId) {
+      if (!categoryId) {
+        return
+      }
+      let params = {
+        categoryId: categoryId,
+        num: this.recommendRange
+      }
+      ARTICLE_DETAIL.getRecommendArticle({params}).then(result => {
+        if (result && result.code == 200) {
+          this.recommandArticle = result.data
         }
       })
     }

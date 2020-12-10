@@ -13,5 +13,9 @@ export default {
   //  获取其他文章列表
   getOtherArticle: params => {
     return service.post('/home/getOtherArticle', params)
+  },
+  //  获取推荐文章列表
+  getRecommendArticle: params => {
+    return service.get('/home/article/recommend', params)
   }
 }

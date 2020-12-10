@@ -99,6 +99,7 @@
           display: flex;
           align-items: center;
           padding: 10px;
+          position: relative;
           .split_line {
             height: 30px;
             line-height: 40px;
@@ -116,8 +117,39 @@
           }
         }
         .body {
-          
+          padding-left: 10px;
+          border-bottom: 1px solid #ccc;
+          .each_article {
+            margin-bottom: 15px;
+            .other_title {
+              margin-bottom: 5px;
+              cursor: pointer;
+              a {
+                color: #24292e;
+                text-decoration: none;
+              }
+              a:hover {
+                text-decoration: underline;
+                color: #555;
+              }
+            }
+            // .other_title:hover {
+            //   text-decoration: underline;
+            //   color: #555;
+            // }
+            .read {
+              font-size: 14px;
+              color: #969696;
+              & > span:nth-child(1) {
+                margin-right: 5px;
+              }
+            }
+          }
+
         }
+      }
+      .recommend_read {
+
       }
     }
   }
