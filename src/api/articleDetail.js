@@ -17,5 +17,9 @@ export default {
   //  获取推荐文章列表
   getRecommendArticle: params => {
     return service.get('/home/article/recommend', params)
+  },
+  //  获取还用户所有的文章篇数和总字数
+  getArticleFontCount: params => {
+    return service.get('/user/articleInfo', params)
   }
 }

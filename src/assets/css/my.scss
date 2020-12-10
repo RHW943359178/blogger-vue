@@ -23,38 +23,11 @@
         }
         .user_avatar {
           text-align: center;
-          width: 80px;
-          height: 80px;
+          width: 60px;
+          height: 60px;
           border: 1px solid #ccc;
           border-radius: 50px;
           margin: auto;
-          // .avatar-uploader {
-          //   // text-align: center;
-          //   width: 80px;
-          //   .el-upload {
-          //     border: 1px dashed #d9d9d9;
-          //     border-radius: 80px;
-          //     cursor: pointer;
-          //     // width: 50px;
-          //     overflow: hidden;
-          //   }
-          //   .el-upload:hover {
-          //     border-color: #409EFF;
-          //   }
-          //   .avatar-uploader-icon {
-          //     font-size: 28px;
-          //     color: #8c939d;
-          //     width: 80px;
-          //     height: 80px;
-          //     border-radius: 80px;
-          //     line-height: 80px;
-          //     text-align: center;
-          //   }
-          //   .avatar {
-          //     width: 50px;
-          //     height: 50px;
-          //     display: block;
-          //   }
             img {
               // width: 80px;
               width: 100%;
@@ -63,6 +36,25 @@
             }
           // } 
 
+        }
+        .authorInfo {
+          display: flex;
+          justify-content: space-between;
+          padding: 5px 10px;
+          .info_box {
+            border-right: 1px solid #f0f0f0;
+            & > div:nth-child(1) {
+              text-align: center;
+            }
+            & > div:nth-child(2) {
+              color: #969696;
+            }& > :nth-child(1), :nth-child(2) {
+              cursor: pointer;
+            }
+          }
+          div {
+            // border: 1px solid #f0f0f0;
+          }
         }
       }
       .body {

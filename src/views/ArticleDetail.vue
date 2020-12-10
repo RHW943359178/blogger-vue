@@ -119,9 +119,9 @@ export default {
         scrollStyle: true,
       },  
       author: { //  当前文章的作者信息
-        // username: '', //  用户名
-        // articleCount: '', //  文章数
-        // fontCount: '' //  总字数
+        username: '', //  用户名
+        articleCount: '', //  文章数
+        fontCount: '' //  总字数
       },
       //  当前作者的其他文章
       otherArticle: [], 
@@ -134,6 +134,10 @@ export default {
       },
       //  推荐文章条数 0 < x <= 10
       recommendRange: 5,
+      //  文章篇数
+      articleCount: 0,
+      //  文章总字数
+      fontCount: 0,
     }
   },
   mounted() {
@@ -157,6 +161,7 @@ export default {
           this.getAuthorByUserId(result.data.userId)
           this.getOtherArticle(result.data.userId, this.$route.query.id)
           this.getRecommendArticle(result.data.categoryId)
+          this.getArticleFontCount(result.data.userId)
         }
       })
     },
@@ -173,7 +178,7 @@ export default {
       }
       ARTICLE_DETAIL.getAuthorByUserId({userId: userId}).then(result => {
         if (result && result.code == 200) {
-          this.author = result.data
+          this.author.username = result.data.username
         }
       })
     },
@@ -207,6 +212,21 @@ export default {
       ARTICLE_DETAIL.getRecommendArticle({params}).then(result => {
         if (result && result.code == 200) {
           this.recommandArticle = result.data
+        }
+      })
+    },
+    //  获取用户总文章篇数和总字数
+    getArticleFontCount(userId) {
+      if (!userId) {
+        return
+      }
+      let params = {
+        userId: userId
+      }
+      ARTICLE_DETAIL.getArticleFontCount({params}).then(result => {
+        if (result && result.code == 200) {
+          this.author.articleCount = result.data.articleCount
+          this.author.fontCount = result.data.fontCount
         }
       })
     }

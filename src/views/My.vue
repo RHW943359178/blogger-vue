@@ -3,7 +3,7 @@
     <div class="b_my_body">
       <div class="b_left" v-show="!editFlag">
         <div class="header">
-          <div class="username">RHW</div>
+          <!-- <div class="username">RHW</div> -->
           <div class="user_avatar">
             <img src="../assets/img/user_avatar.jpg" alt="">
             <!-- <el-upload
@@ -15,6 +15,28 @@
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload> -->
+          </div>
+          <div class="authorInfo">
+            <div class="info_box">
+              <div>8</div>
+              <div>关注</div>
+            </div>
+            <div class="info_box">
+              <div>7</div>
+              <div>粉丝</div>
+            </div>
+            <div class="info_box">
+              <div>32</div>
+              <div>文章</div>
+            </div>
+            <div class="info_box">
+              <div>800</div>
+              <div>字数</div>
+            </div>
+            <div class="info_box">
+              <div>8</div>
+              <div>收获喜欢</div>
+            </div>
           </div>
         </div>
         <div class="body">
