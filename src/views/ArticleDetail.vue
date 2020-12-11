@@ -146,6 +146,10 @@ export default {
   computed: {
     articleId() {
       return this.$store.state.home.articleId
+    },
+    //  用户的文章信息（文章篇数和总字数）
+    userArticle() { 
+      return this.$store.state.user.userArticle
     }
   },
   methods: {
@@ -225,6 +229,8 @@ export default {
       }
       ARTICLE_DETAIL.getArticleFontCount({params}).then(result => {
         if (result && result.code == 200) {
+          //  提交数据到 vuex
+          // this.$store.commit('updateUserArticle', result.data)
           this.author.articleCount = result.data.articleCount
           this.author.fontCount = result.data.fontCount
         }

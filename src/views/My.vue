@@ -5,8 +5,8 @@
         <div class="header">
           <!-- <div class="username">RHW</div> -->
           <div class="user_avatar">
-            <img src="../assets/img/user_avatar.jpg" alt="">
-            <!-- <el-upload
+            <!-- <img src="../assets/img/user_avatar.jpg" alt=""> -->
+            <el-upload
               class="avatar-uploader"
               :action="uploadUrl()"
               :show-file-list="false"
@@ -14,7 +14,7 @@
               :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload> -->
+            </el-upload>
           </div>
           <div class="authorInfo">
             <div class="info_box">
@@ -26,11 +26,11 @@
               <div>粉丝</div>
             </div>
             <div class="info_box">
-              <div>32</div>
+              <div>{{ userArticle.fontCount }}</div>
               <div>文章</div>
             </div>
             <div class="info_box">
-              <div>800</div>
+              <div>{{ userArticle.articleCount }}</div>
               <div>字数</div>
             </div>
             <div class="info_box">
@@ -264,6 +264,10 @@ export default {
     categoryAll() {
       return this.$store.state.home.categoryAll
     },
+    //  用户的文章信息（文章篇数和总字数）
+    userArticle() { 
+      return this.$store.state.user.userArticle
+    },
     uploadUrl() {
       return ''
     }
@@ -365,7 +369,6 @@ export default {
           })
         })
         return dateList
-                console.log(dateList, 'dateList')
       }
     },
     //  返回category中文
@@ -498,6 +501,23 @@ export default {
         return common.timeToDate(time)
       }
     },
+    //  获取用户总文章篇数和总字数
+    getArticleFontCount(userId) {
+      if (!userId) {
+        return
+      }
+      let params = {
+        userId: userId
+      }
+      ARTICLE_DETAIL.getArticleFontCount({params}).then(result => {
+        if (result && result.code == 200) {
+          //  提交数据到 vuex
+          // this.$store.commit('updateUserArticle', result.data)
+          this.author.articleCount = result.data.articleCount
+          this.author.fontCount = result.data.fontCount
+        }
+      })
+    }
   }
 }
 </script>
