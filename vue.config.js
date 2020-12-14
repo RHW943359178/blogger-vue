@@ -1,6 +1,6 @@
 module.exports = {
     // 部署应用时的基本 URL
-    publicPath: process.env.NODE_ENV === "production" ? "/production-sub-path/#/blogger" : "/#/blogger",
+    publicPath: process.env.NODE_ENV === "production" ? "./" : '/',
 
     // build时构建文件的目录 构建时传入 --no-clean 可关闭该行为
     outputDir: 'dist',
@@ -94,9 +94,9 @@ module.exports = {
       //   '/api': {
       //     target: 'http://127.0.0.1:8000', // 本地模拟数据服务器
       //     changeOrigin: true,
-      //     pathRewrite: {
-      //       '^/api': '' // 去掉接口地址中的api字符串
-      //     }
+      //   //   pathRewrite: {
+      //   //     '^/api': '' // 去掉接口地址中的api字符串
+      //   //   }
       //   }
       // }
     },

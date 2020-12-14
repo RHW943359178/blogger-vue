@@ -11,6 +11,7 @@ import errorPage from '../views/ErrorPage.vue'
 Vue.use(Router)
 
 const router = new Router({
+  // mode: 'hash',
   routes: [
     { // 主页
       path: '/blogger',

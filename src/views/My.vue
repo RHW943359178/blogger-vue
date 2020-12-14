@@ -8,7 +8,7 @@
             <!-- <img src="../assets/img/user_avatar.jpg" alt=""> -->
             <el-upload
               class="avatar-uploader"
-              :action="uploadUrl()"
+              :action="uploadUrl"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload">
@@ -269,7 +269,7 @@ export default {
       return this.$store.state.user.userArticle
     },
     uploadUrl() {
-      return ''
+      return 'http://81.69.255.188:8871/icon/upload'
     }
   },
   methods: {
@@ -481,8 +481,6 @@ export default {
     },
     //  文件上传之前钩子
     beforeAvatarUpload(file) {
-      console.log(file, 1)
-      console.log(file, 1)
       const isJPG_PNG = (file.type === 'image/jpeg' || file.type === 'image/png');
 
       const isLt2M = file.size / 1024 / 1024 < 2;
