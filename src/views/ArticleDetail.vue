@@ -3,7 +3,7 @@
     <div class="detail_box">
       <div class="article">
         <div class="title">{{ articleInfo.title }}</div>
-        <div class="introduce">
+        <div class="introduce" @click="jumpToAuthorHome">
           <div class="icon">
             <img src="../assets/img/user_avatar.jpg"  alt="">
           </div>
@@ -234,6 +234,16 @@ export default {
           this.author.articleCount = result.data.articleCount
           this.author.fontCount = result.data.fontCount
         }
+      })
+    },
+    //  跳转到作者主页
+    jumpToAuthorHome() {
+      if (!this.articleInfo.userId) {
+        return
+      }
+      this.$router.push({
+        path: `/blogger/authorHome`,
+        query: {id: this.userArticle.userId}
       })
     }
   }

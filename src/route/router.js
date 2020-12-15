@@ -6,6 +6,7 @@ import ArticleEditor from '../views/ArticleEditor'
 import ArticleDetail from '../views/ArticleDetail'
 import signIn from '../views/SignIn'
 import signUp from '../views/SignUp'
+import authorHome from '../views/AuthorHome'
 import errorPage from '../views/ErrorPage.vue'
 
 Vue.use(Router)
@@ -60,8 +61,12 @@ const router = new Router({
       meta: {
         isLogin: false
       }
+    },{
+      path: '/blogger/authorHome',
+      name: 'authorHome',
+      component: authorHome,
     },
-    {
+    { //  统一的错误页面
       path: '/blogger/404', 
       name: 'errorPage', 
       component: errorPage,

@@ -85,7 +85,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.categoryAll, 123)
   },
   methods: {
     //  清空文本
@@ -144,7 +143,7 @@ export default {
     },
     imgDel() {
 
-    }
+    },
   }
 }
 </script>

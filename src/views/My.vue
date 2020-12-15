@@ -515,7 +515,7 @@ export default {
           this.author.fontCount = result.data.fontCount
         }
       })
-    }
+    },
   }
 }
 </script>
