@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import ARTICLE_DETAIL from '../api/articleDetail'
 export default {
   data () {
     return {
@@ -89,12 +90,23 @@ export default {
         this.$message({type: 'error', message: '无法获取该作者信息', showClose: true})
         return
       }
-      
+      let params = {
+        userId: this.$route.query.id,
+        pageNum: this.pagination.pageNum,
+        pageSize: this.pagination.pageSize
+      }
+      ARTICLE_DETAIL.getArticleById({params}).then(result => {
+        if (result && result.code == 200) {
+          this.articleInfo = result.data
+          this.articleInfo.contentLength = this.articleInfo.content.length
+        }
+      })
     },
     //  无限加载请求文章列表
     load() {
       this.pagination.pageNum += 1
       console.log(this.pagination.pageNum)
+      this.getArticleList()
     }
   }
 }
