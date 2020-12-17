@@ -48,7 +48,7 @@ const router = new Router({
     },
     { //  注册
       path: '/blogger/signIn',
-      name: 'articleDetail', 
+      name: 'signIn', 
       component: signIn,
       meta: {
         isLogin: false
@@ -56,7 +56,7 @@ const router = new Router({
     },
     { //  登录
       path: '/blogger/signUp', 
-      name: 'articleDetail', 
+      name: 'signUp', 
       component: signUp,
       meta: {
         isLogin: false

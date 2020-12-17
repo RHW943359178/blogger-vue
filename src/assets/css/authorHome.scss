@@ -24,30 +24,36 @@
             border-radius: 60px;
           }
         }
-        .authorInfo {
-          display: flex;
-          justify-content: space-between;
-          padding: 5px 10px;
-          .info_box {
-            border-right: 1px solid #969696;
-            padding-right: 10px;
-            margin-right: 10px;
-            & > div:nth-child(1) {
-              text-align: center;
-            }
-            & > div:nth-child(2) {
-              color: #969696;
-            }& > :nth-child(1), :nth-child(2) {
-              cursor: pointer;
-            }
+        .author {
+          .author_name {
+            
           }
-          .info_box:last-child {
-            border-right: none;
-          }
-          div {
-            // border: 1px solid #f0f0f0;
+          .authorInfo {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            .info_box {
+              border-right: 1px solid #969696;
+              padding-right: 10px;
+              margin-right: 10px;
+              & > div:nth-child(1) {
+                text-align: center;
+              }
+              & > div:nth-child(2) {
+                color: #969696;
+              }& > :nth-child(1), :nth-child(2) {
+                cursor: pointer;
+              }
+            }
+            .info_box:last-child {
+              border-right: none;
+            }
+            div {
+              // border: 1px solid #f0f0f0;
+            }
           }
         }
+
       }
       .body {
         padding: 10px;

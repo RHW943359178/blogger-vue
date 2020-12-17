@@ -119,6 +119,8 @@ export default {
         scrollStyle: true,
       },  
       author: { //  当前文章的作者信息
+        imgUrl: '',
+        userId: '',
         username: '', //  用户名
         articleCount: '', //  文章数
         fontCount: '' //  总字数
@@ -182,6 +184,8 @@ export default {
       }
       ARTICLE_DETAIL.getAuthorByUserId({userId: userId}).then(result => {
         if (result && result.code == 200) {
+          this.author.userId = result.data.userId
+          this.author.imgUrl = result.data.imgUrl
           this.author.username = result.data.username
         }
       })
@@ -243,7 +247,7 @@ export default {
       }
       this.$router.push({
         path: `/blogger/authorHome`,
-        query: {id: this.userArticle.userId}
+        query: {author: this.author}
       })
     }
   }

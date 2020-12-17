@@ -282,7 +282,7 @@ export default {
     },
     //  获取该用户所有文章信息
     getAllArticleByUserId() {
-      MY.getCategory().then(result => {
+      MY.getArticleList().then(result => {
         if (result && result.code == 200) {
           this.articleList = result.data
           //  按照分类id显示

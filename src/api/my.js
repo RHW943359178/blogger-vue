@@ -2,8 +2,8 @@
 import service from '../utils/request'
 
 export default {
-  //  获取分类
-  getCategory: params => {
+  //  获取文章列表
+  getArticleList: params => {
     return service.get('/blogger/home/getArticleByUserId', params)
   },
   //  用户文章信息修改
