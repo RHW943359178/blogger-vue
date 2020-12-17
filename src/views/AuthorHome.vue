@@ -43,12 +43,21 @@
             <el-tab-pane name="article" class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
               <span slot="label"><i class="el-icon-tickets"></i>发表文章</span>
               <div class="article_box" v-for="item in articleList" :key="item.id">
-                <a href=""></a>
-                <p></p>
+                <a :href="'#/blogger/article?id=' + item.id" target="_blank">{{ item.title }}</a>
+                <p>{{ item.summary }}</p>
                 <div>
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                  <span>
+                    <i class="el-icon-view"></i>
+                    {{ item.viewCount }}
+                  </span>
+                  <span>
+                    <i class="el-icon-chat-line-square"></i>
+                    {{ item.commentCount }}
+                  </span>
+                  <span>
+                    <i class="el-icon-time"></i>
+                    {{ dateReturn(item.createTime) }}
+                  </span>
                   <span></span>
                 </div>
               </div>
@@ -75,6 +84,7 @@
 <script>
 import my from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
+import common from '../utils/common'
 export default {
   data () {
     return {
@@ -90,7 +100,12 @@ export default {
     }
   },
   mounted() {
-    this.getArticleList()
+    // this.getArticleList()
+  },
+  computed: {
+    author() {
+      return this.$route.query.author
+    }
   },
   methods: {
     //  切换tab页
@@ -99,37 +114,37 @@ export default {
     },
     //  获取发表文章列表
     getArticleList() {
-      if (!this.$route.query.author.userId) {
+      if (!this.author.userId) {
         this.$message({type: 'error', message: '无法获取该作者信息', showClose: true})
         return
       }
       let params = {
-        userId: this.$route.query.author.userId,
+        userId: this.author.userId,
         pageSize: this.pagination.pageSize,
         pageNum: this.pagination.pageNum
       }
       my.getArticleList({params}).then(result => {
-        if (result && result.code == 100) {
+        if (result && result.code == 200) {
           this.cacheList = result.data
         }
       }).then(() => {
         //  将每次请求来的数据 concat 到文章列表里
-        this.articleList.concat(this.cacheList)
-      }),
-
-      ARTICLE_DETAIL.getArticleById({params}).then(result => {
-        if (result && result.code == 200) {
-          this.articleInfo = result.data
-          this.articleInfo.contentLength = this.articleInfo.content.length
-        }
+          this.articleList = this.articleList.concat(this.cacheList)
       })
     },
+
     //  无限加载请求文章列表
     load() {
-      this.pagination.pageNum += 1
-      console.log(this.pagination.pageNum)
+      //  element中无限下拉加载的方法 load，默认第一次加载页面就会触发
       this.getArticleList()
-    }
+      this.pagination.pageNum += 1
+    },
+    //  时间处理
+    dateReturn(time) {
+      if (time) {
+        return common.timeToDate(time)
+      }
+    },
   }
 }
 </script>

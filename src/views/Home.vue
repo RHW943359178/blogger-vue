@@ -217,10 +217,11 @@ export default {
     },
     //  跳转进入具体文章信息
     getArticleDetail(item) {
-      this.$router.push({
+      const detail = this.$router.resolve({
         path: `/blogger/article`,
         query: {id: item.id}
       })
+      window.open(detail.href, '_blank')
       this.$store.commit('updateArticleId', item.id)
     }
   }

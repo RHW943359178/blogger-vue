@@ -61,6 +61,34 @@
         i {
           margin-right: 5px;
         }
+        .article_box {
+          border-bottom: 1px solid #ccc;
+          padding: 10px 0 20px;
+          a {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333333;
+          }
+          p {
+            font-size: 13px;
+            color: #999999;
+          }
+          a:hover {
+            text-decoration: underline;
+            color: #999999;
+          }
+          div {
+            span {
+              font-size: 13px;
+              color: #999999;
+              i {
+                margin-right: 0;
+              }
+              margin-right: 15px;
+            }
+          }
+        }
       }
     }
     .right {
