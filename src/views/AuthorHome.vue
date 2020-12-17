@@ -74,6 +74,7 @@
 
 <script>
 import my from '../api/my'
+import ARTICLE_DETAIL from '../api/articleDetail'
 export default {
   data () {
     return {
@@ -114,12 +115,20 @@ export default {
       }).then(() => {
         //  将每次请求来的数据 concat 到文章列表里
         this.articleList.concat(this.cacheList)
+      }),
+
+      ARTICLE_DETAIL.getArticleById({params}).then(result => {
+        if (result && result.code == 200) {
+          this.articleInfo = result.data
+          this.articleInfo.contentLength = this.articleInfo.content.length
+        }
       })
     },
     //  无限加载请求文章列表
     load() {
       this.pagination.pageNum += 1
       console.log(this.pagination.pageNum)
+      this.getArticleList()
     }
   }
 }
