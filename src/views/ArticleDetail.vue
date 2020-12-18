@@ -56,7 +56,8 @@
             </div>
           </div>
           <div class="button">
-            <el-button type="danger" plain round size="mini">关注</el-button>
+            <el-button v-if="followFlag" type="danger" icon="" plain round size="mini">关注</el-button>
+            <el-button v-else type="success" :onmouseover="followChange()" plain round size="mini">{{ followContent }}</el-button>
           </div>
         </div>
         <div class="other_article" v-show="otherArticle.length">
@@ -140,6 +141,10 @@ export default {
       articleCount: 0,
       //  文章总字数
       fontCount: 0,
+      //  是否已经关注
+      followFlag: false,
+      //  已关注内容切换
+      followContent: '已关注'
     }
   },
   mounted() {
@@ -249,6 +254,16 @@ export default {
         path: `/blogger/authorHome`,
         query: {author: this.author}
       })
+    },
+    //  修改关注按钮文字
+    followChange(val) {
+      // if (val === 1) {
+        this.followContent = '取消关注'
+        console.log(111)
+      // } else {
+      //   this.followContent = '关注'
+      //   console.log(222)
+      // }
     }
   }
 }
