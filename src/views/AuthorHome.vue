@@ -35,7 +35,7 @@
           </div>
           <div>
             <el-button type="success" plain round>发博客信</el-button>
-            <el-button icon="el-icon-plud" type="success" round>关注</el-button>
+            <el-button icon="el-icon-plus" type="success" round>关注</el-button>
           </div>
         </div>
         <div class="body">

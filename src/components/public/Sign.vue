@@ -203,8 +203,9 @@ export default {
           //  提交用户登录状态
           this.$store.dispatch('userLogin', true)
           //  保存到 localStore
-          localStorage.setItem('username', result.data.user.username)
-          localStorage.setItem('flag', 'isLogin')
+          localStorage.setItem('username', result.data.user.username) //  用户名
+          localStorage.setItem('flag', 'isLogin') //  登录标志
+          localStorage.setItem('userId', result.data.user.userId) //  用户id
           //  提交用户信息状态
           this.$store.dispatch('userInfo', result.data.user)
         } else {

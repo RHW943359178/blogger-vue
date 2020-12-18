@@ -56,8 +56,8 @@
             </div>
           </div>
           <div class="button">
-            <el-button v-if="followFlag" type="danger" icon="" plain round size="mini">关注</el-button>
-            <el-button v-else type="success" :onmouseover="followChange()" plain round size="mini">{{ followContent }}</el-button>
+            <el-button v-if="!followFlag && !authorIsSelf()" type="danger" icon="" plain round size="mini" @click="authorFollow(1)">关注</el-button>
+            <el-button v-if="followFlag" type="success" plain round size="mini" @click="authorFollow(2)">取消关注</el-button>
           </div>
         </div>
         <div class="other_article" v-show="otherArticle.length">
@@ -255,15 +255,55 @@ export default {
         query: {author: this.author}
       })
     },
-    //  修改关注按钮文字
-    followChange(val) {
-      // if (val === 1) {
-        this.followContent = '取消关注'
-        console.log(111)
-      // } else {
-      //   this.followContent = '关注'
-      //   console.log(222)
-      // }
+    //  判断当前文章作者是不是自己
+    authorIsSelf() {
+      let self = localStorage.getItem('userId')
+      if (self === this.author.userId) {
+        return true
+      } else {
+        return false
+      }
+    },
+    //  作者关注操作
+    authorFollow(val) {
+      //  本地判断用户是否登录
+      if (!localStorage.getItem('flag') && !localStorage.getItem('username') && !localStorage.getItem('userId')) {
+        //  跳转到登录页
+        this.$message({type: 'warning', message: '请先登录...'})
+        this.$router.push({
+          path: '/blogger/signUp'
+        })
+        return
+      }
+      //  判断用户的用户id是否合法
+      let params = {
+        type: val,
+        userId: this.author.userId
+      }
+      if (val === 2) {  //  1 为关注 2 为取消关注
+        this.$confirm('确定取消关注吗？', '确定', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.updateFollow(params)
+        }).catch(() => {})
+      }
+      this.updateFollow()
+    },
+    //  后台关注与取消关注接口
+    updateFollow(params) {
+      ARTICLE_DETAIL.updateUserFollow(params).then(result => {
+        if (result && result.code == 200) {
+          this.$message({type: ''})
+        } else if (result.code == 401) {
+          //  防止session过期或者从浏览器端修改 localstorage 配置
+          this.$message({type: 'warning', message: '请先登录...'})
+          this.$router.push({
+            path: '/blogger/signUp'
+          })
+        }
+      })
     }
   }
 }

@@ -21,5 +21,9 @@ export default {
   //  获取还用户所有的文章篇数和总字数
   getArticleFontCount: params => {
     return service.get('/blogger/user/articleInfo', params)
+  },
+  //  关注和取消关注
+  updateUserFollow: params => {
+    return service.post('/blogger/follow/update', params)
   }
 }

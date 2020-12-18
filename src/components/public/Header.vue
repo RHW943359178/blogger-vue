@@ -125,6 +125,8 @@ export default {
         type: 'warning',
       }).then(() => {
         localStorage.removeItem('flag')
+        localStorage.removeItem('username')
+        localStorage.removeItem('userId')
         //  刷新当前页面
         location.reload()
       }).catch(() => {})
