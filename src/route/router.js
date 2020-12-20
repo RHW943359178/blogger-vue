@@ -65,6 +65,9 @@ const router = new Router({
       path: '/blogger/authorHome',
       name: 'authorHome',
       component: authorHome,
+      meta: {
+        isLogin: false
+      }
     },
     { //  统一的错误页面
       path: '/blogger/404', 

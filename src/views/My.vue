@@ -10,6 +10,7 @@
               class="avatar-uploader"
               :action="uploadUrl"
               :show-file-list="false"
+              name="icon"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -269,7 +270,7 @@ export default {
       return this.$store.state.user.userArticle
     },
     uploadUrl() {
-      return 'http://81.69.255.188:8871/icon/upload'
+      return 'http://localhost:8080/blogger/user/icon/upload'
     }
   },
   methods: {
@@ -477,6 +478,7 @@ export default {
     },
     //  文件上传成功
     handleAvatarSuccess(res, file) {
+      console.log(file, 'file')
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     //  文件上传之前钩子

@@ -206,6 +206,7 @@ export default {
           localStorage.setItem('username', result.data.user.username) //  用户名
           localStorage.setItem('flag', 'isLogin') //  登录标志
           localStorage.setItem('userId', result.data.user.userId) //  用户id
+          localStorage.setItem('userIcon', result.data.user.imgUrl) //  用户 icon
           //  提交用户信息状态
           this.$store.dispatch('userInfo', result.data.user)
         } else {

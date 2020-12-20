@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import my from '../api/my'
+import MY from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
 export default {
@@ -93,6 +93,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      authorInfo: {},
       //  文章列表
       articleList: [],
       // 缓存的列表（用于接收数据）
@@ -101,6 +102,7 @@ export default {
   },
   mounted() {
     // this.getArticleList()
+    this.getUserInfo()
   },
   computed: {
     author() {
@@ -109,8 +111,17 @@ export default {
   },
   methods: {
     //  切换tab页
-    handleClick() {
-
+    handleClick(val) {
+      switch (val) {
+        case 'article':
+          break
+        case 'dynamic':
+          break
+        case 'follow':
+          break
+        case 'fans':
+          break
+      }
     },
     //  获取发表文章列表
     getArticleList() {
@@ -123,7 +134,7 @@ export default {
         pageSize: this.pagination.pageSize,
         pageNum: this.pagination.pageNum
       }
-      my.getArticleList({params}).then(result => {
+      MY.getArticleList({params}).then(result => {
         if (result && result.code == 200) {
           this.cacheList = result.data
         }
@@ -145,6 +156,22 @@ export default {
         return common.timeToDate(time)
       }
     },
+    //  获取用户信息
+    getUserInfo() {
+            console.log(this.author.userId, 123224)
+      if (!this.author.userId) {
+        return
+      }
+      let params = {
+        userId: this.author.userId
+      }
+      console.log(params, 1234)
+      ARTICLE_DETAIL.getAuthorByUserId({params}).then(result => {
+        if (result && result.code == 200) {
+          this.authorInfo = result.data
+        }
+      })
+    }
   }
 }
 </script>

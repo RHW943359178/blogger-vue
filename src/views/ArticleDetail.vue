@@ -8,7 +8,7 @@
             <img src="../assets/img/user_avatar.jpg"  alt="">
           </div>
           <div class="info">
-            <div class="name">RHW</div>
+            <div class="name">{{ articleInfo.username }}</div>
             <div class="write_info">
               <span>
                 <i class="el-icon-time"></i>
@@ -56,8 +56,8 @@
             </div>
           </div>
           <div class="button">
-            <el-button v-if="!followFlag && !authorIsSelf()" type="danger" icon="" plain round size="mini" @click="authorFollow(1)">关注</el-button>
-            <el-button v-if="followFlag" type="success" plain round size="mini" @click="authorFollow(2)">取消关注</el-button>
+            <el-button v-if="!followFlag && !authorIsSelf()" :loading="followLoading"  type="danger" icon="" plain round size="mini" @click="authorFollow(1)">关注</el-button>
+            <el-button v-if="followFlag" :loading="followLoading" type="success" plain round size="mini" @click="authorFollow(2)">取消关注</el-button>
           </div>
         </div>
         <div class="other_article" v-show="otherArticle.length">
@@ -143,12 +143,13 @@ export default {
       fontCount: 0,
       //  是否已经关注
       followFlag: false,
-      //  已关注内容切换
-      followContent: '已关注'
+      //  关注按钮loading
+      followLoading: false
     }
   },
   mounted() {
     this.getArticleInfo()
+    // this.getSelfInfo()
   },
   computed: {
     articleId() {
@@ -192,6 +193,7 @@ export default {
           this.author.userId = result.data.userId
           this.author.imgUrl = result.data.imgUrl
           this.author.username = result.data.username
+          this.getSelfInfo()
         }
       })
     },
@@ -264,8 +266,39 @@ export default {
         return false
       }
     },
+    //  判断用户 follow 字段中是否包含 文章的 用户id
+    followFlagExist(follow) {
+      if (follow) {
+        let arr = follow.split(',')
+        // console.log(arr.indexOf(this.articleInfo.userId), 123)
+        if (arr.indexOf(this.articleInfo.userId) != -1) {
+          this.followFlag = true
+          // console.log(this.followFlag, 'this.followFlag')
+        } else {
+          this.followFlag = false
+        }
+      } else {
+        this.followFlag = false
+      }
+    },
+    //  这里需要请求自己当前登录用户的信息，要来同步 关注信息
+    getSelfInfo() {
+      if (!localStorage.getItem('userId')) {
+        return
+      }
+      var follow = ''
+      ARTICLE_DETAIL.getAuthorByUserId({userId: localStorage.getItem('userId')}).then(result => {
+        if (result && result.code == 200) {
+          follow = result.data.follow
+          this.followFlagExist(follow)
+        }
+      })
+    },
     //  作者关注操作
     authorFollow(val) {
+      if (this.followLoading) {
+        return
+      }
       //  本地判断用户是否登录
       if (!localStorage.getItem('flag') && !localStorage.getItem('username') && !localStorage.getItem('userId')) {
         //  跳转到登录页
@@ -277,9 +310,10 @@ export default {
       }
       //  判断用户的用户id是否合法
       let params = {
-        type: val,
-        userId: this.author.userId
+        execType: val,
+        followId: this.author.userId
       }
+      console.log(params, 123)
       if (val === 2) {  //  1 为关注 2 为取消关注
         this.$confirm('确定取消关注吗？', '确定', {
           confirmButtonText: '确定',
@@ -288,23 +322,30 @@ export default {
         }).then(() => {
           this.updateFollow(params)
         }).catch(() => {})
+      } else {
+        this.updateFollow(params)
       }
-      this.updateFollow()
     },
     //  后台关注与取消关注接口
     updateFollow(params) {
+      this.followLoading = true
       ARTICLE_DETAIL.updateUserFollow(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: ''})
-        } else if (result.code == 401) {
+          this.followLoading = false
+          // this.getAuthorByUserId()
+          this.getSelfInfo()
+          this.$message({type: 'success', message: result.message})
+        } else if (result && result.code == 401) {
           //  防止session过期或者从浏览器端修改 localstorage 配置
           this.$message({type: 'warning', message: '请先登录...'})
           this.$router.push({
             path: '/blogger/signUp'
           })
+        } else {
+          this.followLoading = false
         }
       })
-    }
+    },
   }
 }
 </script>
