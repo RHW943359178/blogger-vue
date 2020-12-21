@@ -190,9 +190,10 @@ export default {
       }
       ARTICLE_DETAIL.getAuthorByUserId({userId: userId}).then(result => {
         if (result && result.code == 200) {
-          this.author.userId = result.data.userId
-          this.author.imgUrl = result.data.imgUrl
-          this.author.username = result.data.username
+          // this.author.userId = result.data.userId
+          // this.author.imgUrl = result.data.imgUrl
+          // this.author.username = result.data.username
+          this.author = result.data
           this.getSelfInfo()
         }
       })

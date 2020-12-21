@@ -2,4 +2,8 @@
 import service from '../utils/request'
 
 export default {
+  //  获取用户关注用户列表
+  getUserFollowList: params => {
+    return service.post('/blogger/follow/user/followList', params)
+  }
 }

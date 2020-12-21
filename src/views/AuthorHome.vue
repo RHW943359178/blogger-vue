@@ -8,11 +8,11 @@
           </div>
           <div class="author">
             <div class="author_name">
-              {{  }}
+              {{ authorInfo.username }}
             </div>
             <div class="authorInfo">
               <div class="info_box">
-                <div>8</div>
+                <div>{{ authorInfo.followLength }}</div>
                 <div>关注</div>
               </div>
               <div class="info_box">
@@ -20,11 +20,11 @@
                 <div>粉丝</div>
               </div>
               <div class="info_box">
-                <!-- <div>{{ userArticle.fontCount }}</div> -->
+                <div>{{ authorInfo.articleCount }}</div>
                 <div>文章</div>
               </div>
               <div class="info_box">
-                <!-- <div>{{ userArticle.articleCount }}</div> -->
+                <div>{{ authorInfo.fontCount }}</div>
                 <div>字数</div>
               </div>
               <div class="info_box">
@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="body">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
             <el-tab-pane name="article" class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
               <span slot="label"><i class="el-icon-tickets"></i>发表文章</span>
               <div class="article_box" v-for="item in articleList" :key="item.id">
@@ -67,6 +67,23 @@
             </el-tab-pane>
             <el-tab-pane label="关注" name="follow">
               <span slot="label"><i class="el-icon-paperclip"></i>他的关注</span>
+              <div class="follow_box" v-for="(item, index) in userFollowUser" :key="index">
+                <div class="follow_left">
+                  <img src="../assets/img/user_avatar.jpg" alt="">
+                </div>
+                <div class="follow_middle">
+                  <div class="name">RHW可以的</div>
+                  <div class="info">
+                    <span>关注 0</span>
+                    <span>粉丝 160</span>
+                    <span>文章 5</span>
+                  </div>
+                  <div class="info">写了 4516 字，获得了 413 个喜欢</div>
+                </div>
+                <div class="follow_right">
+                  <el-button type="success" round class="el-icon-plus">关注</el-button>
+                </div>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="粉丝" name="fans">
               <span slot="label"><i class="el-icon-star-on"></i>他的粉丝</span>
@@ -84,6 +101,7 @@
 <script>
 import MY from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
+import AUTHOR_HOME from '../api/authorHome'
 import common from '../utils/common'
 export default {
   data () {
@@ -97,12 +115,15 @@ export default {
       //  文章列表
       articleList: [],
       // 缓存的列表（用于接收数据）
-      cacheList: []
+      cacheList: [],
+      //  用户的关注列表
+      userFollowUser: []
     }
   },
   mounted() {
     // this.getArticleList()
     this.getUserInfo()
+    console.log(this.author, 123)
   },
   computed: {
     author() {
@@ -112,12 +133,14 @@ export default {
   methods: {
     //  切换tab页
     handleClick(val) {
+      console.log(val, 'val')
       switch (val) {
         case 'article':
           break
         case 'dynamic':
           break
         case 'follow':
+          this.getFollowUserInfo()
           break
         case 'fans':
           break
@@ -166,9 +189,31 @@ export default {
         userId: this.author.userId
       }
       console.log(params, 1234)
-      ARTICLE_DETAIL.getAuthorByUserId({params}).then(result => {
+      ARTICLE_DETAIL.getAuthorByUserId(params).then(result => {
         if (result && result.code == 200) {
           this.authorInfo = result.data
+          if (!this.authorInfo.follow) {
+            this.authorInfo.followLength = this.authorInfo.follow.split('').length
+          } else {
+            this.authorInfo.followLength = this.authorInfo.follow.split(',').length
+          }
+        }
+      })
+    },
+    //  批量获取用户关注人信息
+    getFollowUserInfo() {
+      console.log(this.author, 'author')
+      if (!this.author.follow) {
+        return
+      }
+      //  将关注字符串转为数组
+      let arr = this.author.follow.split(',')
+      let params = {
+        followList: arr
+      }
+      AUTHOR_HOME.getUserFollowList(params).then(result => {
+        if (result && result.code == 200) {
+          this.userFollowUser = result.data
         }
       })
     }
