@@ -5,7 +5,7 @@
         <div class="title">{{ articleInfo.title }}</div>
         <div class="introduce" @click="jumpToAuthorHome">
           <div class="icon">
-            <img src="../assets/img/user_avatar.jpg"  alt="">
+            <img :src="author.imgUrl"  alt="">
           </div>
           <div class="info">
             <div class="name">{{ articleInfo.username }}</div>
@@ -46,7 +46,7 @@
       <div class="recommend">
         <div class="author">
           <div class="image">
-            <img src="../assets/img/user_avatar.jpg" alt="">
+            <img :src="author.imgUrl" alt="">
           </div>
           <div class="info">
             <div class="username">{{ author.username }}</div>
@@ -97,6 +97,9 @@
         </div>
       </div>
     </div>
+    <div class="comment">
+
+    </div>
   </div>
 </template>
 
@@ -144,7 +147,7 @@ export default {
       //  是否已经关注
       followFlag: false,
       //  关注按钮loading
-      followLoading: false
+      followLoading: false,
     }
   },
   mounted() {
@@ -194,6 +197,9 @@ export default {
           // this.author.imgUrl = result.data.imgUrl
           // this.author.username = result.data.username
           this.author = result.data
+          if (result.data.imgUrl) {
+            this.author.imgUrl = '/static/' + result.data.imgUrl
+          }
           this.getSelfInfo()
         }
       })

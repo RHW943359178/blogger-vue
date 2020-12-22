@@ -216,7 +216,16 @@ export default {
           this.userFollowUser = result.data
         }
       })
-    }
+    },
+    //  判断当前文章作者是不是自己
+    authorIsSelf() {
+      let self = localStorage.getItem('userId')
+      if (self === this.author.userId) {
+        return true
+      } else {
+        return false
+      }
+    },
   }
 }
 </script>

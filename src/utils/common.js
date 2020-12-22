@@ -89,4 +89,10 @@ export default {
       scrollStyle: true
     }
   },
+  /**
+   * 全局返回静态资源的请求地址
+   */
+  returnServerIp() {
+    return 'http:localhost:8080/static/'
+  }
 }

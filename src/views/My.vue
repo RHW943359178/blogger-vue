@@ -239,6 +239,9 @@ export default {
   },
   mounted() {
     this.getAllArticleByUserId()
+    if (localStorage.getItem('userIcon')) {
+      this.imageUrl = '/static/' + localStorage.getItem('userIcon')
+    }
   },
   watch: {
     editFlag: function(val) {
@@ -479,7 +482,9 @@ export default {
     //  文件上传成功
     handleAvatarSuccess(res, file) {
       console.log(file, 'file')
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.imageUrl = URL.createObjectURL(file.raw)
+      //  将数据更新到 localStorage
+      localStorage.setItem('userIcon', file.response.data)
     },
     //  文件上传之前钩子
     beforeAvatarUpload(file) {

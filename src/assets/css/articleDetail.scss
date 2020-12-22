@@ -6,7 +6,7 @@
   overflow: auto;
   .detail_box {
     width: 80%;
-    height: 100%;
+    // height: 100%;
     // overflow: auto;
     margin: 10px auto;
     display: flex;
@@ -153,5 +153,12 @@
 
       }
     }
+  }
+  .comment {
+    width: 100%;
+    height: 56px;
+    background: #dddddd;
+    position: absolute;
+    bottom: 0;
   }
 }

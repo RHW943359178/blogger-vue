@@ -12,8 +12,8 @@
       </div>
       <div class="b_header_right">
         <div class="isLogin" v-if="isLogin()">
-          <el-avatar :size="50" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" @error="errorHandler">
-            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+          <el-avatar :size="50" :src="iconImg" @error="errorHandler">
+            <img :src="iconImg"/>
           </el-avatar>
           <span>{{ loginUser() }}</span>
           <el-button type="text" @click="quitLogin">退出</el-button>
@@ -45,10 +45,18 @@ export default {
         { id: 3, label: '评论', url: '/blogger/comment' },
         { id: 3, label: '我的', url: '/blogger/my' },
         { id: 4, label: '设置', url: '/blogger/set' },
-      ]
+      ],
+      // localAttr: '',
+      iconImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     }
   },
   mounted () {
+    // if (localStorage.getItem('userIcon')) {
+    //   this.iconImg = '/static/' + localStorage.getItem('userIcon')
+    // }
+    // setInterval(() => {
+    //   this.localAttr += 1
+    // }, 2000)
   },
   computed: {
     categoryIdList() {  //  当前选中分类
@@ -63,11 +71,26 @@ export default {
     pageSize() { //  页码范围
       return this.$store.state.home.pageSize
     },
+    // localAttr: { //  localStorage 存取值
+    //   // return localStorage.getItem('userIcon')
+    //   get() {
+    //     return localStorage.getItem('userIcon')
+    //   },
+    //   set(val) {
+    //     localStorage.setItem('userIcon', val)
+    //   }
+    // }
   },
   watch: {
     home_search: function() {
       this.$store.commit('updateSearchCondition', this.home_search)
-    }
+    },
+    // localAttr: function() {
+    //   if (localStorage.getItem('userIcon')) {
+    //     console.log(123)
+    //     this.iconImg = '/static/' + localStorage.getItem('userIcon')
+    //   }
+    // }
   },
   methods: {
     //  点击回到主页
