@@ -97,8 +97,22 @@
         </div>
       </div>
     </div>
-    <div class="comment">
-
+    <div :class="['comment_box', {'comment_box_focus': focusFlag}]">
+    <!-- <div class="comment_box comment_box_focus"> -->
+      <div class="comment">
+        <div :class="['comment_input', {'comment_input_focus': focusFlag}]">
+          <el-input id="commentInput" v-model="commentContent" @focus="conmentFocus" @blur="conmentBlur" placeholder="写下你的评论..." size="small" ></el-input>
+          <!-- <textarea type="textarea" v-model="commentContent" @focus="conmentFocus" @blur="conmentBlur" placeholder="写下你的评论..." size="small" ></textarea> -->
+        </div>
+        <div class="comment_count">
+          <i class="el-icon-chat-line-square"></i>
+          <span>评论 0</span>
+        </div>
+        <div class="comment_yes">
+          <i class="el-icon-heart-on"></i>
+          <span>赞 0</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -148,6 +162,11 @@ export default {
       followFlag: false,
       //  关注按钮loading
       followLoading: false,
+      //  评论内容
+      commentContent: '',
+      //  评论框是否聚焦
+      focusFlag: false,
+      inputType: 'text'
     }
   },
   mounted() {
@@ -353,11 +372,26 @@ export default {
         }
       })
     },
+    //  评论 input 框聚焦
+    conmentFocus() {
+            // this.inputType = 'textarea'
+      this.focusFlag = true
+      this.inputType = 'textarea'
+      console.log(document.getElementById('commentInput').type)
+      // this.$refs['commentInput'].type = 'textarea'
+      document.getElementById('commentInput').type = 'textarea'
+    },
+    //  评论 input 框失焦
+    conmentBlur() {
+      this.focusFlag = false
+      this.inputType = 'text'
+      // this.$refs['commentInput'].type = 'text'
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../assets/css/articleDetail.scss';
   @import '../assets/css/public/markdownCommon.scss';
 </style>
