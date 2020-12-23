@@ -25,5 +25,9 @@ export default {
   //  关注和取消关注
   updateUserFollow: params => {
     return service.post('/blogger/follow/update', params)
+  },
+  //  文章评论保存
+  commentSave: params => {
+    return service.post('/blogger/comment/save', params)
   }
 }

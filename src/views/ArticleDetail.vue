@@ -101,16 +101,20 @@
     <!-- <div class="comment_box comment_box_focus"> -->
       <div class="comment">
         <div :class="['comment_input', {'comment_input_focus': focusFlag}]">
-          <el-input id="commentInput" v-model="commentContent" @focus="conmentFocus" @blur="conmentBlur" placeholder="写下你的评论..." size="small" ></el-input>
-          <!-- <textarea type="textarea" v-model="commentContent" @focus="conmentFocus" @blur="conmentBlur" placeholder="写下你的评论..." size="small" ></textarea> -->
+          <!-- <el-input id="commentInput" v-model="commentContent" @focus="conmentFocus" @blur="conmentBlur" placeholder="写下你的评论..." size="small" ></el-input> -->
+          <textarea :class="{'textarea_focus': focusFlag}" v-model.trim="commentContent" @focus="conmentFocus" placeholder="写下你的评论..." size="small" ></textarea>
         </div>
-        <div class="comment_count">
+        <div class="comment_count" v-show="!focusFlag">
           <i class="el-icon-chat-line-square"></i>
           <span>评论 0</span>
         </div>
-        <div class="comment_yes">
-          <i class="el-icon-heart-on"></i>
+        <div class="comment_yes" v-show="!focusFlag">
+          <i class="el-icon-star-off"></i>
           <span>赞 0</span>
+        </div>
+        <div class="publish" v-show="focusFlag">
+          <el-button type="danger" :disabled="!commentContent" plain size="mini" @click="commentPublish">发布</el-button>
+          <el-button type="info" plain size="mini" @click="conmentBlur">取消</el-button>
         </div>
       </div>
     </div>
@@ -377,15 +381,36 @@ export default {
             // this.inputType = 'textarea'
       this.focusFlag = true
       this.inputType = 'textarea'
-      console.log(document.getElementById('commentInput').type)
+      // console.log(document.getElementById('commentInput').type)
       // this.$refs['commentInput'].type = 'textarea'
-      document.getElementById('commentInput').type = 'textarea'
+      // document.getElementById('commentInput').type = 'textarea'
     },
     //  评论 input 框失焦
     conmentBlur() {
       this.focusFlag = false
       this.inputType = 'text'
       // this.$refs['commentInput'].type = 'text'
+    },
+    //  评论保存
+    commentPublish() {
+      if (!localStorage.getItem('flag') && !localStorage.getItem('username') && !localStorage.getItem('userId')) {
+        //  跳转到登录页
+        this.$message({type: 'warning', message: '请先登录...'})
+        this.$router.push({
+          path: '/blogger/signUp'
+        })
+        return
+      }
+      let params = {
+        userId: localStorage.getItem('userId'),
+        article_id: this.articleInfo.id,
+        build_id: ''
+      }
+      ARTICLE_DETAIL.commentSave(params).then(result => {
+        if (result && result.code == 200) {
+          
+        }
+      })
     }
   }
 }
