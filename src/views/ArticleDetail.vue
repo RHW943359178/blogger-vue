@@ -77,6 +77,29 @@
                 <el-button type="text">按时间倒叙</el-button>
               </div>
             </div>
+            <div class="comment_list_show" v-for="item in commentList" :key="item.id">
+              <img :src="'/static/' + item.imgUrl" alt="">
+              <div class="comment_list_info">
+                <div>{{ item.username }}</div>
+                <div>
+                  <span>{{ item.id }}楼</span>
+                  <span>{{ dateReturn(item.createTime) }}</span>
+                </div>
+                <div>
+                  {{ item.commentContent }}
+                </div>
+                <div>
+                  <span>
+                    <i class="el-icon-star-on"></i>
+                    7
+                  </span>
+                  <span>
+                    <i class="el-icon-chat-line-square"></i>
+                    回复
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

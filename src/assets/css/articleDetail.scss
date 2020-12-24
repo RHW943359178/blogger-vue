@@ -95,14 +95,62 @@
           .comment_list_exec {
             display: flex;
             justify-content: space-between;
+            margin: 0 0 16px;
             // border-left: 4px solid #ec7259;
             .exec_show {
-              & > span :nth-child(1) {
+              & > span:nth-child(1) {
                 font-size: 18px;
                 font-weight: 500;
                 line-height: 20px;
-                margin-left: 15px;
+                padding-left: 15px;
+                margin-right: 5px;
                 border-left: 4px solid #ec7259;
+              }
+              & > span:nth-child(2) {
+                margin-right: 5px;
+              }
+            }
+          }
+          .comment_list_show {
+            display: flex;
+            img {
+              width: 40px;
+              height: 40px;
+              border-radius: 40px;
+            }
+            .comment_list_info {
+              flex: 1;
+              padding: 0 0 16px;
+              margin: 0 0 20px 10px;
+              border-bottom: 1px solid #ccc;
+              & > div:nth-child(1) {
+                  font-size: 15px;
+                }
+              & > div:nth-child(2) {
+                font-size: 12px;
+                margin-top: 2px;
+                color: #969696;
+                & > span:nth-child(1) {
+                  margin: 0 5px 0 0;
+                }
+              }
+              & > div:nth-child(3) {
+                font-size: 16px;
+                line-height: 1.5;
+                margin-top: 10px;
+                word-break: break-word;
+              }
+              & > div:nth-child(4) {
+                font-size: 15px;
+                margin-top: 12px;
+                color: #b0b0b0;
+                & > span:hover {
+                  color: #ec7259;
+                  cursor: pointer;
+                }
+                & > span:nth-child(1) {
+                  margin: 0 16px 0 0;
+                }
               }
             }
           }
