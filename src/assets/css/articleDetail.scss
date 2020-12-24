@@ -10,50 +10,103 @@
     // overflow: auto;
     margin: 10px auto;
     display: flex;
-    .article {
+    .article_box{
       width: 70%;
       height: calc(100% - 20px);
       // margin-left: 50px;
-      background: #E8E8E8;
-      border-radius: 5px;
+      // background: #E8E8E8;
+      // border-radius: 5px;
       padding: 10px 20px;
-      .title {
-        font-size: 28px;
-        color: #555555;
-        margin: 10px 0 20px;
-      }
-      .introduce {
-        display: flex;
-        height: 50px;
-        color: #969696;
-        margin-bottom: 10px;
-        cursor: pointer;
-        .icon {
-          img {
-            height: 48px;
-            width: 48px;
-            border-radius: 48px;
-            margin: 0 15px;
-          }
+      .article {
+        // width: 70%;
+        // height: calc(100% - 20px);
+        // // margin-left: 50px;
+        background: #E8E8E8;
+        border-radius: 5px;
+        padding: 10px 20px;
+        .title {
+          font-size: 28px;
+          color: #555555;
+          margin: 10px 0 20px;
         }
-        .info {
-          .name {
-            line-height: 25px;
+        .introduce {
+          display: flex;
+          height: 50px;
+          color: #969696;
+          margin-bottom: 10px;
+          cursor: pointer;
+          .icon {
+            img {
+              height: 48px;
+              width: 48px;
+              border-radius: 48px;
+              margin: 0 15px;
+            }
           }
-          .write_info {
-            line-height: 25px;
-            // overflow: hidden;
-            span {
-              margin-right: 20px;
+          .info {
+            .name {
+              line-height: 25px;
+            }
+            .write_info {
+              line-height: 25px;
+              // overflow: hidden;
+              span {
+                margin-right: 20px;
+              }
             }
           }
         }
+        .content {
+          margin-top: 15px;
+        }
+        .md {
+          width: 100%;
+        }
       }
-      .content {
+      .comment_list_body {
+        background: #E8E8E8;
+        border-radius: 5px;
+        padding: 10px 20px;
         margin-top: 15px;
-      }
-      .md {
-        width: 100%;
+        textarea {
+          resize: none;
+          border: none;
+          width: calc(100% - 40px);
+          height: 90px;
+          padding: 8px 18px;
+          border-radius: 5px;
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+          outline: none !important
+        }
+        .comment_exec {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 10px;
+          height: 0;
+          overflow: hidden;
+          transition: .2s all;
+          color: #969696;
+        }
+        .comment_exec_focus {
+          transition: .2s all;
+          height: 28px;
+        }
+        .comment_list {
+          .comment_list_exec {
+            display: flex;
+            justify-content: space-between;
+            // border-left: 4px solid #ec7259;
+            .exec_show {
+              & > span :nth-child(1) {
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 20px;
+                margin-left: 15px;
+                border-left: 4px solid #ec7259;
+              }
+            }
+          }
+        }
       }
     }
     .recommend {
@@ -154,17 +207,24 @@
       }
     }
   }
+  // .comment_list_body {
+  //   width: 80%;
+  //   margin: 0 auto;
+  //   padding: 32px;
+  //   background: #E8E8E8;
+  //   .comment_input {
+  //     textarea {
+        
+  //     }
+  //   }
+  // }
   .comment_box {
     width: 100%;
-    // height: 56px;
     background: #dddddd;
     position: fixed;
     bottom: 0;
     z-index: 10000;
-    // line-height: 56px;
-    // align-items: center;
     transition: .2s all;
-    
     .comment {
       width: 80%;
       margin: 0 auto;
@@ -193,6 +253,7 @@
           line-height: 20px;
           padding: 8px 18px;
           border-radius: 50px;
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
         }
         .textarea_focus {
           resize: none;

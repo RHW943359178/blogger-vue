@@ -1,6 +1,9 @@
 <template>
   <div class="b_article_detail">
     <div class="detail_box">
+      <div class="article_box">
+
+      
       <div class="article">
         <div class="title">{{ articleInfo.title }}</div>
         <div class="introduce" @click="jumpToAuthorHome">
@@ -33,7 +36,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="content" id="articleInfo_content" v-highlight v-html="articleInfo.content"></div> -->
         <mavonEditor
             class="md"
           :value="articleInfo.content"
@@ -42,6 +44,41 @@
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"
           :editable="mavonEditorOption.editable"
           :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
+            <!-- 评论区布局 -->
+        <!-- <div class="comment_list_body">
+          <div class="comment_input">
+            <textarea></textarea>
+          </div>
+        </div> -->
+      </div>
+        <div class="comment_list_body">
+          <div class="comment_input">
+            <textarea v-model.trim="commentContentT" @focus="conmentFocusT" placeholder="写下你的评论..."></textarea>
+          </div>
+          <div :class="['comment_exec', {'comment_exec_focus': focusFlagT}]">
+            <div>
+              <i class="el-icon-s-opportunity"></i>
+              <span>Ctrl + Enter 发表</span>
+            </div>
+            <div>
+              <el-button type="danger" :disabled="!commentContentT" :loading="commentLoading" plain size="mini" @click="commentPublish(1)">发布</el-button>
+              <el-button type="info" plain size="mini" @click="conmentBlurT">取消</el-button>
+            </div>
+          </div>
+          <div class="comment_list">
+            <div class="comment_list_exec">
+              <div class="exec_show">
+                <span>全部评论</span>
+                <span>112</span>
+                <el-button type="text">只看作者</el-button>
+              </div>
+              <div class="exec_button">
+                <el-button type="text">按时间正序</el-button>
+                <el-button type="text">按时间倒叙</el-button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="recommend">
         <div class="author">
@@ -97,6 +134,12 @@
         </div>
       </div>
     </div>
+    <!-- 评论区布局 -->
+    <!-- <div class="comment_list_body">
+      <div class="comment_input">
+        <textarea></textarea>
+      </div>
+    </div> -->
     <div :class="['comment_box', {'comment_box_focus': focusFlag}]">
     <!-- <div class="comment_box comment_box_focus"> -->
       <div class="comment">
@@ -113,7 +156,7 @@
           <span>赞 0</span>
         </div>
         <div class="publish" v-show="focusFlag">
-          <el-button type="danger" :disabled="!commentContent" plain size="mini" @click="commentPublish">发布</el-button>
+          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(2)">发布</el-button>
           <el-button type="info" plain size="mini" @click="conmentBlur">取消</el-button>
         </div>
       </div>
@@ -166,11 +209,17 @@ export default {
       followFlag: false,
       //  关注按钮loading
       followLoading: false,
+      //  评论保存按钮 loading
+      commentLoading: false,
       //  评论内容
       commentContent: '',
+      //  非固定页面的评论内容
+      commentContentT: '',
+      //  评论列表
+      commentList: [],
       //  评论框是否聚焦
       focusFlag: false,
-      inputType: 'text'
+      focusFlagT: false,
     }
   },
   mounted() {
@@ -200,6 +249,7 @@ export default {
           this.getOtherArticle(result.data.userId, this.$route.query.id)
           this.getRecommendArticle(result.data.categoryId)
           this.getArticleFontCount(result.data.userId)
+          this.getCommentList(this.$route.query.id)
         }
       })
     },
@@ -378,21 +428,21 @@ export default {
     },
     //  评论 input 框聚焦
     conmentFocus() {
-            // this.inputType = 'textarea'
       this.focusFlag = true
-      this.inputType = 'textarea'
-      // console.log(document.getElementById('commentInput').type)
-      // this.$refs['commentInput'].type = 'textarea'
-      // document.getElementById('commentInput').type = 'textarea'
     },
     //  评论 input 框失焦
     conmentBlur() {
       this.focusFlag = false
-      this.inputType = 'text'
-      // this.$refs['commentInput'].type = 'text'
+    },
+    conmentFocusT() {
+      this.focusFlagT = true
+    },
+    //  非固定评论框 失焦
+    conmentBlurT() {
+      this.focusFlagT = false
     },
     //  评论保存
-    commentPublish() {
+    commentPublish(val) {
       if (!localStorage.getItem('flag') && !localStorage.getItem('username') && !localStorage.getItem('userId')) {
         //  跳转到登录页
         this.$message({type: 'warning', message: '请先登录...'})
@@ -403,12 +453,31 @@ export default {
       }
       let params = {
         userId: localStorage.getItem('userId'),
-        article_id: this.articleInfo.id,
-        build_id: ''
+        articleId: this.articleInfo.id,
+        commentContent: val === 1 ? this.commentContentT : this.commentContent,
+        buildId: ''
       }
+      console.log(params, 'params')
+      this.commentLoading = true
       ARTICLE_DETAIL.commentSave(params).then(result => {
         if (result && result.code == 200) {
-          
+          this.$message({type: 'success', message: '评论成功！'})
+          this.commentLoading = false
+          this.commentContent = ''
+          //  关闭编辑状态
+          this.focusFlag = false
+          this.getCommentList(this.$route.query.id)
+        }
+      })
+    },
+    //  获取评论列表
+    getCommentList(articleId) {
+      let params = {
+        articleId: articleId
+      }
+      ARTICLE_DETAIL.getCommentList({params}).then(result => {
+        if (result && result.code == 200) {
+          this.commentList = result.data
         }
       })
     }

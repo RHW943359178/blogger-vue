@@ -29,5 +29,9 @@ export default {
   //  文章评论保存
   commentSave: params => {
     return service.post('/blogger/comment/save', params)
+  },
+  //  文章评论查询
+  getCommentList: params => {
+    return service.get('/blogger/comment/list', params)
   }
 }
