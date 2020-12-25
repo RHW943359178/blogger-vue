@@ -52,7 +52,7 @@
         </div> -->
       </div>
         <div class="comment_list_body">
-          <div class="comment_input">
+          <!-- <div class="comment_input">
             <textarea v-model.trim="commentContentT" @focus="conmentFocusT" placeholder="写下你的评论..."></textarea>
           </div>
           <div :class="['comment_exec', {'comment_exec_focus': focusFlagT}]">
@@ -64,7 +64,8 @@
               <el-button type="danger" :disabled="!commentContentT" :loading="commentLoading" plain size="mini" @click="commentPublish(1)">发布</el-button>
               <el-button type="info" plain size="mini" @click="conmentBlurT">取消</el-button>
             </div>
-          </div>
+          </div> -->
+          <CommentBox :type="1"  :id="''"/>
           <div class="comment_list">
             <div class="comment_list_exec">
               <div class="exec_show">
@@ -77,7 +78,7 @@
                 <el-button type="text">按时间倒叙</el-button>
               </div>
             </div>
-            <div class="comment_list_show" v-for="item in commentList" :key="item.id">
+            <div class="comment_list_show" v-for="(item, index) in commentList" :key="item.id">
               <img :src="'/static/' + item.imgUrl" alt="">
               <div class="comment_list_info">
                 <div>{{ item.username }}</div>
@@ -93,11 +94,12 @@
                     <i class="el-icon-star-on"></i>
                     7
                   </span>
-                  <span>
+                  <span @click="commentBoxShow(index, item.id)">
                     <i class="el-icon-chat-line-square"></i>
                     回复
                   </span>
                 </div>
+                <CommentBox ref="childComment" :type="2" :id="item.id" />
               </div>
             </div>
           </div>
@@ -157,17 +159,9 @@
         </div>
       </div>
     </div>
-    <!-- 评论区布局 -->
-    <!-- <div class="comment_list_body">
-      <div class="comment_input">
-        <textarea></textarea>
-      </div>
-    </div> -->
     <div :class="['comment_box', {'comment_box_focus': focusFlag}]">
-    <!-- <div class="comment_box comment_box_focus"> -->
       <div class="comment">
         <div :class="['comment_input', {'comment_input_focus': focusFlag}]">
-          <!-- <el-input id="commentInput" v-model="commentContent" @focus="conmentFocus" @blur="conmentBlur" placeholder="写下你的评论..." size="small" ></el-input> -->
           <textarea :class="{'textarea_focus': focusFlag}" v-model.trim="commentContent" @focus="conmentFocus" placeholder="写下你的评论..." size="small" ></textarea>
         </div>
         <div class="comment_count" v-show="!focusFlag">
@@ -179,7 +173,7 @@
           <span>赞 0</span>
         </div>
         <div class="publish" v-show="focusFlag">
-          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(2)">发布</el-button>
+          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(2, commentContent, '')">发布</el-button>
           <el-button type="info" plain size="mini" @click="conmentBlur">取消</el-button>
         </div>
       </div>
@@ -191,9 +185,11 @@
 import { mavonEditor } from 'mavon-editor'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
+import CommentBox from '../components/public/CommentBox'
 export default {
   components: {
-    mavonEditor
+    mavonEditor,
+    CommentBox
   },
   data() {
     return {
@@ -242,7 +238,9 @@ export default {
       commentList: [],
       //  评论框是否聚焦
       focusFlag: false,
-      focusFlagT: false,
+      //  当前的跟帖 id
+
+      // focusFlagT: false,
     }
   },
   mounted() {
@@ -456,16 +454,23 @@ export default {
     //  评论 input 框失焦
     conmentBlur() {
       this.focusFlag = false
+      this.commentContent = ''
     },
-    conmentFocusT() {
-      this.focusFlagT = true
+    //  调用子元素的 focus 方法
+    commentBoxShow(index, id) {
+      if (this.$refs.childComment.length) {
+        this.$refs.childComment[index].conmentFocusT()
+      }
     },
-    //  非固定评论框 失焦
-    conmentBlurT() {
-      this.focusFlagT = false
-    },
+    // conmentFocusT() {
+    //   this.focusFlagT = true
+    // },
+    // //  非固定评论框 失焦
+    // conmentBlurT() {
+    //   this.focusFlagT = false
+    // },
     //  评论保存
-    commentPublish(val) {
+    commentPublish(val, content, buildId) {
       if (!localStorage.getItem('flag') && !localStorage.getItem('username') && !localStorage.getItem('userId')) {
         //  跳转到登录页
         this.$message({type: 'warning', message: '请先登录...'})
@@ -477,18 +482,18 @@ export default {
       let params = {
         userId: localStorage.getItem('userId'),
         articleId: this.articleInfo.id,
-        commentContent: val === 1 ? this.commentContentT : this.commentContent,
-        buildId: ''
+        commentContent: content,
+        buildId: buildId
       }
       console.log(params, 'params')
-      this.commentLoading = true
+      // this.commentLoading = true
       ARTICLE_DETAIL.commentSave(params).then(result => {
         if (result && result.code == 200) {
           this.$message({type: 'success', message: '评论成功！'})
           this.commentLoading = false
           this.commentContent = ''
           //  关闭编辑状态
-          this.focusFlag = false
+          // this.focusFlag = false
           this.getCommentList(this.$route.query.id)
         }
       })
