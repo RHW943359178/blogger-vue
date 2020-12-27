@@ -70,7 +70,7 @@
             <div class="comment_list_exec">
               <div class="exec_show">
                 <span>全部评论</span>
-                <span>112</span>
+                <span>{{ commentCountSum }}</span>
                 <el-button type="text">只看作者</el-button>
               </div>
               <div class="exec_button">
@@ -81,23 +81,62 @@
             <div class="comment_list_show" v-for="(item, index) in commentList" :key="item.id">
               <img :src="'/static/' + item.imgUrl" alt="">
               <div class="comment_list_info">
-                <div>{{ item.username }}</div>
-                <div>
-                  <span>{{ item.id }}楼</span>
-                  <span>{{ dateReturn(item.createTime) }}</span>
+                <div class="main_comment">
+                  <div>
+                    <span>{{ item.username }}</span>
+                    <span v-if="authorIsSelf(item.userId)">作者</span>
+                  </div>
+                  <div>
+                    <span>{{ item.id }}楼</span>
+                    <span>{{ dateReturn(item.createTime) }}</span>
+                  </div>
+                  <div>
+                    {{ item.commentContent }}
+                  </div>
+                  <div>
+                    <span :class="{'is_star': isStar(item.starLinkUser)}" @click="handleStarExec(item.id, item.starLinkUser)">
+                      <i class="el-icon-star-on"></i>
+                      <span v-if="item.stars ">{{ item.stars }}</span>
+                      <span v-else>赞</span>
+                    </span>
+                    <span @click="commentBoxShow(index, item.id)">
+                      <i class="el-icon-chat-line-square"></i>
+                      回复
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  {{ item.commentContent }}
+                <div class="comment_list_show comment_list_show_follow" v-for="it in item.followComment" :key="it.id">
+                  <img :src="'/static/' + it.imgUrl" alt="">
+                  <div class="comment_list_info comment_list_info_follow">
+                    <div class="main_comment">
+                      <div>
+                        <span>{{ it.username }}</span>
+                        <span v-if="authorIsSelf(it.userId)">作者</span>
+                      </div>
+                      <div>
+                        <!-- <span>{{ it.id }}楼</span> -->
+                        <span>{{ dateReturn(it.createTime) }}</span>
+                      </div>
+                      <div>
+                        {{ it.commentContent }}
+                      </div>
+                      <div>
+                        <span :class="{'is_star': isStar(it.starLinkUser)}" @click="handleStarExec(it.id, it.starLinkUser)">
+                          <i class="el-icon-star-on"></i>
+                          <span v-if="it.stars ">{{ it.stars }}</span>
+                          <span v-else>赞</span>
+                        </span>
+                        <span @click="commentBoxShow(index, it.id)">
+                          <i class="el-icon-chat-line-square"></i>
+                          回复
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <span>
-                    <i class="el-icon-star-on"></i>
-                    7
-                  </span>
-                  <span @click="commentBoxShow(index, item.id)">
-                    <i class="el-icon-chat-line-square"></i>
-                    回复
-                  </span>
+                <div class="new_comment" @click="commentBoxShow(index, item.id)">
+                  <i class="el-icon-edit"></i>
+                  <span>添加新评论</span>
                 </div>
                 <CommentBox ref="childComment" :type="2" :id="item.id" />
               </div>
@@ -118,7 +157,7 @@
             </div>
           </div>
           <div class="button">
-            <el-button v-if="!followFlag && !authorIsSelf()" :loading="followLoading"  type="danger" icon="" plain round size="mini" @click="authorFollow(1)">关注</el-button>
+            <el-button v-if="!followFlag && !authorIsSelf(author.userId)" :loading="followLoading"  type="danger" icon="" plain round size="mini" @click="authorFollow(1)">关注</el-button>
             <el-button v-if="followFlag" :loading="followLoading" type="success" plain round size="mini" @click="authorFollow(2)">取消关注</el-button>
           </div>
         </div>
@@ -166,14 +205,14 @@
         </div>
         <div class="comment_count" v-show="!focusFlag">
           <i class="el-icon-chat-line-square"></i>
-          <span>评论 0</span>
+          <span>评论 {{ commentCountSum }}</span>
         </div>
         <div class="comment_yes" v-show="!focusFlag">
           <i class="el-icon-star-off"></i>
-          <span>赞 0</span>
+          <span>赞 {{ commentStarsSum }}</span>
         </div>
         <div class="publish" v-show="focusFlag">
-          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(2, commentContent, '')">发布</el-button>
+          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(1, commentContent, '')">发布</el-button>
           <el-button type="info" plain size="mini" @click="conmentBlur">取消</el-button>
         </div>
       </div>
@@ -238,9 +277,22 @@ export default {
       commentList: [],
       //  评论框是否聚焦
       focusFlag: false,
-      //  当前的跟帖 id
-
-      // focusFlagT: false,
+      //  评论页码
+      commentPage: {
+        pageSize: 10,
+        pageNum: 1,
+        total: 0
+      },
+      //  评论的类型 1 主评论 2 回帖评论
+      commentType: 1,
+      //  标记当前的评论 index
+      currentCommnet: 0,
+      //  文章当前的评论总数
+      commentCountSum: 0,
+      //  文章当前的点赞总数
+      commentStarsSum: 0,
+      //  点赞操作类型  1 点赞 2 取消点赞
+      starExecType: 1,  
     }
   },
   mounted() {
@@ -359,9 +411,9 @@ export default {
       })
     },
     //  判断当前文章作者是不是自己
-    authorIsSelf() {
+    authorIsSelf(param) {
       let self = localStorage.getItem('userId')
-      if (self === this.author.userId) {
+      if (self === param) {
         return true
       } else {
         return false
@@ -458,6 +510,7 @@ export default {
     },
     //  调用子元素的 focus 方法
     commentBoxShow(index, id) {
+      this.currentCommnet = index
       if (this.$refs.childComment.length) {
         this.$refs.childComment[index].conmentFocusT()
       }
@@ -483,10 +536,9 @@ export default {
         userId: localStorage.getItem('userId'),
         articleId: this.articleInfo.id,
         commentContent: content,
-        buildId: buildId
+        buildId: buildId,
+        commentType: val
       }
-      console.log(params, 'params')
-      // this.commentLoading = true
       ARTICLE_DETAIL.commentSave(params).then(result => {
         if (result && result.code == 200) {
           this.$message({type: 'success', message: '评论成功！'})
@@ -495,19 +547,63 @@ export default {
           //  关闭编辑状态
           // this.focusFlag = false
           this.getCommentList(this.$route.query.id)
+          //  关闭评论框
+          if (this.currentCommnet) {
+            this.$refs.childComment[this.currentCommnet].conmentBlurT()
+          }
         }
       })
     },
     //  获取评论列表
     getCommentList(articleId) {
       let params = {
-        articleId: articleId
+        articleId: articleId,
+        pageSize: this.commentPage.pageSize,
+        pageNum: this.commentPage.pageNum
       }
       ARTICLE_DETAIL.getCommentList({params}).then(result => {
         if (result && result.code == 200) {
-          this.commentList = result.data
+          this.commentList = result.data.commentList
+          this.commentStarsSum = result.data.starsCount
+          this.commentCountSum = result.data.commentCount
         }
       })
+    },
+    //  用户点赞或者取消点赞操作
+    handleStarExec(id, starLinkUser) {
+      if (!localStorage.getItem('flag') && !localStorage.getItem('username') && !localStorage.getItem('userId')) {
+        //  跳转到登录页
+        this.$message({type: 'warning', message: '请先登录...'})
+        this.$router.push({
+          path: '/blogger/signUp'
+        })
+        return
+      }
+      let execType = 1
+      //  根据 starLinkUser 字段中是否包含当前用户的id，来判断当前操作的操作类型
+      if (starLinkUser.indexOf(localStorage.getItem('userId')) === -1) {
+        execType = 1
+      } else {
+        execType = 2
+      }
+      let params = {
+        commentId: id,
+        execType: execType
+      }
+      ARTICLE_DETAIL.starAndCancelStar(params).then(result => {
+        if (result && result.code == 200) {
+          this.getCommentList(this.$route.query.id)
+          console.log(result, '123')
+        }
+      })
+    },
+    //  是否已经点赞过
+    isStar(starLinkUser) {
+      if (starLinkUser.indexOf(localStorage.getItem('userId')) > -1) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 }

@@ -33,5 +33,9 @@ export default {
   //  文章评论查询
   getCommentList: params => {
     return service.get('/blogger/comment/list', params)
+  },
+  //  文章点赞和取消点赞操作
+  starAndCancelStar: params => {
+    return service.post('/blogger/comment/star/exec', params)
   }
 }

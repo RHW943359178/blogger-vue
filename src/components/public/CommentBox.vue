@@ -9,7 +9,7 @@
         <span>Ctrl + Enter 发表</span>
       </div>
       <div>
-        <el-button type="danger" :disabled="!commentContentT" :loading="commentLoading" plain size="mini" @click="commentPublish(1, commentContentT)">发布</el-button>
+        <el-button type="danger" :disabled="!commentContentT" :loading="commentLoading" plain size="mini" @click="commentPublish(type, commentContentT)">发布</el-button>
         <el-button type="info" plain size="mini" @click="conmentBlurT">取消</el-button>
       </div>
     </div>

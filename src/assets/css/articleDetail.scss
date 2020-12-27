@@ -123,36 +123,74 @@
               padding: 0 0 16px;
               margin: 0 0 20px 10px;
               border-bottom: 1px solid #ccc;
-              & > div:nth-child(1) {
+              .main_comment {
+                & > div:nth-child(1) {
+                  & > span:nth-child(1) {
+                    font-size: 15px;
+                  }
+                  & > span:nth-child(2) {
+                    font-size: 12px;
+                    color: #ec7259;
+                    border: 1px solid #ec7259;
+                    border-radius: 5px;
+                    margin: 0 0 0 10px;
+                    padding: 0 2px;
+                  }
+                  }
+                & > div:nth-child(2) {
+                  font-size: 12px;
+                  margin-top: 2px;
+                  color: #969696;
+                  & > span:nth-child(1) {
+                    margin: 0 5px 0 0;
+                  }
+                }
+                & > div:nth-child(3) {
+                  font-size: 16px;
+                  line-height: 1.5;
+                  margin-top: 10px;
+                  word-break: break-word;
+                }
+                & > div:nth-child(4) {
                   font-size: 15px;
+                  margin-top: 12px;
+                  color: #b0b0b0;
+                  // padding: 0 0 16px;
+                  // border-bottom: 1px solid #ccc;
+                  & > span:hover {
+                    color: #ec7259;
+                    cursor: pointer;
+                  }
+                  & > span:nth-child(1) {
+                    margin: 0 16px 0 0;
+                  }
                 }
-              & > div:nth-child(2) {
-                font-size: 12px;
-                margin-top: 2px;
-                color: #969696;
-                & > span:nth-child(1) {
-                  margin: 0 5px 0 0;
-                }
-              }
-              & > div:nth-child(3) {
-                font-size: 16px;
-                line-height: 1.5;
-                margin-top: 10px;
-                word-break: break-word;
-              }
-              & > div:nth-child(4) {
-                font-size: 15px;
-                margin-top: 12px;
-                color: #b0b0b0;
-                & > span:hover {
+                .is_star {
                   color: #ec7259;
-                  cursor: pointer;
                 }
-                & > span:nth-child(1) {
-                  margin: 0 16px 0 0;
+              }
+              .new_comment {
+                color: #B0B0B0;
+                font-size: 16px;
+                margin-top: 16px;
+                cursor: pointer;
+                & > :nth-child(2) {
+                  margin-left: 5px;
                 }
+              }
+              .new_comment:hover {
+                color: #9c9c9c;
               }
             }
+            .comment_list_info_follow {
+              border-bottom: none;
+              margin: 0 0 0 10px;
+            }
+          }
+          .comment_list_show_follow {
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+            margin-top: 20px;
           }
         }
       }
