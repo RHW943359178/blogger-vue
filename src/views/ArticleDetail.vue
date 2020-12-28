@@ -423,10 +423,8 @@ export default {
     followFlagExist(follow) {
       if (follow) {
         let arr = follow.split(',')
-        // console.log(arr.indexOf(this.articleInfo.userId), 123)
         if (arr.indexOf(this.articleInfo.userId) != -1) {
           this.followFlag = true
-          // console.log(this.followFlag, 'this.followFlag')
         } else {
           this.followFlag = false
         }
@@ -466,7 +464,6 @@ export default {
         execType: val,
         followId: this.author.userId
       }
-      console.log(params, 123)
       if (val === 2) {  //  1 为关注 2 为取消关注
         this.$confirm('确定取消关注吗？', '确定', {
           confirmButtonText: '确定',
@@ -593,7 +590,6 @@ export default {
       ARTICLE_DETAIL.starAndCancelStar(params).then(result => {
         if (result && result.code == 200) {
           this.getCommentList(this.$route.query.id)
-          console.log(result, '123')
         }
       })
     },

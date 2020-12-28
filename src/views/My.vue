@@ -114,8 +114,11 @@
           </div>
         </div>
         <mavonEditor
-          class="mavonEditor"
+          :class="['mavonEditor', {'mavonEditor_edit': editFlag}]"
           v-model="articleInfo.content"
+          @imgAdd="imgAdd"
+          @imgDel="imgDel"
+          ref="md_detail"
           :subfield="mavonEditorOption.subfield"
           :defaultOpen="mavonEditorOption.defaultOpen"
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"
@@ -366,7 +369,6 @@ export default {
         dateList.forEach(item => {
           data.forEach(it => {
             let time = this.dateReturn(it.createTime).split(' ')[0]
-            console.log(time, 123)
             if (item.datetime == time.substr(0, time.length - 3)) {
               item.articleList.push({title: it.title, articleId: it.id})
             }
@@ -387,7 +389,6 @@ export default {
     },
     //  点击文章切换
     articleChange(val) {
-      console.log(val, 'val')
       this.currentArticle = val.articleId
       this.getArticleInfoById(val.articleId)
     },
@@ -401,7 +402,6 @@ export default {
     },
     //  文章保存
     articleSave() {
-      console.log(this.articleInfo, 123)
       this.dialog.visible = true
       this.dialog.form = {
         title: this.articleInfo.title,
@@ -440,7 +440,6 @@ export default {
         title: this.dialog.form.title,
         openFlag: this.dialog.form.openFlag,
       }
-      console.log(this.articleInfo.content, 'this.articleInfo.content')
       if (!this.articleInfo.content) {
         this.$message({type: 'warning', message: '文章内容不可为空'})
         return
@@ -450,7 +449,7 @@ export default {
           this.$message({type: 'success', message: result.message})
           this.getArticleInfoById(this.currentArticle)
           //  跟新状态分类信息
-          this.getAllArticleByUserId()
+          // this.getAllArticleByUserId()
           //  修改编辑状态为 false
           this.editFlag = false
           this.dialog.visible = false
@@ -481,7 +480,6 @@ export default {
     },
     //  文件上传成功
     handleAvatarSuccess(res, file) {
-      console.log(file, 'file')
       this.imageUrl = URL.createObjectURL(file.raw)
       //  将数据更新到 localStorage
       localStorage.setItem('userIcon', file.response.data)
@@ -522,6 +520,28 @@ export default {
           this.author.fontCount = result.data.fontCount
         }
       })
+    },
+    //  文本编辑器的图片新增
+    imgAdd(pos, file) {
+      let valid = this.beforeAvatarUpload(file)
+      if (valid) {
+        // 构建上传参数，将图片上传到服务器.
+        let formdata = new FormData()
+        formdata.append('icon', file)
+        MY.uploadPicture(formdata).then(result => {
+          console.log(result, 123)
+          let url =  '/static/' + result.data
+          if (result && result.code == 200) {
+            //  设置富文本编辑器回显
+            this.$refs.md_detail.$imglst2Url([[pos, url]])
+          }
+        })
+      }
+    },
+        //  文本编辑器的图片删除
+    imgDel() {
+      console.log(pos, 'pos')
+      console.log(file, 'file')
     },
   }
 }

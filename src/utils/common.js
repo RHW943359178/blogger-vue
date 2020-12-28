@@ -93,6 +93,7 @@ export default {
    * 全局返回静态资源的请求地址
    */
   returnServerIp() {
-    return 'http:localhost:8080/static/'
+    // return 'http:localhost:8080/static/'
+    return 'http:81.69.255.188:8871/static/'
   }
 }

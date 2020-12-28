@@ -13,5 +13,9 @@ export default {
   //  用户文章删除
   deleteArticle: params => {
     return service.post('/blogger/home/article/delete', params)
+  },
+  //  富文本框编辑器上传图片
+  uploadPicture: params => {
+    return service.post('/blogger/user/icon/upload', params)
   }
 }

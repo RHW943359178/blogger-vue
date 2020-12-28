@@ -232,9 +232,12 @@
       margin: 10px 0;
       border-radius: 5px;
       margin-left: 20px;
-      overflow: auto;
+      // overflow: auto;
       .mavonEditor {
-        // height: calc(100% - 60px);
+        height: calc(100% - 70px);
+      }
+      .mavonEditor_edit {
+        height: 100%
       }
       .articleInfo {
         height: 50px;
