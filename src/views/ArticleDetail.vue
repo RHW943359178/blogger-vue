@@ -43,13 +43,14 @@
           :defaultOpen="mavonEditorOption.defaultOpen"
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"
           :editable="mavonEditorOption.editable"
+          :navigation="true"
           :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
-            <!-- 评论区布局 -->
-        <!-- <div class="comment_list_body">
-          <div class="comment_input">
-            <textarea></textarea>
-          </div>
-        </div> -->
+                  <!-- <mavonEditor
+            class="md"
+          :value="articleInfo.content"
+          :toolbars="toolbars"
+          ></mavonEditor> -->
+          <!-- <MarkdownNav /> -->
       </div>
         <div class="comment_list_body">
           <!-- <div class="comment_input">
@@ -225,10 +226,12 @@ import { mavonEditor } from 'mavon-editor'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
 import CommentBox from '../components/public/CommentBox'
+// import MarkdownNav from '../components/MarkdownNav'
 export default {
   components: {
     mavonEditor,
-    CommentBox
+    CommentBox,
+    // MarkdownNav
   },
   data() {
     return {
@@ -292,7 +295,8 @@ export default {
       //  文章当前的点赞总数
       commentStarsSum: 0,
       //  点赞操作类型  1 点赞 2 取消点赞
-      starExecType: 1,  
+      starExecType: 1,
+    
     }
   },
   mounted() {

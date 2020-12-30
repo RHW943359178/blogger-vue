@@ -119,6 +119,7 @@
           @imgAdd="imgAdd"
           @imgDel="imgDel"
           ref="md_detail"
+          :navigation="true"
           :subfield="mavonEditorOption.subfield"
           :defaultOpen="mavonEditorOption.defaultOpen"
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"
@@ -183,6 +184,7 @@ import MY from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
 import { mavonEditor } from 'mavon-editor'
+import toc from 'markdown-toc'
 export default {
   components: {
     mavonEditor
@@ -241,6 +243,7 @@ export default {
     }
   },
   mounted() {
+    // toc('# One\n\n# Two').content
     this.getAllArticleByUserId()
     if (localStorage.getItem('userIcon')) {
       this.imageUrl = '/static/' + localStorage.getItem('userIcon')
