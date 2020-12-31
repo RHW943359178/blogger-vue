@@ -37,20 +37,20 @@
           </div>
         </div>
         <mavonEditor
-            class="md"
+          class="md"
+          id="mavon_editor"
           :value="articleInfo.content"
           :subfield="mavonEditorOption.subfield"
           :defaultOpen="mavonEditorOption.defaultOpen"
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"
           :editable="mavonEditorOption.editable"
-          :navigation="true"
           :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
                   <!-- <mavonEditor
             class="md"
           :value="articleInfo.content"
           :toolbars="toolbars"
           ></mavonEditor> -->
-          <!-- <MarkdownNav /> -->
+          <MarkdownNav ref="markdown_nav" :rootId="'mavon_editor'" />
       </div>
         <div class="comment_list_body">
           <!-- <div class="comment_input">
@@ -211,6 +211,7 @@
         <div class="comment_yes" v-show="!focusFlag">
           <i class="el-icon-star-off"></i>
           <span>赞 {{ commentStarsSum }}</span>
+                    <span @click="test">点我</span>
         </div>
         <div class="publish" v-show="focusFlag">
           <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(1, commentContent, '')">发布</el-button>
@@ -226,12 +227,12 @@ import { mavonEditor } from 'mavon-editor'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
 import CommentBox from '../components/public/CommentBox'
-// import MarkdownNav from '../components/MarkdownNav'
+import MarkdownNav from '../components/MarkdownNav'
 export default {
   components: {
     mavonEditor,
     CommentBox,
-    // MarkdownNav
+    MarkdownNav
   },
   data() {
     return {
@@ -313,6 +314,9 @@ export default {
     }
   },
   methods: {
+    test() {
+
+    },
     //  获取文章具体信息
     getArticleInfo() {
       let params = {
@@ -328,6 +332,13 @@ export default {
           this.getArticleFontCount(result.data.userId)
           this.getCommentList(this.$route.query.id)
         }
+      }).then(() => {
+        //  调用子类方法获取元素
+        // this.$refs.markdown_nav.handleGetAllLabel('markdown_nav')
+        this.$nextTick(() => {
+        // console.log(document.querySelectorAll(`#mavon_editor h2`), 123)
+        })
+
       })
     },
     //  时间处理

@@ -56,6 +56,13 @@
             }
           }
         }
+        .v-note-wrapper {
+          .v-note-navigation-wrapper {
+            position: fixed;
+            height: 400px;
+            bottom: 100px !important; 
+          }
+        }
         .content {
           margin-top: 15px;
         }
