@@ -1,11 +1,9 @@
 <template>
-  <div class="b_article_detail">
+  <div class="b_article_detail" ref="b_article_detail" @scroll="handleScroll">
     <div class="detail_box">
       <div class="article_box">
-
-      
       <div class="article">
-        <div class="title">{{ articleInfo.title }}</div>
+        <!-- <div class="title">{{ articleInfo.title }}</div> -->
         <div class="introduce" @click="jumpToAuthorHome">
           <div class="icon">
             <img :src="author.imgUrl"  alt="">
@@ -29,10 +27,6 @@
                 <i class="el-icon-chat-dot-round"></i>
                 评论 {{ articleInfo.commentCount }}
               </span>
-              <!-- <span v-show="articleInfo.updateTime">
-                <i class="el-icon-time"></i>
-                上次更新 {{ dateReturn(articleInfo.updateTime) }}
-                </span> -->
             </div>
           </div>
         </div>
@@ -44,28 +38,11 @@
           :defaultOpen="mavonEditorOption.defaultOpen"
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"
           :editable="mavonEditorOption.editable"
-          :scrollStyle="mavonEditorOption.scrollStyle"></mavonEditor>
-                  <!-- <mavonEditor
-            class="md"
-          :value="articleInfo.content"
-          :toolbars="toolbars"
-          ></mavonEditor> -->
-          <MarkdownNav ref="markdown_nav" :rootId="'mavon_editor'" />
+          :scrollStyle="mavonEditorOption.scrollStyle">
+        </mavonEditor>
+        <MarkdownNav ref="markdown_nav" :scrollTop="scrollTop" :rootId="'mavon_editor'" />
       </div>
         <div class="comment_list_body">
-          <!-- <div class="comment_input">
-            <textarea v-model.trim="commentContentT" @focus="conmentFocusT" placeholder="写下你的评论..."></textarea>
-          </div>
-          <div :class="['comment_exec', {'comment_exec_focus': focusFlagT}]">
-            <div>
-              <i class="el-icon-s-opportunity"></i>
-              <span>Ctrl + Enter 发表</span>
-            </div>
-            <div>
-              <el-button type="danger" :disabled="!commentContentT" :loading="commentLoading" plain size="mini" @click="commentPublish(1)">发布</el-button>
-              <el-button type="info" plain size="mini" @click="conmentBlurT">取消</el-button>
-            </div>
-          </div> -->
           <CommentBox :type="1"  :id="''"/>
           <div class="comment_list">
             <div class="comment_list_exec">
@@ -211,7 +188,6 @@
         <div class="comment_yes" v-show="!focusFlag">
           <i class="el-icon-star-off"></i>
           <span>赞 {{ commentStarsSum }}</span>
-                    <span @click="test">点我</span>
         </div>
         <div class="publish" v-show="focusFlag">
           <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(1, commentContent, '')">发布</el-button>
@@ -297,6 +273,8 @@ export default {
       commentStarsSum: 0,
       //  点赞操作类型  1 点赞 2 取消点赞
       starExecType: 1,
+      rootContent: [],
+      scrollTop: ''
     
     }
   },
@@ -314,8 +292,17 @@ export default {
     }
   },
   methods: {
-    test() {
-
+    handleScroll () {
+      // 根据滚动右侧内容定位到左侧菜单
+      if (this.$refs['b_article_detail']) {
+        this.scrollTop = this.$refs['b_article_detail'].scrollTop
+        //  这里定义一个值，用于滚轮滚动时的临界值，控制显示吟唱
+        if (this.scrollTop <= 80) {
+          this.$store.commit('updateScrollFlag', false)
+        } else {
+          this.$store.commit('updateScrollFlag', true)
+        }
+      }
     },
     //  获取文章具体信息
     getArticleInfo() {
@@ -331,14 +318,13 @@ export default {
           this.getRecommendArticle(result.data.categoryId)
           this.getArticleFontCount(result.data.userId)
           this.getCommentList(this.$route.query.id)
+          //  将文章标题存入 vuex
+          this.$store.commit('updateArticleInfo', this.articleInfo.title)
+          // this.$store.commit('updateAuthorInfo', this.articleInfo.title)
         }
       }).then(() => {
         //  调用子类方法获取元素
-        // this.$refs.markdown_nav.handleGetAllLabel('markdown_nav')
-        this.$nextTick(() => {
-        // console.log(document.querySelectorAll(`#mavon_editor h2`), 123)
-        })
-
+        this.$refs.markdown_nav.handleGetAllLabel('markdown_nav')
       })
     },
     //  时间处理
@@ -362,6 +348,8 @@ export default {
             this.author.imgUrl = '/static/' + result.data.imgUrl
           }
           this.getSelfInfo()
+          //  将文章作者信息存入 vuex
+          this.$store.commit('updateAuthorInfo', this.author)
         }
       })
     },

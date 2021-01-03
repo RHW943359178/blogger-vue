@@ -1,39 +1,46 @@
 <template>
   <div class="b_header_box">
     <div class="b_header">
-      <div class="b_header_left" @click="bancToHome">
-        <img src="../../assets/img/logo_blue.png" alt="">
-        <span>博客</span>
-      </div>
-      <div class="b_header_middle">
-        <el-input v-show="$route.path === '/blogger'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
-          <el-button slot="append" size="mini" icon="el-icon-search" @click="searchArticles"></el-button>
-        </el-input>
-      </div>
-      <div class="b_header_right">
-        <div class="isLogin" v-if="isLogin()">
-          <el-avatar :size="50" :src="iconImg" @error="errorHandler">
-            <img :src="iconImg"/>
-          </el-avatar>
-          <span>{{ loginUser() }}</span>
-          <el-button type="text" @click="quitLogin">退出</el-button>
+      <div class="b_header_normal" v-if="!scrollFlag">
+        <div class="b_header_left" @click="bancToHome">
+          <img src="../../assets/img/logo_blue.png" alt="">
+          <span>博客</span>
         </div>
-        <div class="sign" v-else>
-          <el-button type="text" @click="jumpToSignIn">注册</el-button>
-          <el-button type="text" @click="jumpToSignUp">登录</el-button>
+        <div class="b_header_middle">
+          <el-input v-show="$route.path === '/blogger'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
+            <el-button slot="append" size="mini" icon="el-icon-search" @click="searchArticles"></el-button>
+          </el-input>
         </div>
-        <ul>
-          <!-- 用<router-link> 来代替 <li>标签实现页面顶部 tab 也路由切换 -->
-          <router-link v-for="(item, index) in navigators" :key="index" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
-        </ul>
+        <div class="b_header_right">
+          <div class="isLogin" v-if="isLogin()">
+            <el-avatar :size="50" :src="iconImg" @error="errorHandler">
+              <img :src="iconImg"/>
+            </el-avatar>
+            <span>{{ loginUser() }}</span>
+            <el-button type="text" @click="quitLogin">退出</el-button>
+          </div>
+          <div class="sign" v-else>
+            <el-button type="text" @click="jumpToSignIn">注册</el-button>
+            <el-button type="text" @click="jumpToSignUp">登录</el-button>
+          </div>
+          <ul>
+            <!-- 用<router-link> 来代替 <li>标签实现页面顶部 tab 也路由切换 -->
+            <router-link v-for="(item, index) in navigators" :key="index" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
+          </ul>
+        </div>
       </div>
+      <ArticleHeader v-if="scrollFlag" />
     </div>
   </div>
 </template>
 
 <script>
 import HOME from '../../api/home'
+import ArticleHeader from './ArticleHeader'
 export default {
+  components: {
+    ArticleHeader
+  },
   data () {
     return {
       home_search: '',
@@ -57,6 +64,7 @@ export default {
     // setInterval(() => {
     //   this.localAttr += 1
     // }, 2000)
+    console.log(this.scrollFlag, 'scrollFlag')
   },
   computed: {
     categoryIdList() {  //  当前选中分类
@@ -71,6 +79,9 @@ export default {
     pageSize() { //  页码范围
       return this.$store.state.home.pageSize
     },
+    scrollFlag() {  //  滚动参数
+      return this.$store.state.articleDetail.scrollFlag
+    }
     // localAttr: { //  localStorage 存取值
     //   // return localStorage.getItem('userIcon')
     //   get() {
