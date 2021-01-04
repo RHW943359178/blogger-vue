@@ -43,7 +43,7 @@
         <MarkdownNav ref="markdown_nav" :scrollTop="scrollTop" :rootId="'mavon_editor'" />
       </div>
         <div class="comment_list_body">
-          <CommentBox :type="1"  :id="''"/>
+          <CommentBox :type="1"  :id="0"/>
           <div class="comment_list">
             <div class="comment_list_exec">
               <div class="exec_show">
@@ -77,7 +77,7 @@
                       <span v-if="item.stars ">{{ item.stars }}</span>
                       <span v-else>赞</span>
                     </span>
-                    <span @click="commentBoxShow(index, item.id)">
+                    <span @click="commentBoxShow(index)">
                       <i class="el-icon-chat-line-square"></i>
                       回复
                     </span>
@@ -104,7 +104,7 @@
                           <span v-if="it.stars ">{{ it.stars }}</span>
                           <span v-else>赞</span>
                         </span>
-                        <span @click="commentBoxShow(index, it.id)">
+                        <span @click="commentBoxShow(index)">
                           <i class="el-icon-chat-line-square"></i>
                           回复
                         </span>
@@ -112,7 +112,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="new_comment" @click="commentBoxShow(index, item.id)">
+                <div class="new_comment" @click="commentBoxShow(index)">
                   <i class="el-icon-edit"></i>
                   <span>添加新评论</span>
                 </div>
@@ -190,7 +190,7 @@
           <span>赞 {{ commentStarsSum }}</span>
         </div>
         <div class="publish" v-show="focusFlag">
-          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(1, commentContent, '')">发布</el-button>
+          <el-button type="danger" :disabled="!commentContent" :loading="commentLoading" plain size="mini" @click="commentPublish(1, commentContent, 0)">发布</el-button>
           <el-button type="info" plain size="mini" @click="conmentBlur">取消</el-button>
         </div>
       </div>
@@ -296,8 +296,8 @@ export default {
       // 根据滚动右侧内容定位到左侧菜单
       if (this.$refs['b_article_detail']) {
         this.scrollTop = this.$refs['b_article_detail'].scrollTop
-        //  这里定义一个值，用于滚轮滚动时的临界值，控制显示吟唱
-        if (this.scrollTop <= 80) {
+        //  这里定义一个值，用于滚轮滚动时的临界值，控制显示隐藏
+        if (this.scrollTop <= 160) {
           this.$store.commit('updateScrollFlag', false)
         } else {
           this.$store.commit('updateScrollFlag', true)
@@ -509,7 +509,7 @@ export default {
       this.commentContent = ''
     },
     //  调用子元素的 focus 方法
-    commentBoxShow(index, id) {
+    commentBoxShow(index) {
       this.currentCommnet = index
       if (this.$refs.childComment.length) {
         this.$refs.childComment[index].conmentFocusT()

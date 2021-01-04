@@ -25,7 +25,7 @@ export default {
       commentLoading: false,
       focusFlagT: false,
       followCommentFlag: true,
-      buildId: '',
+      buildId: 0,
     }
   },
   mounted() {

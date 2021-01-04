@@ -13,7 +13,6 @@
 
 <script>
 export default {
-  // props: ['articleTitle', 'userInfo'],
   data() {
     return {
 
@@ -28,7 +27,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.articleTitle, 123)
   }
 }
 </script>
