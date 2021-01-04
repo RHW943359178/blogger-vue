@@ -119,7 +119,6 @@
           @imgAdd="imgAdd"
           @imgDel="imgDel"
           ref="md_detail"
-          :navigation="true"
           :subfield="mavonEditorOption.subfield"
           :defaultOpen="mavonEditorOption.defaultOpen"
           :toolbarsFlag="mavonEditorOption.toolbarsFlag"

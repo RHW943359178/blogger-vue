@@ -1,35 +1,41 @@
 <template>
   <div class="b_header_box">
     <div class="b_header">
-      <div class="b_header_normal" v-if="!scrollFlag">
-        <div class="b_header_left" @click="bancToHome">
-          <img src="../../assets/img/logo_blue.png" alt="">
-          <span>博客</span>
-        </div>
-        <div class="b_header_middle">
-          <el-input v-show="$route.path === '/blogger'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
-            <el-button slot="append" size="mini" icon="el-icon-search" @click="searchArticles"></el-button>
-          </el-input>
-        </div>
-        <div class="b_header_right">
-          <div class="isLogin" v-if="isLogin()">
-            <el-avatar :size="50" :src="iconImg" @error="errorHandler">
-              <img :src="iconImg"/>
-            </el-avatar>
-            <span>{{ loginUser() }}</span>
-            <el-button type="text" @click="quitLogin">退出</el-button>
+      <el-carousel height="100%" ref="carousel_header" direction="vertical" :indicator-position="'none'" :autoplay="false">
+        <el-carousel-item name="normal_header">
+          <div class="b_header_normal" v-if="!scrollFlag">
+            <div class="b_header_left" @click="bancToHome">
+              <img src="../../assets/img/logo_blue.png" alt="">
+              <span>博客</span>
+            </div>
+            <div class="b_header_middle">
+              <el-input v-show="$route.path === '/blogger'" v-model="home_search" size="small" :placeholder="placeholder" @focus="searchFocus" clearable>
+                <el-button slot="append" size="mini" icon="el-icon-search" @click="searchArticles"></el-button>
+              </el-input>
+            </div>
+            <div class="b_header_right">
+              <div class="isLogin" v-if="isLogin()">
+                <el-avatar :size="50" :src="iconImg" @error="errorHandler">
+                  <img :src="iconImg"/>
+                </el-avatar>
+                <span>{{ loginUser() }}</span>
+                <el-button type="text" @click="quitLogin">退出</el-button>
+              </div>
+              <div class="sign" v-else>
+                <el-button type="text" @click="jumpToSignIn">注册</el-button>
+                <el-button type="text" @click="jumpToSignUp">登录</el-button>
+              </div>
+              <ul>
+                <!-- 用<router-link> 来代替 <li>标签实现页面顶部 tab 也路由切换 -->
+                <router-link v-for="(item, index) in navigators" :key="index" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
+              </ul>
+            </div>
           </div>
-          <div class="sign" v-else>
-            <el-button type="text" @click="jumpToSignIn">注册</el-button>
-            <el-button type="text" @click="jumpToSignUp">登录</el-button>
-          </div>
-          <ul>
-            <!-- 用<router-link> 来代替 <li>标签实现页面顶部 tab 也路由切换 -->
-            <router-link v-for="(item, index) in navigators" :key="index" tag="li" exact active-class="active" :to="item.url">{{ item.label }}</router-link>
-          </ul>
-        </div>
-      </div>
-      <ArticleHeader v-if="scrollFlag" />
+        </el-carousel-item>
+        <el-carousel-item name="article_header">
+          <ArticleHeader v-if="scrollFlag" />
+        </el-carousel-item>
+      </el-carousel>
     </div>
   </div>
 </template>
@@ -58,13 +64,6 @@ export default {
     }
   },
   mounted () {
-    // if (localStorage.getItem('userIcon')) {
-    //   this.iconImg = '/static/' + localStorage.getItem('userIcon')
-    // }
-    // setInterval(() => {
-    //   this.localAttr += 1
-    // }, 2000)
-    console.log(this.scrollFlag, 'scrollFlag')
   },
   computed: {
     categoryIdList() {  //  当前选中分类
@@ -82,26 +81,18 @@ export default {
     scrollFlag() {  //  滚动参数
       return this.$store.state.articleDetail.scrollFlag
     }
-    // localAttr: { //  localStorage 存取值
-    //   // return localStorage.getItem('userIcon')
-    //   get() {
-    //     return localStorage.getItem('userIcon')
-    //   },
-    //   set(val) {
-    //     localStorage.setItem('userIcon', val)
-    //   }
-    // }
   },
   watch: {
     home_search: function() {
       this.$store.commit('updateSearchCondition', this.home_search)
     },
-    // localAttr: function() {
-    //   if (localStorage.getItem('userIcon')) {
-    //     console.log(123)
-    //     this.iconImg = '/static/' + localStorage.getItem('userIcon')
-    //   }
-    // }
+    scrollFlag: function() {
+      if (this.scrollFlag) {
+        this.$refs['carousel_header'].setActiveItem('article_header')
+      } else {
+        this.$refs['carousel_header'].setActiveItem('normal_header')
+      }
+    }
   },
   methods: {
     //  点击回到主页

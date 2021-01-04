@@ -47,24 +47,12 @@ export default {
     //  锚点跳转
     goAnchor(id) {
       this.activeId = id
-      console.log(id, 'id')
       id = '#' + id
       document.querySelector(id).scrollIntoView()
     },
     onScroll() {
-      console.log(this.scrollTop, 'this.scrollTop')
-      // console.log(this.domArr, 'this.domArr')
-      // this.domArr.forEach(item => {
-      //         console.log(item.offsetTop, 'item.offsetTop')
-      //   //  这里的147需要根据具体的情况来计算：标题h标签元素到父类容器的高度值（offsetTop）到滚轮开始滚动的位置的差值
-      //   if (this.scrollTop >= item.offsetTop + 147) {
-      //     this.activeId = item.childNodes[0].id
-      //   }
-      // })
       this.domArrOffsetTop.forEach(item => {
-              // console.log(item.offsetTop, 'item.offsetTop')
         //  这里的147需要根据具体的情况来计算：标题h标签元素到父类容器的高度值（offsetTop）到滚轮开始滚动的位置的差值
-        // if (this.scrollTop >= item.offsetTop + 114) {
         if (this.scrollTop >= item.offsetTop + 70) {
           this.activeId = item.id
         }
