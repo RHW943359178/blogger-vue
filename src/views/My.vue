@@ -59,7 +59,7 @@
                   <div class="title" @click="categoryEachChange(item)" >
                     <i v-if="!item.flag" class="el-icon-arrow-right"></i>
                     <i v-if="item.flag" class="el-icon-arrow-down"></i>
-                    <span v-if="currentCategory === 1">{{ returnCategory(categoryAll, item.categoryId) }}</span>
+                    <span v-if="currentCategory === 1">{{ returnCategory(categories, item.categoryId) }}</span>
                     <span v-else>{{ item.datetime }}</span>
                     <span>[{{ item.articleList.length }}]</span>
                   </div>
@@ -151,7 +151,7 @@
     </div>
     <!-- 提交保存的内容dialog框 -->
      <!-- @open="dialogOpen" @close="dialogClose" -->
-    <el-dialog :visible="dialog.visible" width="400px" title="投稿内容保存" append-to-body @close="dialogClose">
+    <el-dialog :visible="dialog.visible" width="400px" title="投稿内容保存" append-to-body :show-close="false" @close="dialogClose">
       <el-form label-width="80px" label-position="80px" size="small" :model="dialog.form" :rules="rules" ref="ruleForm">
         <el-form-item label="文章标题" required prop="title">
           <el-input v-model="dialog.form.title" placeholder="请输入文章标题" clearable style="width: 200px"></el-input>
@@ -166,7 +166,7 @@
         </el-form-item>
         <el-form-item label="所属分类" required prop="category">
           <el-select v-model="dialog.form.category" style="width: 200px">
-            <el-option v-show="item.catagoryId != 1" v-for="item in categoryAll" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
+            <el-option v-for="item in categories" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -183,7 +183,7 @@ import MY from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
 import { mavonEditor } from 'mavon-editor'
-import toc from 'markdown-toc'
+import HOME from '../api/home'
 export default {
   components: {
     mavonEditor
@@ -206,6 +206,7 @@ export default {
       articleList_dateTime: [],
       //  当前类目下所有的文章列表分类
       currentItem: [],
+      categories: [],
       //  文章信息
       openFlags: [
         {key: 1, text: '公开'},
@@ -242,11 +243,11 @@ export default {
     }
   },
   mounted() {
-    // toc('# One\n\n# Two').content
     this.getAllArticleByUserId()
     if (localStorage.getItem('userIcon')) {
       this.imageUrl = '/static/' + localStorage.getItem('userIcon')
     }
+    this.handleGetAllCategory()
   },
   watch: {
     editFlag: function(val) {
@@ -270,9 +271,6 @@ export default {
     }
   },
   computed: {
-    categoryAll() {
-      return this.$store.state.home.categoryAll
-    },
     //  用户的文章信息（文章篇数和总字数）
     userArticle() { 
       return this.$store.state.user.userArticle
@@ -282,6 +280,14 @@ export default {
     }
   },
   methods: {
+  // 获取全部分类列表
+  handleGetAllCategory(categories) {
+    HOME.handleGetAllCategory().then(result => {
+      if (result && result.code == 200) {
+        this.categories = result.data
+      }
+    })
+  },
     //  切换类目
     categoryChange(item) {
       this.currentCategory = item.id
@@ -531,7 +537,6 @@ export default {
         let formdata = new FormData()
         formdata.append('icon', file)
         MY.uploadPicture(formdata).then(result => {
-          console.log(result, 123)
           let url =  '/static/' + result.data
           if (result && result.code == 200) {
             //  设置富文本编辑器回显
@@ -542,8 +547,6 @@ export default {
     },
         //  文本编辑器的图片删除
     imgDel() {
-      console.log(pos, 'pos')
-      console.log(file, 'file')
     },
   }
 }

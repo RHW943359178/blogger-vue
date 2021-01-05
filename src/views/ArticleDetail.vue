@@ -408,10 +408,20 @@ export default {
       if (!this.articleInfo.userId) {
         return
       }
-      this.$router.push({
+      const detail = this.$router.resolve({
         path: `/blogger/authorHome`,
-        query: {author: this.author}
+        query: {
+          userId: this.author.userId,
+          follow: this.author.follow
+        }
       })
+      window.open(detail.href, '_blank')
+      // this.$store.commit('updateArticleId', item.id)
+    
+      // this.$router.push({
+      //   path: `/blogger/authorHome`,
+      //   query: {author: this.author}
+      // })
     },
     //  判断当前文章作者是不是自己
     authorIsSelf(param) {

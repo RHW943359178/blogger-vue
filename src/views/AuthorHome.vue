@@ -4,7 +4,7 @@
       <div class="left">
         <div class="header">
           <div class="icon">
-            <img src="../assets/img/user_avatar.jpg" alt="">
+            <img :src="'/static/' + authorInfo.imgUrl" alt="">
           </div>
           <div class="author">
             <div class="author_name">
@@ -33,9 +33,11 @@
               </div>
             </div>
           </div>
-          <div>
-            <el-button type="success" plain round>发博客信</el-button>
-            <el-button icon="el-icon-plus" type="success" round>关注</el-button>
+          <div class="buttonBox">
+            <div v-if="!authorIsSelf()">
+              <el-button type="success" plain round>发博客信</el-button>
+              <el-button icon="el-icon-plus" type="success" round>关注</el-button>
+            </div>
           </div>
         </div>
         <div class="body">
@@ -80,7 +82,7 @@
                   </div>
                   <div class="info">写了 4516 字，获得了 413 个喜欢</div>
                 </div>
-                <div class="follow_right">
+                <div class="follow_right" v-if="!authorIsSelf()">
                   <el-button type="success" round class="el-icon-plus">关注</el-button>
                 </div>
               </div>
@@ -121,19 +123,16 @@ export default {
     }
   },
   mounted() {
-    // this.getArticleList()
     this.getUserInfo()
-    console.log(this.author, 123)
   },
   computed: {
     author() {
-      return this.$route.query.author
+      return this.$route.query
     }
   },
   methods: {
     //  切换tab页
     handleClick(val) {
-      console.log(val, 'val')
       switch (val) {
         case 'article':
           break
@@ -181,14 +180,12 @@ export default {
     },
     //  获取用户信息
     getUserInfo() {
-            console.log(this.author.userId, 123224)
       if (!this.author.userId) {
         return
       }
       let params = {
         userId: this.author.userId
       }
-      console.log(params, 1234)
       ARTICLE_DETAIL.getAuthorByUserId(params).then(result => {
         if (result && result.code == 200) {
           this.authorInfo = result.data
@@ -202,7 +199,6 @@ export default {
     },
     //  批量获取用户关注人信息
     getFollowUserInfo() {
-      console.log(this.author, 'author')
       if (!this.author.follow) {
         return
       }

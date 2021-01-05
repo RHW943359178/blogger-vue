@@ -95,5 +95,5 @@ export default {
   returnServerIp() {
     // return 'http:localhost:8080/static/'
     return 'http:81.69.255.188:8871/static/'
-  }
+  },
 }

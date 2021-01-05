@@ -144,8 +144,6 @@ export default {
         if (result && result.code == 200) {
           // this.categoryList = result.data
           this.$store.commit('updateCategoryAll', result.data)
-        } else {
-          this.$message({type: 'error', message: result.message})
         }
       })
     },

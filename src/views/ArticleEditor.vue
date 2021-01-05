@@ -9,12 +9,12 @@
         style="height: 100%"
         v-model="editorContent"
         :ishljs="true"
-        ref=md
+        ref="md_detail"
         @imgAdd="imgAdd"
         @imgDel="imgDel"></mavon-editor>
     </div>
     <!-- 提交保存的内容dialog框 -->
-    <el-dialog :visible="dialog.visible" width="400px" title="投稿内容保存" @open="dialogOpen" @close="dialogClose" append-to-body>
+    <el-dialog :visible="dialog.visible" width="400px" append-to-body :show-close="false" title="投稿内容保存" @open="dialogOpen" @close="dialogClose">
       <el-form label-width="80px" label-position="80px" size="small" :model="dialog.form" :rules="rules" ref="ruleForm">
         <el-form-item label="文章标题" required prop="title">
           <el-input v-model="dialog.form.title" placeholder="请输入文章标题" clearable style="width: 200px"></el-input>
@@ -29,7 +29,7 @@
         </el-form-item>
         <el-form-item label="所属分类" required prop="category">
           <el-select v-model="dialog.form.category" style="width: 200px">
-            <el-option v-show="item.catagoryId != 1" v-for="item in categoryAll" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
+            <el-option v-for="item in categories" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -45,6 +45,8 @@
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css';
 import ARTICLE_EDITOR from '../api/articleEditor'
+import MY from '../api/my'
+import HOME from '../api/home'
 export default {
   components: {
     mavonEditor
@@ -53,6 +55,8 @@ export default {
     return {
       //  保存的内容
       editorContent: '',
+      //  分类
+      categories: [],
       //  dialog框显示内容
       dialog: {
         visible: false,
@@ -80,11 +84,9 @@ export default {
     }
   },
   computed: {
-    categoryAll() {
-      return this.$store.state.home.categoryAll
-    }
   },
   mounted() {
+    this.handleGetAllCategory()
   },
   methods: {
     //  清空文本
@@ -109,9 +111,9 @@ export default {
         categoryId: this.dialog.form.category,
         title: this.dialog.form.title,
         openFlag: this.dialog.form.openFlag,
-        username: "RHW",
-        viewCount: 1,
-        commentCount: 1
+        username: localStorage.getItem('username'),
+        viewCount: 0,
+        commentCount: 0
       }
       ARTICLE_EDITOR.handleArticleSave(params).then(result => {
         if (result && result.code == 200) {
@@ -138,8 +140,43 @@ export default {
         this.dialog.form.summary = this.editorContent.substr(0, 20)
       }
     },
-    imgAdd() {
+    //  获取所有分类
+    handleGetAllCategory() {
+      HOME.handleGetAllCategory().then(result => {
+        if (result && result.code == 200) {
+          this.categories = result.data
+        }
+      })
+    },
+    //  文件上传之前钩子
+    beforeAvatarUpload(file) {
+      const isJPG_PNG = (file.type === 'image/jpeg' || file.type === 'image/png');
 
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG_PNG) {
+        this.$message.warning('上传头像图片只能是 JPG 和 PNG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.warning('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG_PNG && isLt2M;
+    },
+    //  文本编辑器的图片新增
+    imgAdd(pos, file) {
+      let valid = this.beforeAvatarUpload(file)
+      if (valid) {
+        // 构建上传参数，将图片上传到服务器.
+        let formdata = new FormData()
+        formdata.append('icon', file)
+        MY.uploadPicture(formdata).then(result => {
+          let url =  '/static/' + result.data
+          if (result && result.code == 200) {
+            //  设置富文本编辑器回显
+            this.$refs.md_detail.$imglst2Url([[pos, url]])
+          }
+        })
+      }
     },
     imgDel() {
 
