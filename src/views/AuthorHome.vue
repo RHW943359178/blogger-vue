@@ -35,7 +35,7 @@
           </div>
           <div class="buttonBox">
             <div v-if="!authorIsSelf()">
-              <el-button type="success" plain round>发博客信</el-button>
+              <el-button type="success" plain round @click="sendMessage">发博客信</el-button>
               <el-button icon="el-icon-plus" type="success" round>关注</el-button>
             </div>
           </div>
@@ -97,6 +97,8 @@
 
       </div>
     </div>
+    <!-- 聊天信息框 -->
+    <Chat :visible="chatVisible" :username="authorInfo.username" />
   </div>
 </template>
 
@@ -105,7 +107,11 @@ import MY from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
 import AUTHOR_HOME from '../api/authorHome'
 import common from '../utils/common'
+import Chat from '../components/Chat'
 export default {
+  components: {
+    Chat
+  },
   data () {
     return {
       activeName: 'article',
@@ -119,7 +125,9 @@ export default {
       // 缓存的列表（用于接收数据）
       cacheList: [],
       //  用户的关注列表
-      userFollowUser: []
+      userFollowUser: [],
+      //  用户聊天信息框
+      chatVisible: false
     }
   },
   mounted() {
@@ -222,6 +230,14 @@ export default {
         return false
       }
     },
+    //  点击发博客信
+    sendMessage() {
+      this.chatVisible = true
+    },
+    //  关闭聊天dialog框
+    closeDialog() {
+      this.chatVisible = false
+    }
   }
 }
 </script>

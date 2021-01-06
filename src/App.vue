@@ -25,4 +25,7 @@ export default {
   body {
     margin: 0;
   }
+  .chat_tip {
+    padding: 5px 10px;
+  }
 </style>

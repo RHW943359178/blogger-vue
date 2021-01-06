@@ -8,8 +8,11 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' //样式文件
+import * as socketApi from './utils/socket'
+import './utils/directives.js'
 
 Vue.config.productionTip = false
+Vue.prototype.socketApi = socketApi
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
 
