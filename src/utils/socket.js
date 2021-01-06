@@ -13,6 +13,7 @@ function getWebIP() {
 function initWebSocket() {
   //  ws 地址
   const wsUri = 'ws://' + getWebIP() + ':' + serverPort
+  console.log(wsUri, 123)
   webSock = new WebSocket(wsUri)
   webSock.onmessage = e => {
     websocketOnMessage(e)

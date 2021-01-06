@@ -1,6 +1,6 @@
 <template>
-    <el-dialog :visible="visible" ref="chat_dialog" width="500px" :modal="false" append-to-body :show-close="false" :title="username" 
-                @open="dialogOpen" @close="dialogClose" custom-class="b_chat" v-dialogDrag>
+    <el-dialog :visible="visible" ref="chat_dialog" width="500px" :modal="false" append-to-body :modal-append-to-body="false" :show-close="false" :title="username" 
+                @open="dialogOpen" @close="dialogClose" :lock-scroll="false" custom-class="b_chat" v-dialogDrag>
       <div class="chat_title"></div>
       <div class="chat_show_box"></div>
       <div class="chat_input">
@@ -10,9 +10,6 @@
           </el-tooltip>
         </div>
         <textarea v-model="message" @keyup.enter="sendMessage"></textarea>
-        <!-- <div class="send">
-          <el-button size="mini" type="success" plain>发送(enter)</el-button>
-        </div> -->
       </div>
       <div slot="footer">
         <el-button size="mini" type="success" plain @click="sendMessage">发送(enter)</el-button>
@@ -60,6 +57,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../assets/css/chat.scss';
+  .el-dialog__header {
+    padding: 0;
+  }
+  .el-dialog__body {
+    padding: 0; 
+  }
 </style>

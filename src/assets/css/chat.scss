@@ -12,6 +12,12 @@
   }
   .chat_input {
     height: 100px;
+    .input_bar {
+      padding: 4px 0;
+      i {
+        font-size: 18px;
+      }
+    }
     textarea {
       resize: none;
       border: none;

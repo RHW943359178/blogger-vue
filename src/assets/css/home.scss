@@ -30,7 +30,7 @@
         border-radius: 4px;
         background: #FFFFFF;
         padding: 10px 20px;
-        transition: .6s all;
+        transition: .3s all;
         
         cursor: pointer;
         .article_title {
@@ -67,7 +67,8 @@
         }
       }
       .article_box:hover {
-        transform: scale(1.02);
+        // transform: scale(1.02);
+        box-shadow: 0 5px 20px rgba(0,0,0,.1);
       }
     }
     .b_home_wall {
@@ -164,8 +165,7 @@
             transition: .6s all;
           }
           & > div:hover {
-            transform: scale(1.1);
-            // transform: translate3d(0,0,0);
+            transform: scale(1.05);
           }
         }
       }

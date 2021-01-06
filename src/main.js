@@ -12,6 +12,7 @@ import * as socketApi from './utils/socket'
 import './utils/directives.js'
 
 Vue.config.productionTip = false
+
 Vue.prototype.socketApi = socketApi
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
