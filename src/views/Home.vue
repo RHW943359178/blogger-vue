@@ -51,7 +51,7 @@
             一个80后草根站长！一直潜心研究Web前端技术，一边工作一边积累经验，分享一些个人博客模板
           </div>
         </div>
-        <div class="spiit_line"></div>
+        <div class="split_line"></div>
         <div class="category">
           <div class="title">分类云</div>
           <div class="category_tag">
@@ -69,20 +69,25 @@
             <div class="category_each" @click="handleCategoryChange(item)" v-for="item in categoryAll" :key="item.categoryId" :style="returnColor(item.color)">{{ item.categoryName }}</div>
           </div>
         </div>
+        <div class="recommend">
+          <Recommend :title="'推荐阅读'" :buttonFlag="false" :recommandArticle="recommandArticle" />
+        </div>
       </div>
     </div>
-    <el-backtop target=".b_home" :bottom="40">
-      <div class="back_to_top">
-        UP
-      </div>
-    </el-backtop>
+    <BackToTop :domId="'.b_home'" :offset="40" />
   </div>
 </template>
 
 <script>
 import HOME from '../api/home'
 import common from '../utils/common'
+import Recommend from '../components/public/Recommend'
+import BackToTop from '../components/public/BackToTop'
 export default {
+  components: {
+    Recommend,
+    BackToTop
+  },
   data () {
     return {
       //  分类云列表
@@ -96,11 +101,14 @@ export default {
       },
       //  
       detailType: 1,
+      //  推荐文章列表
+      recommandArticle: []
     }
   },
   mounted() {
     this.handleGetAllCategory()
     this.handleGetArticleList()
+    this.getRecommendArticle()
   },
   computed: {
     condition() { //  当前过滤条件
@@ -221,6 +229,18 @@ export default {
       })
       window.open(detail.href, '_blank')
       this.$store.commit('updateArticleId', item.id)
+    },
+    //  获取推荐内容列表
+    getRecommendArticle() {
+      let params = {
+        pageNum: 1,
+        pageSize: 5
+      }
+      HOME.getRecommendArticle({params}).then(result => {
+        if (result && result.code == 200) {
+          this.recommandArticle = result.data
+        }
+      })
     }
   }
 }

@@ -140,39 +140,10 @@
           </div>
         </div>
         <div class="other_article" v-show="otherArticle.length">
-          <div class="title">
-            <span class="split_line"></span>
-            <span>其他文章</span>
-          </div>
-          <div class="body">
-            <div class="each_article" v-for="(item, index) in otherArticle" :key="index">
-              <div class="other_title">
-                <a :href="'#/blogger/article?id=' + item.id" target="_blank">{{ item.title }}</a>
-              </div>
-              <div class="read">
-                <span>阅读数</span>
-                <span>{{ item.viewCount }}</span>
-              </div>
-            </div>
-          </div>
+          <Recommend :title="'其他文章'" :buttonFlag="false" :recommandArticle="otherArticle" />
         </div>
-        <div class="recommend_read other_article">
-          <div class="title">
-            <span class="split_line"></span>
-            <span>推荐阅读</span>
-            <el-button style="position: absolute; right: 20px;" type="text" icon="el-icon-refresh">换一批</el-button>
-          </div>
-          <div class="body">
-            <div class="each_article" v-for="(item, index) in recommandArticle" :key="index">
-              <div class="other_title">
-                <a :href="'#/blogger/article?id=' + item.id" target="_blank">{{ item.title }}</a>
-              </div>
-              <div class="read">
-                <span>阅读数</span>
-                <span>{{ item.viewCount }}</span>
-              </div>
-            </div>
-          </div>
+        <div class="recommend_read other_article" v-show="recommandArticle.length">
+          <Recommend :title="'推荐阅读'" :buttonFlag="true" :buttonContent="'换一批'" :recommandArticle="recommandArticle" />
         </div>
       </div>
     </div>
@@ -195,6 +166,7 @@
         </div>
       </div>
     </div>
+    <BackToTop :domId="'.b_article_detail'" :offset="60" />
   </div>
 </template>
 
@@ -204,11 +176,15 @@ import ARTICLE_DETAIL from '../api/articleDetail'
 import common from '../utils/common'
 import CommentBox from '../components/public/CommentBox'
 import MarkdownNav from '../components/MarkdownNav'
+import Recommend from '../components/public/Recommend'
+import BackToTop from '../components/public/BackToTop'
 export default {
   components: {
     mavonEditor,
     CommentBox,
-    MarkdownNav
+    MarkdownNav,
+    Recommend,
+    BackToTop
   },
   data() {
     return {

@@ -10,4 +10,8 @@ export default {
   handleGetAllArticle: params => {
     return service.get('/blogger/home/article', params)
   },
+  //  获取推荐文章列表
+  getRecommendArticle: params => {
+    return service.get('/blogger/home/recommend', params)
+  }
 }

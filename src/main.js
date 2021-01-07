@@ -10,6 +10,8 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' //样式文件
 import * as socketApi from './utils/socket'
 import './utils/directives.js'
+//  引入全局inco
+import '@/icons'
 
 Vue.config.productionTip = false
 

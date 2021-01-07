@@ -240,77 +240,8 @@
           right: 10px;
         }
       }
-      .other_article {
-        .title {
-          height: 40px;
-          display: flex;
-          align-items: center;
-          padding: 10px;
-          position: relative;
-          .split_line {
-            height: 30px;
-            line-height: 40px;
-            width: 5px;
-            border: 2px;
-            background: #409EFF;
-          }
-          & > span:nth-child(2) {
-            margin-left: 20px;
-            color: #555;
-            font-weight: bold;
-          }
-          span {
-            display: inline-block;
-          }
-        }
-        .body {
-          padding-left: 10px;
-          border-bottom: 1px solid #ccc;
-          .each_article {
-            margin-bottom: 15px;
-            .other_title {
-              margin-bottom: 5px;
-              cursor: pointer;
-              a {
-                color: #24292e;
-                text-decoration: none;
-              }
-              a:hover {
-                text-decoration: underline;
-                color: #555;
-              }
-            }
-            // .other_title:hover {
-            //   text-decoration: underline;
-            //   color: #555;
-            // }
-            .read {
-              font-size: 14px;
-              color: #969696;
-              & > span:nth-child(1) {
-                margin-right: 5px;
-              }
-            }
-          }
-
-        }
-      }
-      .recommend_read {
-
-      }
     }
   }
-  // .comment_list_body {
-  //   width: 80%;
-  //   margin: 0 auto;
-  //   padding: 32px;
-  //   background: #E8E8E8;
-  //   .comment_input {
-  //     textarea {
-        
-  //     }
-  //   }
-  // }
   .comment_box {
     width: 100%;
     background: #dddddd;
