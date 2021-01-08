@@ -37,7 +37,13 @@ service.interceptors.response.use(response => {
         break;
       case 401:
         Message.message = '未授权，请重新登录'
-        Message.error('未授权，请重新登录')
+        Message.warning('未授权，请重新登录')
+        //  未登录自动跳转到登录页面并清除本地local
+        localStorage.removeItem('userId')
+        localStorage.removeItem('username')
+        localStorage.removeItem('userIcon')
+        localStorage.removeItem('flag')
+        window.location.href = "#/blogger/signUp"
         break;
       case 403:
         Message.message = '拒绝访问'
