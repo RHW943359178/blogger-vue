@@ -53,7 +53,21 @@
         </div>
         <div class="split_line"></div>
         <div class="category">
-          <div class="title">分类云</div>
+          <div class="title">专题列表</div>
+          <div class="category_tag">
+            <!-- <div class="category_tag_title">
+              <div class="split_line"></div>
+              <div class="content">当前专题</div>
+            </div> -->
+            <div class="category_tag_body">
+              <el-button type="primary" plain size="mini" circle class="el-icon-close" @click="subjectChange(0)"></el-button>
+              <span :class="['subjectTag', {'activeSubject': currentSubject == item.subjectId}]" v-for="item in subjects" :key="item.subjectId" @click="subjectChange(item)">{{ item.subjectName }}</span>
+            </div>
+          </div>
+          <div class="category_tag_body"></div>
+        </div>
+        <div class="category">
+          <div class="title">分类列表</div>
           <div class="category_tag">
             <div class="category_tag_title">
               <div class="split_line"></div>
@@ -102,13 +116,18 @@ export default {
       //  
       detailType: 1,
       //  推荐文章列表
-      recommandArticle: []
+      recommandArticle: [],
+      //  所有专题列表
+      subjects: [],
+      //  当前选中的专题
+      currentSubject: 0
     }
   },
   mounted() {
     this.handleGetAllCategory()
     this.handleGetArticleList()
     this.getRecommendArticle()
+    this.getAllSubjects()
   },
   computed: {
     condition() { //  当前过滤条件
@@ -241,6 +260,22 @@ export default {
           this.recommandArticle = result.data
         }
       })
+    },
+    //  获取所有专题列表
+    getAllSubjects() {
+      HOME.getAllSubjects({}).then(result => {
+        if (result && result.code == 200) {
+          this.subjects = result.data
+        }
+      })
+    },
+    //  点击专题列表切换
+    subjectChange(item) {
+      if (item === 0) {
+        this.currentSubject = item
+      } else {
+        this.currentSubject = item.subjectId
+      }
     }
   }
 }

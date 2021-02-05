@@ -118,7 +118,7 @@ module.exports = {
     https: false,
     open: true, //配置自动启动浏览器
     proxy: 'http://127.0.0.1:8000',
-  //   proxy: 'http://81.69.255.188:8000',
+    // proxy: 'http://81.69.255.188:8000',
     // 配置多个代理
     // proxy: {
     //   '/api': {

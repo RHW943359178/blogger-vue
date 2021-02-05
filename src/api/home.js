@@ -13,5 +13,9 @@ export default {
   //  获取推荐文章列表
   getRecommendArticle: params => {
     return service.get('/blogger/home/recommend', params)
+  },
+  //  获取所有专题列表
+  getAllSubjects: params => {
+    return service.get('/blogger/subject/getAllSubjects', params)
   }
 }

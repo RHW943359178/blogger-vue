@@ -49,7 +49,7 @@ export default {
    */
   validatePwd() {
     return (rule, value, callback) => {
-      const pwdReg = /^[a-zA-Z]\w{8,18}$/
+      const pwdReg = /^[a-zA-Z][a-zA-Z0-9_]{7,17}$/
       if (!value) {
         return callback(new Error('请输入密码'))
       }

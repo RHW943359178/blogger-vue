@@ -55,18 +55,17 @@
             </div>
             <div class="category_body">
               <div class="body_left">
-                <div class="category_each" v-for="(item, index) in currentCategory === 1 ? articleList_category : articleList_dateTime" :key="index">
-                  <div class="title" @click="categoryEachChange(item)" >
-                    <i v-if="!item.flag" class="el-icon-arrow-right"></i>
-                    <i v-if="item.flag" class="el-icon-arrow-down"></i>
-                    <span v-if="currentCategory === 1">{{ returnCategory(categories, item.categoryId) }}</span>
-                    <span v-else>{{ item.datetime }}</span>
-                    <span>[{{ item.articleList.length }}]</span>
-                  </div>
-                  <div v-show="item.flag" class="detail">
-                    <p :class="{'active': it.articleId === currentArticle}" v-for="(it, idx) in item.articleList" :key="idx" @click="articleChange(it)">{{ it.title }}</p>
-                  </div>
-                </div>
+                <el-collapse>
+                  <el-collapse-item 
+                    v-for="(item, index) in articleList_common" 
+                    :key="index" 
+                    :title="item.showName + ' ' + '[' +  item.articleList.length + ']'" 
+                    :name="item.index">
+                    <div class="detail">
+                      <p :class="{'active': it.articleId === currentArticle}" v-for="(it, idx) in item.articleList" :key="idx" @click="articleChange(it)">{{ it.title }}</p>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
               </div>
             </div>
           </div>
@@ -197,13 +196,18 @@ export default {
       categoryList: [
         {id: 1, label: '分类', icon: 'category.png'},
         {id: 2, label: '时间', icon: 'dateTime.png'},
+        {id: 3, label: '专题', icon: 'zhuanti.png'},
       ],
       //  所有文章列表
       articleList: [],
+      //  当前显示的文章列表
+      articleList_common: [],
       //  文章信息按照分类
       articleList_category: [],
       //  文章信息按照时间
       articleList_dateTime: [],
+      //  文章信息按照专题来分类
+      articleList_subject: [],
       //  当前类目下所有的文章列表分类
       currentItem: [],
       categories: [],
@@ -281,7 +285,7 @@ export default {
   },
   methods: {
   // 获取全部分类列表
-  handleGetAllCategory(categories) {
+  handleGetAllCategory() {
     HOME.handleGetAllCategory().then(result => {
       if (result && result.code == 200) {
         this.categories = result.data
@@ -291,8 +295,14 @@ export default {
     //  切换类目
     categoryChange(item) {
       this.currentCategory = item.id
+      if (item.id === 1 || item.id === 2) {
+        this.articleList_common = this.handleArticleData(this.articleList, item.id)
+        console.log("this.articleList_common", this.articleList_common)
+      } else {
+        this.articleList_common = []
+      }
       if (item.id === 2) {
-        this.articleList_dateTime = this.handleArticleData(this.articleList, item.id)
+        
       }
     },
     //  获取该用户所有文章信息
@@ -301,18 +311,18 @@ export default {
         if (result && result.code == 200) {
           this.articleList = result.data
           //  按照分类id显示
-          this.articleList_category = this.handleArticleData(result.data, 1)
+          this.articleList_common = this.handleArticleData(result.data, 1)
           //  按照时间显示
           //  默认打开第一个类目的，第一篇文章
-          if (this.articleList_category.length) {
-            //  当前用户下，第一个类目
-            let currentCategoryList = this.articleList_category[0]
-            currentCategoryList.flag = true
-            if (currentCategoryList.articleList.length) {
-              this.currentArticle = currentCategoryList.articleList[0].articleId
-              this.getArticleInfoById(this.currentArticle)
-            }
-          }
+          // if (this.articleList_category.length) {
+          //   //  当前用户下，第一个类目
+          //   let currentCategoryList = this.articleList_category[0]
+          //   currentCategoryList.flag = true
+          //   if (currentCategoryList.articleList.length) {
+          //     this.currentArticle = currentCategoryList.articleList[0].articleId
+          //     this.getArticleInfoById(this.currentArticle)
+          //   }
+          // }
         }
       })
     },
@@ -345,7 +355,7 @@ export default {
         })
         //  遍历不重复的列表
         tmpList.forEach(item => {
-          categoryList.push({categoryId: item, flag: false, articleList: []})
+          categoryList.push({categoryId: item, showName: this.returnCategory(this.categories, item), index: item, articleList: []})
         })
         categoryList.forEach(item => {
           data.forEach(it => {
@@ -372,12 +382,12 @@ export default {
         tmpList = Array.from(new Set(tmpList))
         //  遍历生成日期数据
         tmpList.forEach(item => {
-          dateList.push({datetime: item, flag: false, articleList: []})
+          dateList.push({showName: item, index: item, articleList: []})
         })
         dateList.forEach(item => {
           data.forEach(it => {
             let time = this.dateReturn(it.createTime).split(' ')[0]
-            if (item.datetime == time.substr(0, time.length - 3)) {
+            if (item.showName == time.substr(0, time.length - 3)) {
               item.articleList.push({title: it.title, articleId: it.id})
             }
           })
@@ -388,12 +398,6 @@ export default {
     //  返回category中文
     returnCategory(data, id) {
       return common.returnCategory(data, id)
-    },
-    //  切换分类获取分类下文章信息
-    categoryEachChange(item) {
-      item.flag = !item.flag
-      this.$set(item, 'flag', item.flag)
-      this.currentItem = item
     },
     //  点击文章切换
     articleChange(val) {

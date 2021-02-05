@@ -151,6 +151,46 @@
               // width: 40%;
               height: 100%;
               overflow: auto;
+              .el-collapse-item {
+                .el-collapse-item__header {
+                  background: none;
+                  font-size: 16px;
+                  padding-left: 15px;
+                }
+                .el-collapse-item__wrap {
+                  background: none;
+                }
+                .el-collapse-item__content {
+                  padding-bottom: 0;
+                  .detail {
+                    // height: 100px;
+                    max-height: 200px;
+                    transition: max-height .5s;
+                    p {
+                      margin: 0;
+                      padding: 6px 0 6px 20px;
+                      word-wrap: break-word;
+                      word-break: normal;
+                      font-size: 14px;
+                    }
+                    p:hover{
+                      color: #555;
+                      background: #F5F5F5;
+                      border-radius: 5px;
+                      color: #666;
+                      cursor: pointer;
+                    }
+                    .active {
+                      background: #F5F5F5;
+                      border-radius: 5px;
+                      color: #666;
+                    }
+                  }
+                }
+                .el-collapse-item__header:hover {
+                  box-shadow: 0px 0px 5px 2px rgba(0,0,0,.1);
+                }
+              }
               .category_each {
                 cursor: pointer;
                 .title {
@@ -161,29 +201,6 @@
                   & > span:nth-child(2) {
                     margin-left: 3px;
                   }
-                }
-                .detail {
-                  // height: 100px;
-                  max-height: 200px;
-                  transition: max-height .5s;
-                  p {
-                    padding-left: 10%;
-                    margin: 8px 0;
-                    word-wrap: break-word;
-                    word-break: normal;
-                  }
-                  p:hover{
-                    color: #555;
-                    // text-decoration: underline;
-                    background: #F5F5F5;
-                    border-radius: 5px;
-                    color: #666;
-                  }
-                }
-                .active {
-                  background: #F5F5F5;
-                  border-radius: 5px;
-                  color: #666;
                 }
                 .title:hover {
                   color: #666;                        
