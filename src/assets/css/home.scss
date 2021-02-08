@@ -154,7 +154,7 @@
               padding: 3px 8px;
               border: 1px solid #409eff;
               border-radius: 4px;
-              color: #555;
+              color: #999;
               background: #ffffff;
               cursor: pointer;
               margin-left: 10px;
@@ -164,8 +164,9 @@
             }
             .activeSubject {
               background: #dddddd;
-              box-sizing: border-box;
-              border: 3px solid #409eff;
+              color: #409eff;
+              // box-sizing: border-box;
+              // border: 3px solid #409eff;
             }
           }
         }

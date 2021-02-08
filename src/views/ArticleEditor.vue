@@ -14,7 +14,8 @@
         @imgDel="imgDel"></mavon-editor>
     </div>
     <!-- 提交保存的内容dialog框 -->
-    <el-dialog :visible="dialog.visible" width="400px" append-to-body :show-close="false" title="投稿内容保存" @open="dialogOpen" @close="dialogClose">
+    <ArticleSaveBox :dialog="dialog" :flag="1" />
+    <!-- <el-dialog :visible="dialog.visible" width="400px" append-to-body :show-close="false" title="投稿内容保存" @open="dialogOpen" @close="dialogClose">
       <el-form label-width="80px" label-position="80px" size="small" :model="dialog.form" :rules="rules" ref="ruleForm">
         <el-form-item label="文章标题" required prop="title">
           <el-input v-model="dialog.form.title" placeholder="请输入文章标题" clearable style="width: 200px"></el-input>
@@ -37,19 +38,21 @@
         <el-button type="primary" size="mini" @click="submitContent('ruleForm')">保存</el-button>
         <el-button type="info" size="mini" @click="dialog.visible = false">关闭</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import { mavonEditor } from 'mavon-editor'
+import ArticleSaveBox from '../components/public/ArticleSaveBox'
 import 'mavon-editor/dist/css/index.css';
 import ARTICLE_EDITOR from '../api/articleEditor'
 import MY from '../api/my'
 import HOME from '../api/home'
 export default {
   components: {
-    mavonEditor
+    mavonEditor,
+    ArticleSaveBox
   },
   data () {
     return {
@@ -64,7 +67,9 @@ export default {
           title: '',
           summary: '',
           category: '',
-          openFlag: 1
+          openFlag: 1,
+          radio: 0,
+          subject: '',
         }
       },
       openFlags: [

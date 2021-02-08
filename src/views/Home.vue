@@ -182,9 +182,10 @@ export default {
         return
       }
       if (this.categoryTags.indexOf(item) === -1 && item.categoryId !== 0) {
+        //  分类与专题互斥
+        this.currentSubject = 0
         this.categoryTags.push(item)
       }
-      // this.handleGetArticleList()
     },
     //  关闭分类 tag 标签
     tagClose(tag, index) {
@@ -197,7 +198,8 @@ export default {
         condition: this.condition,
         categoryId: arr,
         pageNum: this.pagination.pageNum,
-        pageSize: this.pagination.pageSize
+        pageSize: this.pagination.pageSize,
+        subjectId: this.currentSubject
       }
       HOME.handleGetAllArticle({params}).then(result => {
         if (result && result.code == 200) {
@@ -273,9 +275,14 @@ export default {
     subjectChange(item) {
       if (item === 0) {
         this.currentSubject = item
+        //  清空 categoryTags 列表时在 watch 那里已经调用了 handleGetArticleList()
+        this.handleGetArticleList()
       } else {
         this.currentSubject = item.subjectId
+        //  专题与分类互斥
+        this.categoryTags = []
       }
+      
     }
   }
 }
