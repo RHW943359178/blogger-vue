@@ -57,7 +57,7 @@ export default {
         { id: 2, label: '投稿', url: '/blogger/articleEditor' },
         { id: 3, label: '评论', url: '/blogger/comment' },
         { id: 3, label: '我的', url: '/blogger/my' },
-        { id: 4, label: '设置', url: '/blogger/set' },
+        { id: 4, label: '设置', url: '/blogger/setting' },
       ],
       // localAttr: '',
       iconImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'

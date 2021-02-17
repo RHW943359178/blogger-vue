@@ -55,7 +55,7 @@
             </div>
             <div class="category_body">
               <div class="body_left">
-                <el-collapse>
+                <el-collapse >
                   <el-collapse-item 
                     v-for="(item, index) in articleList_common" 
                     :key="index" 
@@ -149,43 +149,21 @@
       </div>
     </div>
     <!-- 提交保存的内容dialog框 -->
-     <!-- @open="dialogOpen" @close="dialogClose" -->
-    <el-dialog :visible="dialog.visible" width="400px" title="投稿内容保存" append-to-body :show-close="false" @close="dialogClose">
-      <el-form label-width="80px" label-position="80px" size="small" :model="dialog.form" :rules="rules" ref="ruleForm">
-        <el-form-item label="文章标题" required prop="title">
-          <el-input v-model="dialog.form.title" placeholder="请输入文章标题" clearable style="width: 200px"></el-input>
-        </el-form-item>
-        <el-form-item label="文章梗概">
-          <el-input v-model="dialog.form.summary" placeholder="请输入文章梗概" clearable style="width: 200px"></el-input>
-        </el-form-item>
-        <el-form-item label="是否公开" required>
-          <el-select v-model="dialog.form.openFlag" style="width: 200px">
-            <el-option v-for="item in openFlags" :key="item.key" :value="item.key" :label="item.text"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属分类" required prop="category">
-          <el-select v-model="dialog.form.category" style="width: 200px">
-            <el-option v-for="item in categories" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button type="primary" size="mini" @click="submitContent('ruleForm')">保存</el-button>
-        <el-button type="info" size="mini" @click="dialog.visible = false">关闭</el-button>
-      </div>
-    </el-dialog>
+    <ArticleSaveBox :dialog="dialog" :flag="2" />
   </div>
 </template>
 
 <script>
 import MY from '../api/my'
 import ARTICLE_DETAIL from '../api/articleDetail'
+import ArticleSaveBox from '../components/public/ArticleSaveBox'
 import common from '../utils/common'
 import { mavonEditor } from 'mavon-editor'
 import HOME from '../api/home'
 export default {
   components: {
-    mavonEditor
+    mavonEditor,
+    ArticleSaveBox
   },
   data() {
     return {
@@ -210,7 +188,10 @@ export default {
       articleList_subject: [],
       //  当前类目下所有的文章列表分类
       currentItem: [],
+      //  分类列表
       categories: [],
+      //  主题列表
+      subjects: [],
       //  文章信息
       openFlags: [
         {key: 1, text: '公开'},
@@ -231,19 +212,21 @@ export default {
           title: '',
           summary: '',
           category: '',
-          openFlag: 1
+          openFlag: 1,
+          radio: 0,
+          subject: '',
         }
       },
       //  表单验证规则
-      rules: {
-        title: [
-          { required: true, message: '请输入活动名称', trigger: 'blur'},
-          { max: 50, message: '长度不能超过50个字符', trigger: 'blur'},
-        ],
-        category: [
-          { required: true, message: '请选择文章所属分类', trigger: 'change'},
-        ],
-      }
+      // rules: {
+      //   title: [
+      //     { required: true, message: '请输入活动名称', trigger: 'blur'},
+      //     { max: 50, message: '长度不能超过50个字符', trigger: 'blur'},
+      //   ],
+      //   category: [
+      //     { required: true, message: '请选择文章所属分类', trigger: 'change'},
+      //   ],
+      // }
     }
   },
   mounted() {
@@ -252,6 +235,7 @@ export default {
       this.imageUrl = '/static/' + localStorage.getItem('userIcon')
     }
     this.handleGetAllCategory()
+    this.getAllSubjects()
   },
   watch: {
     editFlag: function(val) {
@@ -284,25 +268,33 @@ export default {
     }
   },
   methods: {
-  // 获取全部分类列表
-  handleGetAllCategory() {
-    HOME.handleGetAllCategory().then(result => {
-      if (result && result.code == 200) {
-        this.categories = result.data
-      }
-    })
-  },
+    //  切换分类、时间和专题
+    articleTypeChange() {
+      console.log(123)
+    },
+    // 获取全部分类列表
+    handleGetAllCategory() {
+      HOME.handleGetAllCategory().then(result => {
+        if (result && result.code == 200) {
+          this.categories = result.data
+        }
+      })
+    },
+    //  获取所有专题列表
+    getAllSubjects() {
+      HOME.getAllSubjects({}).then(result => {
+        if (result && result.code == 200) {
+          this.subjects = result.data
+        }
+      })
+    },
     //  切换类目
     categoryChange(item) {
       this.currentCategory = item.id
       if (item.id === 1 || item.id === 2) {
         this.articleList_common = this.handleArticleData(this.articleList, item.id)
-        console.log("this.articleList_common", this.articleList_common)
       } else {
-        this.articleList_common = []
-      }
-      if (item.id === 2) {
-        
+        this.articleList_common = this.handleArticleData(this.articleList, item.id)
       }
     },
     //  获取该用户所有文章信息
@@ -368,7 +360,7 @@ export default {
           this.currentItem = categoryList[0]
         }
         return categoryList
-      } else {  //  按照时间排序
+      } else if (type === 2) {  //  按照时间排序
         let dateList = []
         data.forEach(item => {
           if (item.createTime) {
@@ -393,6 +385,25 @@ export default {
           })
         })
         return dateList
+      } else {
+        let subjectList = []
+        data.forEach(item => {
+          if (item.subjectId > 0) {
+            if (tmpList.indexOf(item.subjectId) > -1) {
+              tmpList.push(item.subjectId)
+            }
+          }
+        })
+        tmpList.forEach(item => {
+          subjectList.push({showName: common.returnSubject(this.subjects, item), subjectId: item, index: item, articleList: []})
+        })
+        subjectList.forEach(item => {
+          data.forEach(it => {
+            if (item.subjectId == it.subjectId) {
+              item.articleList.push({title: it.title, articleId: it.id})
+            }
+          })
+        })
       }
     },
     //  返回category中文
@@ -549,7 +560,7 @@ export default {
         })
       }
     },
-        //  文本编辑器的图片删除
+    //  文本编辑器的图片删除
     imgDel() {
     },
   }

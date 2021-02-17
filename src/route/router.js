@@ -8,6 +8,7 @@ import signIn from '../views/SignIn'
 import signUp from '../views/SignUp'
 import authorHome from '../views/AuthorHome'
 import errorPage from '../views/ErrorPage.vue'
+import set from '../views/Setting.vue'
 
 Vue.use(Router)
 
@@ -67,6 +68,14 @@ const router = new Router({
       component: authorHome,
       meta: {
         isLogin: false
+      }
+    },
+    {
+      path: '/blogger/setting',
+      name: 'setting',
+      component: set,
+      meta: {
+        isLogin: true
       }
     },
     { //  统一的错误页面

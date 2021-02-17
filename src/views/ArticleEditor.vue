@@ -15,30 +15,6 @@
     </div>
     <!-- 提交保存的内容dialog框 -->
     <ArticleSaveBox :dialog="dialog" :flag="1" />
-    <!-- <el-dialog :visible="dialog.visible" width="400px" append-to-body :show-close="false" title="投稿内容保存" @open="dialogOpen" @close="dialogClose">
-      <el-form label-width="80px" label-position="80px" size="small" :model="dialog.form" :rules="rules" ref="ruleForm">
-        <el-form-item label="文章标题" required prop="title">
-          <el-input v-model="dialog.form.title" placeholder="请输入文章标题" clearable style="width: 200px"></el-input>
-        </el-form-item>
-        <el-form-item label="文章梗概">
-          <el-input v-model="dialog.form.summary" placeholder="请输入文章梗概" clearable style="width: 200px"></el-input>
-        </el-form-item>
-        <el-form-item label="是否公开" required>
-          <el-select v-model="dialog.form.openFlag" style="width: 200px">
-            <el-option v-for="item in openFlags" :key="item.key" :value="item.key" :label="item.text"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属分类" required prop="category">
-          <el-select v-model="dialog.form.category" style="width: 200px">
-            <el-option v-for="item in categories" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button type="primary" size="mini" @click="submitContent('ruleForm')">保存</el-button>
-        <el-button type="info" size="mini" @click="dialog.visible = false">关闭</el-button>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 
