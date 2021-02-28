@@ -13,7 +13,7 @@
           <el-option v-for="item in openFlags" :key="item.key" :value="item.key" :label="item.text"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="所属分类" required prop="category">
+      <el-form-item label="所属分类" prop="category">
         <el-select v-model="dialog.form.category" style="width: 200px" :disabled="categoryDisabled">
           <el-option v-for="item in categories" :key="item.categoryId" :value="item.categoryId" :label="item.categoryName"></el-option>
         </el-select>
@@ -24,8 +24,9 @@
           <el-radio :label="0">否</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="专题列表" required prop="subject">
-        <el-select v-model="dialog.form.subjectId" style="width: 200px" :disabled="subjectDisabled">
+       <!-- :prop="subjectRequired" -->
+      <el-form-item label="专题列表" prop="subject">
+        <el-select v-model="dialog.form.subject" style="width: 200px" :disabled="subjectDisabled">
           <el-option v-for="item in subjectList" :key="item.subjectId" :value="item.subjectId" :label="item.subjectName"></el-option>
         </el-select>
       </el-form-item>
@@ -40,19 +41,9 @@
 <script>
 import HOME from '../../api/home'
 export default {
-  props: ['dialog', 'flag'],
+  props: ['dialog', 'flag', 'editorContent'],
   data() {
     return {
-      //  dialog框显示内容
-      // dialog: {
-      //   visible: false,
-      //   form: {
-      //     title: '',
-      //     summary: '',
-      //     category: '',
-      //     openFlag: 1
-      //   }
-      // },
       //  分类列表
       categories: [],
       categoryDisabled: false,
@@ -64,6 +55,7 @@ export default {
         {key: 1, text: '公开'},
         {key: 2, text: '不公开'},
       ],
+      currentRadia: 0,
       //  表单验证规则
       rules: {
         title: [
@@ -74,7 +66,7 @@ export default {
           { required: true, message: '请选择文章所属分类', trigger: 'change'},
         ],
         subject: [
-          { required: true, message: '请选择文章所属专题', trigger: 'change'},
+          { required: false, message: '请选择文章所属专题', trigger: 'change'},
         ],
       },
     }
@@ -82,25 +74,40 @@ export default {
   mounted() {
     this.handleGetAllCategory()
     this.getAllSubjects()
+    // console.log(this.dialog, 123)
+    // this.$emit('updateDialog', this.dialog)
   },
   methods: {
     //  表格校验
     submitContent(formname) {
-      this.$parent.submitContent(formname)
+      // this.$parent.submitContent(formname)
+      console.log(this.dialog, 12)
+      // this.rules.category[0].required = true
+      this.$refs[formname].validate(valid => {
+        if (valid) {
+          // this.contentSave()
+          this.$parent.save(this.currentRadia)
+        } else {
+          return false
+        }
+      })
     },
     //  dialog框关闭
     dialogClose() {
       this.$refs['ruleForm'].resetFields()
+      this.categoryDisabled = false
+      this.subjectDisabled = true
       this.dialog.form = {
         title: '',
         summary: '',
         category: '',
-        openFalg: 1
+        subject: '',
+        openFlag: 1,
+        radio: 0
       }
     },
     //  dialog 框打开时回调
     dialogOpen() {
-      //  默认展示文章内容的前20个字符为违章梗概
       if (this.editorContent && this.flag === 1) {
         this.dialog.form.summary = this.editorContent.substr(0, 20)
       }
@@ -122,14 +129,21 @@ export default {
       })
     },
     radioChange(val) {
+      this.$refs['ruleForm'].resetFields()
+      this.currentRadia = val
       if (val) {
         this.categoryDisabled = true
         this.subjectDisabled = false
         this.dialog.form.category = ''
+        this.rules.category[0].required = false
+        this.rules.subject[0].required = true
       } else {
         this.categoryDisabled = false
         this.subjectDisabled = true
         this.dialog.form.subject = ''
+        this.rules.category[0].required = true
+        this.rules.subject[0].required = false
+
       }
     }
   }

@@ -7,8 +7,14 @@
           <div class="article_summary">{{ item.summary }}</div>
           <div class="article_footer">
             <div class="category">
-              <i class="el-icon-paperclip"></i>
-              <span>{{ returnCategory(item.categoryId) }}</span>
+              <div v-show="item.categoryId">
+                <i class="el-icon-paperclip"></i>
+                <span>{{ returnCategory(item.categoryId, 1) }}</span>
+              </div>
+              <div v-show="item.subjectId">
+                <i class="el-icon-collection-tag"></i>
+                <span>{{ returnCategory(item.subjectId, 2) }}</span>
+              </div>
             </div>
             <div class="time">
               <i class="el-icon-time"></i>
@@ -222,13 +228,23 @@ export default {
       this.handleGetArticleList()
     },
     //  返回分类中文
-    returnCategory(id) {
+    returnCategory(id, val) {
+      let array, idName, name
+      if (val === 1) {
+        array = this.categoryAll
+        idName = 'categoryId'
+        name = 'categoryName'
+      } else {
+        array = this.subjects
+        idName = 'subjectId'
+        name = 'subjectName'
+      }
       if (id) {
-        let arr = this.categoryAll.filter(item => {
-          return item.categoryId == id
+        let arr = array.filter(item => {
+          return item[idName] == id
         })
         if (arr.length) {
-          return arr[0].categoryName
+          return arr[0][name]
         } else {
           return ''
         }

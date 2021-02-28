@@ -14,7 +14,7 @@
         @imgDel="imgDel"></mavon-editor>
     </div>
     <!-- 提交保存的内容dialog框 -->
-    <ArticleSaveBox :dialog="dialog" :flag="1" />
+    <ArticleSaveBox :dialog="dialog" :flag="1" :editorContent="editorContent" />
   </div>
 </template>
 
@@ -67,34 +67,29 @@ export default {
   computed: {
   },
   mounted() {
-    this.handleGetAllCategory()
   },
   methods: {
     //  清空文本
     clearContext() {
       this.editorContent = ''
     },
-    //  文章保存时校验
-    submitContent(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.contentSave()
-        } else {
-          return false
-        }
-      })
-    },
     //  内容编辑保存
-    contentSave() {
+    save(val) {
       let params = {
         content: this.editorContent,
         summary: this.dialog.form.summary,
         categoryId: this.dialog.form.category,
+        subjectId: this.dialog.form.subject,
         title: this.dialog.form.title,
         openFlag: this.dialog.form.openFlag,
         username: localStorage.getItem('username'),
         viewCount: 0,
         commentCount: 0
+      }
+      if (val) {
+        params.categoryId = 0
+      } else {
+        params.subjectId = 0
       }
       ARTICLE_EDITOR.handleArticleSave(params).then(result => {
         if (result && result.code == 200) {
@@ -120,14 +115,6 @@ export default {
       if (this.editorContent) {
         this.dialog.form.summary = this.editorContent.substr(0, 20)
       }
-    },
-    //  获取所有分类
-    handleGetAllCategory() {
-      HOME.handleGetAllCategory().then(result => {
-        if (result && result.code == 200) {
-          this.categories = result.data
-        }
-      })
     },
     //  文件上传之前钩子
     beforeAvatarUpload(file) {
