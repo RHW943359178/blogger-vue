@@ -74,15 +74,10 @@ export default {
   mounted() {
     this.handleGetAllCategory()
     this.getAllSubjects()
-    // console.log(this.dialog, 123)
-    // this.$emit('updateDialog', this.dialog)
   },
   methods: {
     //  表格校验
     submitContent(formname) {
-      // this.$parent.submitContent(formname)
-      console.log(this.dialog, 12)
-      // this.rules.category[0].required = true
       this.$refs[formname].validate(valid => {
         if (valid) {
           // this.contentSave()
@@ -129,20 +124,25 @@ export default {
       })
     },
     radioChange(val) {
-      this.$refs['ruleForm'].resetFields()
       this.currentRadia = val
+      //  切换 raido 既移除标题校验结果
+      this.$refs['ruleForm'].clearValidate('title')
       if (val) {
         this.categoryDisabled = true
         this.subjectDisabled = false
         this.dialog.form.category = ''
         this.rules.category[0].required = false
         this.rules.subject[0].required = true
+        //  移除分类校验结果
+        this.$refs['ruleForm'].clearValidate('category')
       } else {
         this.categoryDisabled = false
         this.subjectDisabled = true
         this.dialog.form.subject = ''
         this.rules.category[0].required = true
         this.rules.subject[0].required = false
+        //  移除主题校验结果
+        this.$refs['ruleForm'].clearValidate('subject')
 
       }
     }

@@ -298,7 +298,7 @@ export default {
         //  专题与分类互斥
         this.categoryTags = []
       }
-      
+      this.$store.commit('updateSubjectId', this.currentSubject)
     }
   }
 }

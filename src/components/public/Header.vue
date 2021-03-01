@@ -78,6 +78,9 @@ export default {
     pageSize() { //  页码范围
       return this.$store.state.home.pageSize
     },
+    subjectId() {
+      return this.$store.state.home.subjectId
+    },
     scrollFlag() {  //  滚动参数
       return this.$store.state.articleDetail.scrollFlag
     }
@@ -113,6 +116,7 @@ export default {
       let params = {
         condition: this.home_search,
         categoryId: arr,
+        subjectId: this.subjectId,
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }

@@ -4,6 +4,8 @@ const home = {
     home_search: '',
     //  文章分类id
     categoryId: '',
+    //  文章专题
+    subjectId: 0,
     //  文章分类id集合
     categoryIdList: [],
     //  全部的文章分类
@@ -29,6 +31,10 @@ const home = {
     //  更新选中的分类id
     updateCategoryIdList(state, param) {
       state.categoryIdList = param
+    },
+    //  跟新选中的专题id
+    updateSubjectId(state, param) {
+      state.subjectId = param
     },
     //  更新全部文章分类
     updateCategoryAll(state, param) {
