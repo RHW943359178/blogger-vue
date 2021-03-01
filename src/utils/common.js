@@ -78,7 +78,7 @@ export default {
     }
   },
     /**
-   * 返回分类中文
+   * 返回专题中文
    */
   returnSubject(data, id) {
     if (id && data.length) {
@@ -86,7 +86,7 @@ export default {
         return item.subjectId == id
       })
       if (arr.length) {
-        return arr[0].subjectId
+        return arr[0].subjectName
       } else {
         return ''
       }

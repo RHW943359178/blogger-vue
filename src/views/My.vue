@@ -270,7 +270,6 @@ export default {
   methods: {
     //  切换分类、时间和专题
     articleTypeChange() {
-      console.log(123)
     },
     // 获取全部分类列表
     handleGetAllCategory() {
@@ -291,11 +290,12 @@ export default {
     //  切换类目
     categoryChange(item) {
       this.currentCategory = item.id
-      if (item.id === 1 || item.id === 2) {
-        this.articleList_common = this.handleArticleData(this.articleList, item.id)
-      } else {
-        this.articleList_common = this.handleArticleData(this.articleList, item.id)
-      }
+      // if (item.id === 1 || item.id === 2) {
+      //   this.articleList_common = this.handleArticleData(this.articleList, item.id)
+      // } else {
+      //   this.articleList_common = this.handleArticleData(this.articleList, item.id)
+      // }
+      this.articleList_common = this.handleArticleData(this.articleList, item.id)
     },
     //  获取该用户所有文章信息
     getAllArticleByUserId() {
@@ -341,7 +341,7 @@ export default {
         this.currentItem = []
         let categoryList = []
         data.forEach(item => {
-          if (tmpList.indexOf(item.categoryId)  === -1) {
+          if (tmpList.indexOf(item.categoryId)  === -1 && item.categoryId !== 0) {
             tmpList.push(item.categoryId)
           }
         })
@@ -389,7 +389,7 @@ export default {
         let subjectList = []
         data.forEach(item => {
           if (item.subjectId > 0) {
-            if (tmpList.indexOf(item.subjectId) > -1) {
+            if (tmpList.indexOf(item.subjectId) === -1) {
               tmpList.push(item.subjectId)
             }
           }
@@ -404,6 +404,7 @@ export default {
             }
           })
         })
+        return subjectList
       }
     },
     //  返回category中文

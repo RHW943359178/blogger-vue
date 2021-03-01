@@ -70,7 +70,7 @@ function websocketOpen(e) {
   console.log('连接成功')
 }
 
-initWebSocket()
+// initWebSocket()
 
 export {
   sendSock
