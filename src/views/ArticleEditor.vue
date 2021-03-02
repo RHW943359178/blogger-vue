@@ -68,6 +68,12 @@ export default {
   },
   mounted() {
   },
+  //  通过 watch 检测内容变化并写进 localStorage
+  watch: {
+    editorContent: function(val) {
+      localStorage.setItem('bloggerContent', val)
+    }
+  },
   methods: {
     //  清空文本
     clearContext() {
@@ -96,6 +102,8 @@ export default {
           this.dialog.visible = false
           this.editorContent = ''
           this.$message({type: 'success', message: result.message})
+          //  移除 localStorage 中的content
+          localStorage.removeItem('bloggerContent')
         }
       })
     },
