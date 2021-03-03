@@ -103,6 +103,24 @@ export default {
     },
     //  dialog 框打开时回调
     dialogOpen() {
+      //           if (this.dialog.form.radio) {
+      //   this.categoryDisabled = true
+      //   this.subjectDisabled = false
+      //   this.dialog.form.category = ''
+      //   this.rules.category[0].required = false
+      //   this.rules.subject[0].required = true
+      //   //  移除分类校验结果
+      //   // this.$refs['ruleForm'].clearValidate('category')
+      // } else {
+      //   this.categoryDisabled = false
+      //   this.subjectDisabled = true
+      //   this.dialog.form.subject = ''
+      //   this.rules.category[0].required = true
+      //   this.rules.subject[0].required = false
+      //   //  移除主题校验结果
+      //   // this.$refs['ruleForm'].clearValidate('subject')
+      // }
+      // this.radioChange(this.dialog.form.radio)
       if (this.editorContent && this.flag === 1) {
         this.dialog.form.summary = this.editorContent.substr(0, 20)
       }
@@ -143,8 +161,33 @@ export default {
         this.rules.subject[0].required = false
         //  移除主题校验结果
         this.$refs['ruleForm'].clearValidate('subject')
-
       }
+    }
+  },
+  computed: {
+    form() {
+      return this.dialog.form
+    }
+  },
+  watch: {
+    form: function(newVal, oldVal) {
+      console.log(newVal, 'newVal')
+      if (newVal.category == 0 && newVal.subject != 0) {
+        this.$set(this.dialog.form, 'radio', 1)
+        this.dialog.form.category = ''
+        this.categoryDisabled = true
+        this.subjectDisabled = false
+        this.rules.category[0].required = false
+        this.rules.subject[0].required = true
+      } else {
+        this.$set(this.dialog.form, 'radio', 0)
+        this.dialog.form.subject = ''
+        this.categoryDisabled = false
+        this.subjectDisabled = true
+        this.rules.category[0].required = true
+        this.rules.subject[0].required = false
+      }
+      
     }
   }
 }

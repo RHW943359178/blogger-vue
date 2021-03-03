@@ -256,6 +256,10 @@ export default {
           scrollStyle: true
         }
       }
+    },
+    //  通过 watch 检测内容变化并写进 localStorage
+    editorContent: function(val) {
+      localStorage.setItem('bloggerContent', val)
     }
   },
   computed: {
@@ -265,6 +269,9 @@ export default {
     },
     uploadUrl() {
       return 'http://localhost:8080/blogger/user/icon/upload'
+    },
+    editorContent() {
+      return this.articleInfo.content
     }
   },
   methods: {
@@ -426,13 +433,22 @@ export default {
     },
     //  文章保存
     articleSave() {
-      this.dialog.visible = true
+      console.log(this.articleInfo, 'articleinfo')
       this.dialog.form = {
         title: this.articleInfo.title,
         summary: this.articleInfo.summary,
         category: this.articleInfo.categoryId,
-        openFlag: this.articleInfo.openFlag
+        openFlag: this.articleInfo.openFlag,
+        subject: this.articleInfo.subjectId
       }
+      this.dialog.visible = true
+      //       if (this.dialog.form.category === 0 && this.dialog.form.subject !== 0) {
+      //   this.$set(this.dialog.form, 'radio', 1)
+      //   this.dialog.form.category = ''
+      // } else {
+      //   this.$set(this.dialog.form, 'radio', 0)
+      //   this.dialog.form.subject = ''
+      // }
     },
     //  dialog框关闭
     dialogClose() {
@@ -463,10 +479,16 @@ export default {
         categoryId: this.dialog.form.category,
         title: this.dialog.form.title,
         openFlag: this.dialog.form.openFlag,
+        subjectId: this.dialog.form.subject
       }
       if (!this.articleInfo.content) {
         this.$message({type: 'warning', message: '文章内容不可为空'})
         return
+      }
+      if (this.dialog.form.radio) {
+        params.categoryId = 0
+      } else {
+        params.subjectId = 0
       }
       MY.updateArticleInfo(params).then(result => {
         if (result && result.code == 200) {
@@ -477,6 +499,8 @@ export default {
           //  修改编辑状态为 false
           this.editFlag = false
           this.dialog.visible = false
+          //  移除 localStorage 中的content
+          localStorage.removeItem('bloggerContent')
         }
       })
     },
