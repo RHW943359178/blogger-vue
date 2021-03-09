@@ -51,20 +51,16 @@
           <img src="../assets/img/avatar.jpg" width="100" alt="">
         </div>
         <div class="introduce">
-          <div class="title">XXX</div>
-          <div class="title_sub">Web前端设计师、网页设计</div>
+          <div class="title">RHW</div>
+          <div class="title_sub">Web前端、Golang工程师</div>
           <div class="content">
-            一个80后草根站长！一直潜心研究Web前端技术，一边工作一边积累经验，分享一些个人博客模板
+            <!-- 一个80后草根站长！一直潜心研究Web前端技术，一边工作一边积累经验，分享一些个人博客模板 -->
           </div>
         </div>
         <div class="split_line"></div>
         <div class="category">
           <div class="title">专题列表</div>
           <div class="category_tag">
-            <!-- <div class="category_tag_title">
-              <div class="split_line"></div>
-              <div class="content">当前专题</div>
-            </div> -->
             <div class="category_tag_body">
               <el-button type="primary" plain size="mini" circle class="el-icon-close" @click="subjectChange(0)"></el-button>
               <span :class="['subjectTag', {'activeSubject': currentSubject == item.subjectId}]" v-for="item in subjects" :key="item.subjectId" @click="subjectChange(item)">{{ item.subjectName }}</span>

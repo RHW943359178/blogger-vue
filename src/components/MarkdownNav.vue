@@ -82,7 +82,7 @@ export default {
       tmp = Array.from(new Set(tmp))
       tmp.forEach(item => {
         //  这里根据唯一id获取元素，再取其父类元素
-        returnArr.push(document.querySelector(`#${item}`).parentElement)
+        // returnArr.push(document.querySelector(`#${item}`).parentElement)
       })
       return returnArr
     }
