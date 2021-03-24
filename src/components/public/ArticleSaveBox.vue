@@ -193,8 +193,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
+  .el-dialog__header {
+    font-weight: bold;
+  }
   .el-dialog__body {
-    padding: 10px 20px 0 20px;
+    padding: 20px 20px 10px !important;
   }
 </style>

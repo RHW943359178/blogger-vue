@@ -113,4 +113,16 @@ export default {
     // return 'http:localhost:8080/static/'
     return 'http:81.69.255.188:8871/static/'
   },
+    /**
+   * 全局返回loading实例
+   */
+  loading(load, target) {
+    return load({
+      target: target,
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+  }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="b_home">
     <div class="b_home_body">
-      <div class="b_content_box">
+      <div class="b_content_box" id="b_content_box">
         <div class="article_box" v-for="item in articleList" :key="item.id" @click="getArticleDetail(item)">
           <div class="article_title">{{ item.title }}</div>
           <div class="article_summary">{{ item.summary }}</div>
@@ -63,7 +63,7 @@
           <div class="category_tag">
             <div class="category_tag_body">
               <el-button type="primary" plain size="mini" circle class="el-icon-close" @click="subjectChange(0)"></el-button>
-              <span :class="['subjectTag', {'activeSubject': currentSubject == item.subjectId}]" v-for="item in subjects" :key="item.subjectId" @click="subjectChange(item)">{{ item.subjectName }}</span>
+              <span :class="['subjectTag', {'activeSubject': currentSubject == item.subjectId}]" :id="'subjectId' + item.subjectId" v-for="item in subjects" :key="item.subjectId" @click="subjectChange(item, 'subjectId' + item.subjectId)">{{ item.subjectName }}</span>
             </div>
           </div>
           <div class="category_tag_body"></div>
@@ -122,7 +122,12 @@ export default {
       //  所有专题列表
       subjects: [],
       //  当前选中的专题
-      currentSubject: 0
+      currentSubject: 0,
+      //  响应 loading，文章列表及 button
+      loading: false,
+      options: {
+        target: ''
+      }
     }
   },
   mounted() {
@@ -147,6 +152,17 @@ export default {
     total() {
       return this.$store.state.home.total
     },
+    // //  返回loading实例
+    // loading() {
+    //   // let target = document.querySelector(id)
+    //   return this.$loading({
+    //     // target: target,
+    //     lock: true,
+    //     text: 'Loading',
+    //     spinner: 'el-icon-loading',
+    //     background: 'rgba(0, 0, 0, 0.7)'
+    //   })
+    // }
   },
   watch: {
     categoryTags: function() {  //  监听分类 id 的属性变化
@@ -203,12 +219,14 @@ export default {
         pageSize: this.pagination.pageSize,
         subjectId: this.currentSubject
       }
+      const loading = common.loading(this.$loading, '#b_content_box')
       HOME.handleGetAllArticle({params}).then(result => {
         if (result && result.code == 200) {
           this.pagination.total = result.data.count
           this.$store.commit('updateArticleList', result.data.list)
           this.$store.commit('updateTotal', result.data.count)
         }
+        loading.close()
       })
     },
     //  pageNum改变
@@ -284,7 +302,7 @@ export default {
       })
     },
     //  点击专题列表切换
-    subjectChange(item) {
+    subjectChange(item, id) {
       if (item === 0) {
         this.currentSubject = item
         //  清空 categoryTags 列表时在 watch 那里已经调用了 handleGetArticleList()
@@ -293,6 +311,7 @@ export default {
         this.currentSubject = item.subjectId
         //  专题与分类互斥
         this.categoryTags = []
+
       }
       this.$store.commit('updateSubjectId', this.currentSubject)
     }
