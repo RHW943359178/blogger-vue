@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible="visible" ref="chat_dialog" width="500px" :modal="false" append-to-body :modal-append-to-body="false" :show-close="false" :title="username" 
+    <el-dialog :visible="visible" ref="chat_dialog" width="500px" :modal="false" append-to-body :modal-append-to-body="false" :show-close="false" :title="username"
                 @open="dialogOpen" @close="dialogClose" :lock-scroll="false" custom-class="b_chat" v-dialogDrag>
       <div class="chat_title"></div>
       <div class="chat_show_box"></div>
@@ -29,28 +29,28 @@ export default {
       message: ''
     }
   },
-  created() {
+  created () {
   },
-  mounted() {
+  mounted () {
 
   },
   //  离开路由之后断开 websocket 连接
-  destroyed() {
+  destroyed () {
   },
   methods: {
-    dialogOpen() {
+    dialogOpen () {
 
     },
-    dialogClose() {
+    dialogClose () {
 
     },
     //  关闭dialog
-    handleDialogClose() {
+    handleDialogClose () {
       //  我们不在子组件在修改状态，所以调用父类的方法来修改
       this.$parent.closeDialog()
     },
     //  发送消息
-    sendMessage() {
+    sendMessage () {
       console.log(1111)
     }
   }
@@ -63,6 +63,6 @@ export default {
     padding: 0;
   }
   .el-dialog__body {
-    padding: 0; 
+    padding: 0;
   }
 </style>

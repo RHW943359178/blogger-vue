@@ -9,15 +9,15 @@ const articleDetail = {
   },
   mutations: {
     updateArticleInfo(state, param) {
-      state.articleTitle = param
+      state.articleTitle = param;
     },
     updateAuthorInfo(state, param) {
-      state.authorInfo = param
+      state.authorInfo = param;
     },
     updateScrollFlag(state, param) {
-      state.scrollFlag = param
+      state.scrollFlag = param;
     }
   }
-}
+};
 
-export default articleDetail
+export default articleDetail;

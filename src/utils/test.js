@@ -1,10 +1,10 @@
-import CryptoJS from "crypto-js";
- //秘钥
-const CRYPTOJSKEY= "CPUNPGAQLCYTJWTHFDBV";
- 
+import CryptoJS from 'crypto-js';
+// 秘钥
+const CRYPTOJSKEY = 'CPUNPGAQLCYTJWTHFDBV';
+
 export default {
-  
-  //加密
+
+  // 加密
   /*
   * {param} plaintText 加密明文
   * return  str 加密结果
@@ -21,7 +21,6 @@ export default {
     return encryptedBase64Str;
   },
   decrypt(encryptedBase64Str, type) {
-   
     var encryptedBase64Str = encryptedBase64Str;
     var options = {
       mode: CryptoJS.mode.ECB,
@@ -32,6 +31,6 @@ export default {
     var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, options);
     // 解密后，需要按照Utf8的方式将明文转位字符串
     var decryptedStr = decryptedData.toString(CryptoJS.enc.Utf8);
-    return decryptedStr ;
+    return decryptedStr;
   }
-}
+};

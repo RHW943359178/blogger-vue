@@ -1,21 +1,21 @@
 //  导入封装之后的 axios
-import service from '../utils/request'
+import service from '../utils/request';
 
 export default {
   //  获取文章列表
   getArticleList: params => {
-    return service.get('/blogger/home/getArticleByUserId', params)
+    return service.get('/blogger/home/getArticleByUserId', params);
   },
   //  用户文章信息修改
   updateArticleInfo: params => {
-    return service.post('/blogger/home/updateArticleInfo', params)
+    return service.post('/blogger/home/updateArticleInfo', params);
   },
   //  用户文章删除
   deleteArticle: params => {
-    return service.post('/blogger/home/article/delete', params)
+    return service.post('/blogger/home/article/delete', params);
   },
   //  富文本框编辑器上传图片
   uploadPicture: params => {
-    return service.post('/blogger/user/icon/upload', params)
+    return service.post('/blogger/user/icon/upload', params);
   }
-}
+};

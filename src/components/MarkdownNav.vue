@@ -16,7 +16,7 @@
 <script>
 export default {
   props: ['rootId', 'scrollTop'],
-  data() {
+  data () {
     return {
       nodes: [],
       activeId: '',
@@ -27,7 +27,7 @@ export default {
       showFlag: false
     }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.pageTop = this.scrollTop
     })
@@ -40,24 +40,24 @@ export default {
   },
   methods: {
     //  从文章内容里取出所有的 标题标签内容（h1-h6）
-    handleGetAllLabel(id) {
+    handleGetAllLabel (id) {
       if (!id) {
         return
       }
       this.domArr = this.handleGetHLabel()
       this.domArr.forEach(item => {
-        this.nodes.push({id: item.childNodes[0].id, text: item.childNodes[1].data, label: item.localName})
-        this.domArrOffsetTop.push({id: item.childNodes[0].id, offsetTop: item.offsetTop})
+        this.nodes.push({ id: item.childNodes[0].id, text: item.childNodes[1].data, label: item.localName })
+        this.domArrOffsetTop.push({ id: item.childNodes[0].id, offsetTop: item.offsetTop })
       })
       console.log(this.domArrOffsetTop, 'this.domArrOffsetTop')
     },
     //  锚点跳转
-    goAnchor(id) {
+    goAnchor (id) {
       this.activeId = id
       id = '#' + id
       document.querySelector(id).scrollIntoView()
     },
-    onScroll() {
+    onScroll () {
       this.domArrOffsetTop.forEach(item => {
         //  这里的147需要根据具体的情况来计算：标题h标签元素到父类容器的高度值（offsetTop）到滚轮开始滚动的位置的差值
         if (this.scrollTop >= item.offsetTop + 70) {
@@ -72,18 +72,18 @@ export default {
       }
     },
     //  获取不重复h标签方法
-    handleGetHLabel() {
-      let tmp = [], returnArr = []
-      let arr = document.querySelectorAll(`#${this.rootId} h1, h2, h3, h4, h5, h6`)
+    handleGetHLabel () {
+      let tmp = []; const returnArr = []
+      const arr = document.querySelectorAll(`#${this.rootId} h1, h2, h3, h4, h5, h6`)
       //  数据处理
       arr.forEach(item => {
         tmp.push(item.childNodes[0].id)
       })
       tmp = Array.from(new Set(tmp))
-      tmp.forEach(item => {
-        //  这里根据唯一id获取元素，再取其父类元素
-        // returnArr.push(document.querySelector(`#${item}`).parentElement)
-      })
+      // tmp.forEach(item => {
+      //   //  这里根据唯一id获取元素，再取其父类元素
+      //   returnArr.push(document.querySelector(`#${item}`).parentElement)
+      // })
       return returnArr
     }
   }

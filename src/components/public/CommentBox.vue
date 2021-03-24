@@ -19,20 +19,20 @@
 <script>
 export default {
   props: ['type', 'id'],
-  data() {
+  data () {
     return {
       commentContentT: '',
       commentLoading: false,
       focusFlagT: false,
       followCommentFlag: true,
-      buildId: 0,
+      buildId: 0
     }
   },
-  mounted() {
+  mounted () {
     // console.log(this.type, 's')
   },
   methods: {
-    conmentFocusT() {
+    conmentFocusT () {
       if (this.type === 1) {
         this.focusFlagT = true
       } else {
@@ -41,7 +41,7 @@ export default {
       }
     },
     //  非固定评论框 失焦
-    conmentBlurT() {
+    conmentBlurT () {
       this.commentContentT = ''
       if (this.type === 1) {
         this.focusFlagT = false
@@ -49,7 +49,7 @@ export default {
         this.followCommentFlag = true
       }
     },
-    commentPublish(val) {
+    commentPublish (val) {
       this.buildId = this.id
       this.$parent.commentPublish(val, this.commentContentT, this.buildId)
     }

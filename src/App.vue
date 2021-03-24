@@ -12,11 +12,11 @@ export default {
     Header
   },
   computed: {
-    currentPath() {
+    currentPath () {
       return this.$route.path === '/blogger/signIn' || this.$route.path === '/blogger/signUp' || this.$route.path === '/blogger/404'
     }
   },
-  mounted() {
+  mounted () {
   }
 }
 </script>

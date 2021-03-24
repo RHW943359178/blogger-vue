@@ -19,48 +19,48 @@ const home = {
     //  当前文章总条数
     total: 0,
     //  当前选中的文章id
-    articleId: 0,
+    articleId: 0
   },
   mutations: {
     updateSearchCondition(state, param) {
-      state.home_search = param
+      state.home_search = param;
     },
     updateCategoryId(state, param) {
-      state.categoryId = param
+      state.categoryId = param;
     },
     //  更新选中的分类id
     updateCategoryIdList(state, param) {
-      state.categoryIdList = param
+      state.categoryIdList = param;
     },
     //  跟新选中的专题id
     updateSubjectId(state, param) {
-      state.subjectId = param
+      state.subjectId = param;
     },
     //  更新全部文章分类
     updateCategoryAll(state, param) {
-      state.categoryAll = param
+      state.categoryAll = param;
     },
     //  更新文章列表
     updateArticleList(state, param) {
-      state.articleList = param
+      state.articleList = param;
     },
     //  更新页码数
     updatePageNum(state, param) {
-      state.pageNum = param
+      state.pageNum = param;
     },
     //  更新页码范围
     updatePageSize(state, param) {
-      state.pageSize = param
+      state.pageSize = param;
     },
     //  更新页码范围
     updateTotal(state, param) {
-      state.total = param
+      state.total = param;
     },
     //  跟新文章id
     updateArticleId(state, param) {
-      state.articleId = param
+      state.articleId = param;
     }
-  },
-}
+  }
+};
 
-export default home
+export default home;

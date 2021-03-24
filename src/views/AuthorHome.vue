@@ -130,17 +130,17 @@ export default {
       chatVisible: false
     }
   },
-  mounted() {
+  mounted () {
     this.getUserInfo()
   },
   computed: {
-    author() {
+    author () {
       return this.$route.query
     }
   },
   methods: {
     //  切换tab页
-    handleClick(val) {
+    handleClick (val) {
       switch (val) {
         case 'article':
           break
@@ -154,44 +154,44 @@ export default {
       }
     },
     //  获取发表文章列表
-    getArticleList() {
+    getArticleList () {
       if (!this.author.userId) {
-        this.$message({type: 'error', message: '无法获取该作者信息', showClose: true})
+        this.$message({ type: 'error', message: '无法获取该作者信息', showClose: true })
         return
       }
-      let params = {
+      const params = {
         userId: this.author.userId,
         pageSize: this.pagination.pageSize,
         pageNum: this.pagination.pageNum
       }
-      MY.getArticleList({params}).then(result => {
+      MY.getArticleList({ params }).then(result => {
         if (result && result.code == 200) {
           this.cacheList = result.data
         }
       }).then(() => {
         //  将每次请求来的数据 concat 到文章列表里
-          this.articleList = this.articleList.concat(this.cacheList)
+        this.articleList = this.articleList.concat(this.cacheList)
       })
     },
 
     //  无限加载请求文章列表
-    load() {
+    load () {
       //  element中无限下拉加载的方法 load，默认第一次加载页面就会触发
       this.getArticleList()
       this.pagination.pageNum += 1
     },
     //  时间处理
-    dateReturn(time) {
+    dateReturn (time) {
       if (time) {
         return common.timeToDate(time)
       }
     },
     //  获取用户信息
-    getUserInfo() {
+    getUserInfo () {
       if (!this.author.userId) {
         return
       }
-      let params = {
+      const params = {
         userId: this.author.userId
       }
       ARTICLE_DETAIL.getAuthorByUserId(params).then(result => {
@@ -206,13 +206,13 @@ export default {
       })
     },
     //  批量获取用户关注人信息
-    getFollowUserInfo() {
+    getFollowUserInfo () {
       if (!this.author.follow) {
         return
       }
       //  将关注字符串转为数组
-      let arr = this.author.follow.split(',')
-      let params = {
+      const arr = this.author.follow.split(',')
+      const params = {
         followList: arr
       }
       AUTHOR_HOME.getUserFollowList(params).then(result => {
@@ -222,8 +222,8 @@ export default {
       })
     },
     //  判断当前文章作者是不是自己
-    authorIsSelf() {
-      let self = localStorage.getItem('userId')
+    authorIsSelf () {
+      const self = localStorage.getItem('userId')
       if (self === this.author.userId) {
         return true
       } else {
@@ -231,11 +231,11 @@ export default {
       }
     },
     //  点击发博客信
-    sendMessage() {
+    sendMessage () {
       this.chatVisible = true
     },
     //  关闭聊天dialog框
-    closeDialog() {
+    closeDialog () {
       this.chatVisible = false
     }
   }
