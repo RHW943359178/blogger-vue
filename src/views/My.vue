@@ -293,6 +293,8 @@ export default {
         if (result && result.code == 200) {
           this.subjects = result.data
         }
+      }).then(() => {
+        this.getAllArticleByUserId()
       })
     },
     //  切换类目
