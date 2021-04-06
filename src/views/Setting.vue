@@ -67,13 +67,13 @@
       </div>
     </div>
     <!-- 文章分类新增保存dialog框 -->
-    <el-dialog 
-      :visible="categoryDialog.visible" 
-      width="400px" 
-      append-to-body 
-      :show-close="false" 
-      :title="categoryDialog.title" 
-      @open="categoryOpen" 
+    <el-dialog
+      :visible="categoryDialog.visible"
+      width="400px"
+      append-to-body
+      :show-close="false"
+      :title="categoryDialog.title"
+      @open="categoryOpen"
       @close="categoryClose">
       <el-form label-width="80px" label-position="right" :model="categoryDialog.form" :rules="categoryRules" ref="categoryForm">
         <el-form-item label="分类名称" prop="categoryName">
@@ -95,13 +95,13 @@
       </div>
     </el-dialog>
     <!-- 文章分类新增保存dialog框 -->
-    <el-dialog 
-      :visible="subjectDialog.visible" 
-      width="400px" 
-      append-to-body 
-      :show-close="false" 
-      :title="subjectDialog.title" 
-      @open="sujectOpen" 
+    <el-dialog
+      :visible="subjectDialog.visible"
+      width="400px"
+      append-to-body
+      :show-close="false"
+      :title="subjectDialog.title"
+      @open="sujectOpen"
       @close="sujectClose">
       <el-form label-width="80px" label-position="right" ref="subjectForm" :model="subjectDialog.form" :rules="subjectRules">
         <el-form-item label="主题名称" prop="subjectName">
@@ -123,7 +123,7 @@
 import HOME from '../api/home'
 import SETTING from '../api/setting'
 export default {
-  data() {
+  data () {
     return {
       //  分类列表
       categoryList: [],
@@ -147,22 +147,22 @@ export default {
       //  分类 form 表单校验
       categoryRules: {
         categoryName: [
-          {required: true, message: '请输入分类名称', trigger: 'blur'}
+          { required: true, message: '请输入分类名称', trigger: 'blur' }
         ],
         categoryNo: [
-          {required: true, message: '请输入分类编号', trigger: 'blur'}
+          { required: true, message: '请输入分类编号', trigger: 'blur' }
         ],
         color: [
-          {required: true, message: '请选择背景颜色', trigger: 'change'}
+          { required: true, message: '请选择背景颜色', trigger: 'change' }
         ]
       },
       //  主题 subject 表单验证
       subjectRules: {
         subjectName: [
-          {required: true, message: '请输入主题名称', trigger: 'blur'}
+          { required: true, message: '请输入主题名称', trigger: 'blur' }
         ],
         subjectNo: [
-          {required: true, message: '请输入主题编号', trigger: 'blur'}
+          { required: true, message: '请输入主题编号', trigger: 'blur' }
         ]
       },
       //  主题dialog框
@@ -180,13 +180,13 @@ export default {
       categoryActive: ''
     }
   },
-  mounted() {
+  mounted () {
     this.handleGetAllCategory()
     this.getAllSubjects()
   },
   methods: {
     // 获取全部分类列表
-    handleGetAllCategory() {
+    handleGetAllCategory () {
       HOME.handleGetAllCategory().then(result => {
         if (result && result.code == 200) {
           this.categoryList = result.data
@@ -194,7 +194,7 @@ export default {
       })
     },
     //  获取所有专题列表
-    getAllSubjects() {
+    getAllSubjects () {
       HOME.getAllSubjects({}).then(result => {
         if (result && result.code == 200) {
           this.subjectList = result.data
@@ -202,12 +202,12 @@ export default {
       })
     },
     //  分类dialog框打开
-    categoryOpen() {
+    categoryOpen () {
 
     },
     //  分类dialog框关闭
-    categoryClose() {
-      this.$refs['categoryForm'].resetFields()
+    categoryClose () {
+      this.$refs.categoryForm.resetFields()
       this.categoryDialog.form = {
         categoryName: '',
         categoryNo: '',
@@ -215,7 +215,7 @@ export default {
       }
     },
     //  文章分类新增
-    categoryAdd() {
+    categoryAdd () {
       this.categoryDialog.title = '新增文章分类'
       this.categoryDialog.saveType = 1
       this.categoryDialog.visible = true
@@ -223,7 +223,7 @@ export default {
       this.categoryDialog.form.categoryNo = this.getMaxNumber(this.categoryList, 'categoryNo')
     },
     //  文章分类编辑
-    categoryEdit(row) {
+    categoryEdit (row) {
       this.categoryDialog.title = row.categoryName + ' - 分类修改'
       this.categoryDialog.saveType = 2
       this.categoryDialog.visible = true
@@ -233,7 +233,7 @@ export default {
       this.categoryDialog.form.color = row.color
     },
     //  文章分类删除按钮操作
-    categoryDelete(row) {
+    categoryDelete (row) {
       this.$confirm('确定删除该分类吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -243,23 +243,23 @@ export default {
       }).catch(() => {})
     },
     //  分类删除
-    deleteCategory(id) {
+    deleteCategory (id) {
       if (!id) {
-        this.$message({type: 'warning', message: '请选择需要删除的分类!'})
+        this.$message({ type: 'warning', message: '请选择需要删除的分类!' })
         return
       }
-      let params = {
+      const params = {
         categoryId: id
       }
       SETTING.deleteCategory(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: 'success', message: result.message})
+          this.$message({ type: 'success', message: result.message })
           this.handleGetAllCategory()
         }
       })
     },
     //  分类保存提交
-    categorySubmit(formname) {
+    categorySubmit (formname) {
       this.$refs[formname].validate(valid => {
         if (valid) {
           this.categorySave()
@@ -269,8 +269,8 @@ export default {
       })
     },
     //  分类保存
-    categorySave() {
-      let params = {
+    categorySave () {
+      const params = {
         categoryName: this.categoryDialog.form.categoryName,
         categoryNo: this.categoryDialog.form.categoryNo,
         color: this.categoryDialog.form.color
@@ -280,21 +280,21 @@ export default {
       }
       SETTING.categorySave(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: 'success', message: result.message})
+          this.$message({ type: 'success', message: result.message })
           this.categoryDialog.visible = false
           this.handleGetAllCategory()
         }
       })
     },
     //  主题新增
-    subjectAdd() {
+    subjectAdd () {
       this.subjectDialog.title = '新增文章主题'
       this.subjectDialog.visible = true
       this.subjectDialog.saveType = 1
       this.subjectDialog.form.subjectNo = this.getMaxNumber(this.subjectList, 'subjectNo')
     },
     //  主题编辑
-    subjectEdit(row) {
+    subjectEdit (row) {
       this.subjectDialog.title = row.sujectName + ' - 主题修改'
       this.subjectDialog.saveType = 2
       this.currentSubject = row
@@ -303,7 +303,7 @@ export default {
       this.subjectDialog.form.subjectNo = row.subjectNo
     },
     //  主题删除
-    subjectDelete(row) {
+    subjectDelete (row) {
       this.$confirm('确定删除该文章主题吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -313,19 +313,19 @@ export default {
       }).catch(() => {})
     },
     //  主题 dialog 开启
-    sujectOpen() {
+    sujectOpen () {
 
     },
     //  主题 dialog 框关闭
-    sujectClose() {
-      this.$refs['subjectForm'].resetFields()
+    sujectClose () {
+      this.$refs.subjectForm.resetFields()
       this.subjectDialog.form = {
         subjectName: '',
         subjectNo: ''
       }
     },
     //  主题保存提交
-    subjectSubmit(formname) {
+    subjectSubmit (formname) {
       this.$refs[formname].validate(valid => {
         if (valid) {
           this.subjectSave()
@@ -335,8 +335,8 @@ export default {
       })
     },
     //  主题保存
-    subjectSave() {
-      let params = {
+    subjectSave () {
+      const params = {
         subjectName: this.subjectDialog.form.subjectName,
         subjectNo: Number(this.subjectDialog.form.subjectNo)
       }
@@ -345,29 +345,29 @@ export default {
       }
       SETTING.subjectSave(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: 'success', message: result.message})
+          this.$message({ type: 'success', message: result.message })
           this.subjectDialog.visible = false
           this.getAllSubjects()
         }
       })
     },
     //  文章主题删除
-    deleteSubject(id) {
+    deleteSubject (id) {
       if (!id) {
         return
       }
-      let params = {
+      const params = {
         subjectId: id
       }
       SETTING.subjectDelete(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: 'success', message: result.message})
+          this.$message({ type: 'success', message: result.message })
           this.getAllSubjects()
         }
       })
     },
     //  获取数据库数据最大编号
-    getMaxNumber(arr, itemName) {
+    getMaxNumber (arr, itemName) {
       if (!arr.length) {
         return
       }
@@ -375,7 +375,7 @@ export default {
       tmp = arr.map(item => {
         return item[itemName]
       })
-      let max = Math.max.apply(null, tmp)
+      const max = Math.max.apply(null, tmp)
       return max + 5
     }
   }

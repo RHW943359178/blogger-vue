@@ -50,14 +50,14 @@ export default {
   data () {
     return {
       home_search: '',
-      placeholder: 'css',  //  用于首页搜索框展示
+      placeholder: 'css', //  用于首页搜索框展示
       activeRouter: 1,
       navigators: [
         { id: 1, label: '首页', url: '/blogger' },
         { id: 2, label: '投稿', url: '/blogger/articleEditor' },
         { id: 3, label: '评论', url: '/blogger/comment' },
         { id: 3, label: '我的', url: '/blogger/my' },
-        { id: 4, label: '设置', url: '/blogger/setting' },
+        { id: 4, label: '设置', url: '/blogger/setting' }
       ],
       // localAttr: '',
       iconImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
@@ -66,61 +66,61 @@ export default {
   mounted () {
   },
   computed: {
-    categoryIdList() {  //  当前选中分类
+    categoryIdList () { //  当前选中分类
       return this.$store.state.home.categoryIdList
     },
-    articleList() { //  文章列表
+    articleList () { //  文章列表
       return this.$store.state.home.articleList
     },
-    pageNum() { //  页码数
+    pageNum () { //  页码数
       return this.$store.state.home.pageNum
     },
-    pageSize() { //  页码范围
+    pageSize () { //  页码范围
       return this.$store.state.home.pageSize
     },
-    subjectId() {
+    subjectId () {
       return this.$store.state.home.subjectId
     },
-    scrollFlag() {  //  滚动参数
+    scrollFlag () { //  滚动参数
       return this.$store.state.articleDetail.scrollFlag
     }
   },
   watch: {
-    home_search: function() {
+    home_search: function () {
       this.$store.commit('updateSearchCondition', this.home_search)
     },
-    scrollFlag: function() {
+    scrollFlag: function () {
       if (this.scrollFlag) {
-        this.$refs['carousel_header'].setActiveItem('article_header')
+        this.$refs.carousel_header.setActiveItem('article_header')
       } else {
-        this.$refs['carousel_header'].setActiveItem('normal_header')
+        this.$refs.carousel_header.setActiveItem('normal_header')
       }
     }
   },
   methods: {
     //  点击回到主页
-    bancToHome() {
+    bancToHome () {
       this.$router.push('/blogger')
     },
     //  当前选中路由切换
-    activeChange(item) {
+    activeChange (item) {
       this.activeRouter = item.id
     },
     //  站内搜索出发焦点
-    searchFocus() {
+    searchFocus () {
       this.home_search = this.placeholder
     },
     //  站内搜索所有文章
-    searchArticles() {
-      let arr = this.categoryIdList.join()
-      let params = {
+    searchArticles () {
+      const arr = this.categoryIdList.join()
+      const params = {
         condition: this.home_search,
         categoryId: arr,
         subjectId: this.subjectId,
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
-      HOME.handleGetAllArticle({params}).then(result => {
+      HOME.handleGetAllArticle({ params }).then(result => {
         if (result && result.code == 200) {
           this.$store.commit('updateArticleList', result.data.list)
           this.$store.commit('updateTotal', result.data.count)
@@ -128,30 +128,30 @@ export default {
       })
     },
     //  跳转到注册页面
-    jumpToSignIn() {
+    jumpToSignIn () {
       this.$router.push('/blogger/signIn')
     },
     //  跳转到登录页面
-    jumpToSignUp() {
+    jumpToSignUp () {
       this.$router.push('/blogger/signUp')
     },
     //  判断当前用户登录状态的条件
-    isLogin() {
+    isLogin () {
       return localStorage.getItem('flag') === 'isLogin' && localStorage.getItem('username')
     },
     //  当前登录人信息
-    loginUser() {
+    loginUser () {
       return localStorage.getItem('username')
     },
-    errorHandler() {
+    errorHandler () {
       return true
     },
     //  退出登录
-    quitLogin() {
+    quitLogin () {
       this.$confirm('确定退出当前登录吗？', '确定', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       }).then(() => {
         localStorage.removeItem('flag')
         localStorage.removeItem('username')
@@ -159,7 +159,7 @@ export default {
         //  刷新当前页面
         location.reload()
       }).catch(() => {})
-    },
+    }
   }
 }
 </script>

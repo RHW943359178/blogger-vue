@@ -1,7 +1,7 @@
 <template>
   <div class="b_home">
     <div class="b_home_body">
-      <div class="b_content_box">
+      <div class="b_content_box" id="b_content_box">
         <div class="article_box" v-for="item in articleList" :key="item.id" @click="getArticleDetail(item)">
           <div class="article_title">{{ item.title }}</div>
           <div class="article_summary">{{ item.summary }}</div>
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div>
-        
+
       </div>
       <div class="b_home_wall">
         <div class="b_home_bg">
@@ -63,7 +63,7 @@
           <div class="category_tag">
             <div class="category_tag_body">
               <el-button type="primary" plain size="mini" circle class="el-icon-close" @click="subjectChange(0)"></el-button>
-              <span :class="['subjectTag', {'activeSubject': currentSubject == item.subjectId}]" v-for="item in subjects" :key="item.subjectId" @click="subjectChange(item)">{{ item.subjectName }}</span>
+              <span :class="['subjectTag', {'activeSubject': currentSubject == item.subjectId}]" :id="'subjectId' + item.subjectId" v-for="item in subjects" :key="item.subjectId" @click="subjectChange(item, 'subjectId' + item.subjectId)">{{ item.subjectName }}</span>
             </div>
           </div>
           <div class="category_tag_body"></div>
@@ -115,42 +115,58 @@ export default {
         pageSize: 10,
         total: 0
       },
-      //  
+      //
       detailType: 1,
       //  推荐文章列表
       recommandArticle: [],
       //  所有专题列表
       subjects: [],
       //  当前选中的专题
-      currentSubject: 0
+      currentSubject: 0,
+      //  响应 loading，文章列表及 button
+      loading: false,
+      options: {
+        target: ''
+      }
     }
   },
-  mounted() {
+  mounted () {
     this.handleGetAllCategory()
     this.handleGetArticleList()
     this.getRecommendArticle()
     this.getAllSubjects()
   },
   computed: {
-    condition() { //  当前过滤条件
+    condition () { //  当前过滤条件
       return this.$store.state.home.home_search
     },
-    categoryIdList() {  //  当前选中分类
+    categoryIdList () { //  当前选中分类
       return this.$store.state.home.categoryIdList
     },
-    articleList() {
+    articleList () {
       return this.$store.state.home.articleList
     },
-    categoryAll() {
+    categoryAll () {
       return this.$store.state.home.categoryAll
     },
-    total() {
+    total () {
       return this.$store.state.home.total
-    },
+    }
+    // //  返回loading实例
+    // loading() {
+    //   // let target = document.querySelector(id)
+    //   return this.$loading({
+    //     // target: target,
+    //     lock: true,
+    //     text: 'Loading',
+    //     spinner: 'el-icon-loading',
+    //     background: 'rgba(0, 0, 0, 0.7)'
+    //   })
+    // }
   },
   watch: {
-    categoryTags: function() {  //  监听分类 id 的属性变化
-      let tmp = []
+    categoryTags: function () { //  监听分类 id 的属性变化
+      const tmp = []
       this.categoryTags.forEach(item => {
         tmp.push(item.categoryId)
       })
@@ -160,15 +176,15 @@ export default {
   },
   methods: {
     //  返回分类云背景颜色
-    returnColor(cl) {
+    returnColor (cl) {
       //  如果没有color值，就默认指定
       if (!cl) {
-        return `background: #FF6347;`
+        return 'background: #FF6347;'
       }
       return `background: ${cl};`
     },
     //  获取所有分类
-    handleGetAllCategory() {
+    handleGetAllCategory () {
       HOME.handleGetAllCategory().then(result => {
         if (result && result.code == 200) {
           // this.categoryList = result.data
@@ -177,9 +193,9 @@ export default {
       })
     },
     //  点击分类云获取文章列表
-    handleCategoryChange(item) {
+    handleCategoryChange (item) {
       //  选择多个分类加到 tag 列表里，实现复合查询
-      if (item === 0) {  //  当标签为全部时清空数据
+      if (item === 0) { //  当标签为全部时清空数据
         this.categoryTags = []
         return
       }
@@ -190,41 +206,43 @@ export default {
       }
     },
     //  关闭分类 tag 标签
-    tagClose(tag, index) {
+    tagClose (tag, index) {
       this.categoryTags.splice(index, 1)
     },
     //  获取文章列表
-    handleGetArticleList() {
-      let arr = this.categoryIdList.join()
-      let params = {
+    handleGetArticleList () {
+      const arr = this.categoryIdList.join()
+      const params = {
         condition: this.condition,
         categoryId: arr,
         pageNum: this.pagination.pageNum,
         pageSize: this.pagination.pageSize,
         subjectId: this.currentSubject
       }
-      HOME.handleGetAllArticle({params}).then(result => {
+      const loading = common.loading(this.$loading, '#b_content_box')
+      HOME.handleGetAllArticle({ params }).then(result => {
         if (result && result.code == 200) {
           this.pagination.total = result.data.count
           this.$store.commit('updateArticleList', result.data.list)
           this.$store.commit('updateTotal', result.data.count)
         }
+        loading.close()
       })
     },
     //  pageNum改变
-    currentChange(num) {
+    currentChange (num) {
       this.pagination.pageNum = num
       this.$store.commit('updatePageNum', num)
       this.handleGetArticleList()
     },
     //  pageSize改变
-    sizeChange(size) {
+    sizeChange (size) {
       this.pagination.pageSize = size
       this.$store.commit('updatePageSize', size)
       this.handleGetArticleList()
     },
     //  返回分类中文
-    returnCategory(id, val) {
+    returnCategory (id, val) {
       let array, idName, name
       if (val === 1) {
         array = this.categoryAll
@@ -236,7 +254,7 @@ export default {
         name = 'subjectName'
       }
       if (id) {
-        let arr = array.filter(item => {
+        const arr = array.filter(item => {
           return item[idName] == id
         })
         if (arr.length) {
@@ -249,34 +267,34 @@ export default {
       }
     },
     //  时间处理
-    dateReturn(time) {
+    dateReturn (time) {
       if (time) {
         return common.timeToDate(time)
       }
     },
     //  跳转进入具体文章信息
-    getArticleDetail(item) {
+    getArticleDetail (item) {
       const detail = this.$router.resolve({
-        path: `/blogger/article`,
-        query: {id: item.id}
+        path: '/blogger/article',
+        query: { id: item.id }
       })
       window.open(detail.href, '_blank')
       this.$store.commit('updateArticleId', item.id)
     },
     //  获取推荐内容列表
-    getRecommendArticle() {
-      let params = {
+    getRecommendArticle () {
+      const params = {
         pageNum: 1,
         pageSize: 5
       }
-      HOME.getRecommendArticle({params}).then(result => {
+      HOME.getRecommendArticle({ params }).then(result => {
         if (result && result.code == 200) {
           this.recommandArticle = result.data
         }
       })
     },
     //  获取所有专题列表
-    getAllSubjects() {
+    getAllSubjects () {
       HOME.getAllSubjects({}).then(result => {
         if (result && result.code == 200) {
           this.subjects = result.data
@@ -284,7 +302,7 @@ export default {
       })
     },
     //  点击专题列表切换
-    subjectChange(item) {
+    subjectChange (item) {
       if (item === 0) {
         this.currentSubject = item
         //  清空 categoryTags 列表时在 watch 那里已经调用了 handleGetArticleList()

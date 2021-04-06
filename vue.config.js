@@ -1,12 +1,12 @@
-const IS_PROD = ['production', 'test'].includes(process.env.NODE_ENV)
-const path = require('path')
+const IS_PROD = ['production', 'test'].includes(process.env.NODE_ENV);
+const path = require('path');
 
 function resolve(dir) {
-  return path.join(__dirname, dir)
+  return path.join(__dirname, dir);
 }
 module.exports = {
   // 部署应用时的基本 URL
-  publicPath: process.env.NODE_ENV === "production" ? "./" : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
 
   // build时构建文件的目录 构建时传入 --no-clean 可关闭该行为
   outputDir: 'dist',
@@ -22,25 +22,25 @@ module.exports = {
 
   // 构建多页面应用，页面的配置
   // pages: {
-//     index: {
-//         // page 的入口
-//         entry: 'src/index/main.js',
-//         // 模板来源
-//         template: 'public/index.html',
-//         // 在 dist/index.html 的输出
-//         filename: 'index.html',
-//         // 当使用 title 选项时，
-//         // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
-//         title: 'Index Page',
-//         // 在这个页面中包含的块，默认情况下会包含
-//         // 提取出来的通用 chunk 和 vendor chunk。
-//         chunks: ['chunk-vendors', 'chunk-common', 'index']
-//     },
-//     // 当使用只有入口的字符串格式时，
-//     // 模板会被推导为 `public/subpage.html`
-//     // 并且如果找不到的话，就回退到 `public/index.html`。
-//     // 输出文件名会被推导为 `subpage.html`。
-//     subpage: 'src/subpage/main.js'
+  //     index: {
+  //         // page 的入口
+  //         entry: 'src/index/main.js',
+  //         // 模板来源
+  //         template: 'public/index.html',
+  //         // 在 dist/index.html 的输出
+  //         filename: 'index.html',
+  //         // 当使用 title 选项时，
+  //         // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
+  //         title: 'Index Page',
+  //         // 在这个页面中包含的块，默认情况下会包含
+  //         // 提取出来的通用 chunk 和 vendor chunk。
+  //         chunks: ['chunk-vendors', 'chunk-common', 'index']
+  //     },
+  //     // 当使用只有入口的字符串格式时，
+  //     // 模板会被推导为 `public/subpage.html`
+  //     // 并且如果找不到的话，就回退到 `public/index.html`。
+  //     // 输出文件名会被推导为 `subpage.html`。
+  //     subpage: 'src/subpage/main.js'
   // },
 
   // 是否在开发环境下通过 eslint-loader 在每次保存时 lint 代码 (在生产构建时禁用 eslint-loader)
@@ -53,7 +53,7 @@ module.exports = {
   transpileDependencies: [],
 
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建
-  productionSourceMap: true,
+  productionSourceMap: false,
 
   // 设置生成的 HTML 中 <link rel="stylesheet"> 和 <script> 标签的 crossorigin 属性（注：仅影响构建时注入的标签）
   crossorigin: '',
@@ -68,7 +68,7 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        'views': resolve('src/views')
+        views: resolve('src/views')
       }
     }
   },
@@ -77,7 +77,7 @@ module.exports = {
     config.module
       .rule('svg')
       .exclude.add(resolve('src/icons'))
-      .end()
+      .end();
     config.module
       .rule('icons')
       .test(/\.svg$/)
@@ -86,9 +86,9 @@ module.exports = {
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
-      symbolId: 'icon-[name]'
+        symbolId: 'icon-[name]'
       })
-      .end()
+      .end();
   },
 
   // css的处理
@@ -104,7 +104,7 @@ module.exports = {
     extract: IS_PROD,
     // 是否为 CSS 开启 source map。设置为 true 之后可能会影响构建的性能
     sourceMap: false,
-    //向 CSS 相关的 loader 传递选项(支持 css-loader postcss-loader sass-loader less-loader stylus-loader)
+    // 向 CSS 相关的 loader 传递选项(支持 css-loader postcss-loader sass-loader less-loader stylus-loader)
     loaderOptions: {
       css: {},
       less: {}
@@ -116,8 +116,8 @@ module.exports = {
     host: 'localhost',
     port: 8080, // 端口号
     https: false,
-    open: true, //配置自动启动浏览器
-    proxy: 'http://127.0.0.1:8000',
+    open: true, // 配置自动启动浏览器
+    proxy: 'http://127.0.0.1:8000'
     // proxy: 'http://81.69.255.188:8000',
     // 配置多个代理
     // proxy: {
@@ -140,4 +140,4 @@ module.exports = {
 
   // 可以用来传递任何第三方插件选项
   pluginOptions: {}
-}
+};

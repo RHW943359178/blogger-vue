@@ -56,10 +56,10 @@
             <div class="category_body">
               <div class="body_left">
                 <el-collapse >
-                  <el-collapse-item 
-                    v-for="(item, index) in articleList_common" 
-                    :key="index" 
-                    :title="item.showName + ' ' + '[' +  item.articleList.length + ']'" 
+                  <el-collapse-item
+                    v-for="(item, index) in articleList_common"
+                    :key="index"
+                    :title="item.showName + ' ' + '[' +  item.articleList.length + ']'"
                     :name="item.index">
                     <div class="detail">
                       <p :class="{'active': it.articleId === currentArticle}" v-for="(it, idx) in item.articleList" :key="idx" @click="articleChange(it)">{{ it.title }}</p>
@@ -165,16 +165,16 @@ export default {
     mavonEditor,
     ArticleSaveBox
   },
-  data() {
+  data () {
     return {
       //  当前选中的类目
       currentCategory: 1,
       //  当前选中的文章
       currentArticle: '',
       categoryList: [
-        {id: 1, label: '分类', icon: 'category.png'},
-        {id: 2, label: '时间', icon: 'dateTime.png'},
-        {id: 3, label: '专题', icon: 'zhuanti.png'},
+        { id: 1, label: '分类', icon: 'category.png' },
+        { id: 2, label: '时间', icon: 'dateTime.png' },
+        { id: 3, label: '专题', icon: 'zhuanti.png' }
       ],
       //  所有文章列表
       articleList: [],
@@ -194,8 +194,8 @@ export default {
       subjects: [],
       //  文章信息
       openFlags: [
-        {key: 1, text: '公开'},
-        {key: 2, text: '不公开'},
+        { key: 1, text: '公开' },
+        { key: 2, text: '不公开' }
       ],
       //  头像地址
       imageUrl: '',
@@ -203,7 +203,7 @@ export default {
         // content: '',  // 文章正文
         // contentLength: 0, //  文章长度
       },
-      editFlag: false,  //  是否为编辑模式
+      editFlag: false, //  是否为编辑模式
       mavonEditorOption: common.mavonEditorOption(),
       //  dialog框显示内容
       dialog: {
@@ -214,9 +214,9 @@ export default {
           category: '',
           openFlag: 1,
           radio: 0,
-          subject: '',
+          subject: ''
         }
-      },
+      }
       //  表单验证规则
       // rules: {
       //   title: [
@@ -229,7 +229,7 @@ export default {
       // }
     }
   },
-  mounted() {
+  mounted () {
     if (localStorage.getItem('userIcon')) {
       this.imageUrl = '/static/' + localStorage.getItem('userIcon')
     }
@@ -237,19 +237,19 @@ export default {
     this.getAllSubjects()
   },
   watch: {
-    editFlag: function(val) {
+    editFlag: function (val) {
       if (val) {
         this.mavonEditorOption = {
-          subfield: true,// 单双栏模式
-          defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
+          subfield: true, // 单双栏模式
+          defaultOpen: 'preview', // edit： 默认展示编辑区域 ， preview： 默认展示预览区域
           editable: true,
           toolbarsFlag: true,
           scrollStyle: true
         }
       } else {
         this.mavonEditorOption = {
-          subfield: false,// 单双栏模式
-          defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域 
+          subfield: false, // 单双栏模式
+          defaultOpen: 'preview', // edit： 默认展示编辑区域 ， preview： 默认展示预览区域
           editable: false,
           toolbarsFlag: false,
           scrollStyle: true
@@ -257,28 +257,28 @@ export default {
       }
     },
     //  通过 watch 检测内容变化并写进 localStorage
-    editorContent: function(val) {
+    editorContent: function (val) {
       localStorage.setItem('bloggerContent', val)
     }
   },
   computed: {
     //  用户的文章信息（文章篇数和总字数）
-    userArticle() { 
+    userArticle () {
       return this.$store.state.user.userArticle
     },
-    uploadUrl() {
+    uploadUrl () {
       return 'http://localhost:8080/blogger/user/icon/upload'
     },
-    editorContent() {
+    editorContent () {
       return this.articleInfo.content
     }
   },
   methods: {
     //  切换分类、时间和专题
-    articleTypeChange() {
+    articleTypeChange () {
     },
     // 获取全部分类列表
-    handleGetAllCategory() {
+    handleGetAllCategory () {
       HOME.handleGetAllCategory().then(result => {
         if (result && result.code == 200) {
           this.categories = result.data
@@ -288,7 +288,7 @@ export default {
       })
     },
     //  获取所有专题列表
-    getAllSubjects() {
+    getAllSubjects () {
       HOME.getAllSubjects({}).then(result => {
         if (result && result.code == 200) {
           this.subjects = result.data
@@ -296,12 +296,12 @@ export default {
       })
     },
     //  切换类目
-    categoryChange(item) {
+    categoryChange (item) {
       this.currentCategory = item.id
       this.articleList_common = this.handleArticleData(this.articleList, item.id)
     },
     //  获取该用户所有文章信息
-    getAllArticleByUserId() {
+    getAllArticleByUserId () {
       MY.getArticleList().then(result => {
         if (result && result.code == 200) {
           this.articleList = result.data
@@ -311,15 +311,15 @@ export default {
       })
     },
     //  根据文章id获取具体文章信息
-    getArticleInfoById(id) {
-      let params = {
+    getArticleInfoById (id) {
+      const params = {
         articleId: id
       }
       if (!id) {
-        this.$message({type: 'error', message: '文章id不正确'})
+        this.$message({ type: 'error', message: '文章id不正确' })
         return
       }
-      ARTICLE_DETAIL.getArticleById({params}).then(result => {
+      ARTICLE_DETAIL.getArticleById({ params }).then(result => {
         if (result && result.code == 200) {
           this.articleInfo = result.data
           this.articleInfo.contentLength = this.articleInfo.content.length
@@ -327,24 +327,24 @@ export default {
       })
     },
     //  文章数据处理
-    handleArticleData(data, type) {
+    handleArticleData (data, type) {
       let tmpList = []
       if (type === 1) { //  按照分类排序
         this.currentItem = []
-        let categoryList = []
+        const categoryList = []
         data.forEach(item => {
-          if (tmpList.indexOf(item.categoryId)  === -1 && item.categoryId !== 0) {
+          if (tmpList.indexOf(item.categoryId) === -1 && item.categoryId !== 0) {
             tmpList.push(item.categoryId)
           }
         })
         //  遍历不重复的列表
         tmpList.forEach(item => {
-          categoryList.push({categoryId: item, showName: this.returnCategory(this.categories, item), index: item, articleList: []})
+          categoryList.push({ categoryId: item, showName: this.returnCategory(this.categories, item), index: item, articleList: [] })
         })
         categoryList.forEach(item => {
           data.forEach(it => {
             if (item.categoryId === it.categoryId) {
-              item.articleList.push({title: it.title, articleId: it.id})
+              item.articleList.push({ title: it.title, articleId: it.id })
             }
           })
         })
@@ -353,12 +353,12 @@ export default {
         }
         console.log(categoryList, 123)
         return categoryList
-      } else if (type === 2) {  //  按照时间排序
-        let dateList = []
+      } else if (type === 2) { //  按照时间排序
+        const dateList = []
         data.forEach(item => {
           if (item.createTime) {
             //  处理时间格式，只保存日期
-            let time = this.dateReturn(item.createTime).split(' ')[0]
+            const time = this.dateReturn(item.createTime).split(' ')[0]
             tmpList.push(time.substr(0, time.length - 3))
             // tmpList.push(this.dateReturn(item.createTime).split(' ')[0].subStr(0, ))
           }
@@ -367,19 +367,19 @@ export default {
         tmpList = Array.from(new Set(tmpList))
         //  遍历生成日期数据
         tmpList.forEach(item => {
-          dateList.push({showName: item, index: item, articleList: []})
+          dateList.push({ showName: item, index: item, articleList: [] })
         })
         dateList.forEach(item => {
           data.forEach(it => {
-            let time = this.dateReturn(it.createTime).split(' ')[0]
+            const time = this.dateReturn(it.createTime).split(' ')[0]
             if (item.showName == time.substr(0, time.length - 3)) {
-              item.articleList.push({title: it.title, articleId: it.id})
+              item.articleList.push({ title: it.title, articleId: it.id })
             }
           })
         })
         return dateList
       } else {
-        let subjectList = []
+        const subjectList = []
         data.forEach(item => {
           if (item.subjectId > 0) {
             if (tmpList.indexOf(item.subjectId) === -1) {
@@ -388,12 +388,12 @@ export default {
           }
         })
         tmpList.forEach(item => {
-          subjectList.push({showName: common.returnSubject(this.subjects, item), subjectId: item, index: item, articleList: []})
+          subjectList.push({ showName: common.returnSubject(this.subjects, item), subjectId: item, index: item, articleList: [] })
         })
         subjectList.forEach(item => {
           data.forEach(it => {
             if (item.subjectId == it.subjectId) {
-              item.articleList.push({title: it.title, articleId: it.id})
+              item.articleList.push({ title: it.title, articleId: it.id })
             }
           })
         })
@@ -401,16 +401,16 @@ export default {
       }
     },
     //  返回category中文
-    returnCategory(data, id) {
+    returnCategory (data, id) {
       return common.returnCategory(data, id)
     },
     //  点击文章切换
-    articleChange(val) {
+    articleChange (val) {
       this.currentArticle = val.articleId
       this.getArticleInfoById(val.articleId)
     },
     //  切换编辑状态
-    editStatusChange(val) {
+    editStatusChange (val) {
       if (val === 0) {
         this.editFlag = true
       } else {
@@ -418,7 +418,7 @@ export default {
       }
     },
     //  文章保存
-    articleSave() {
+    articleSave () {
       console.log(this.articleInfo, 'articleinfo')
       this.dialog.form = {
         title: this.articleInfo.title,
@@ -437,8 +437,8 @@ export default {
       // }
     },
     //  dialog框关闭
-    dialogClose() {
-      this.$refs['ruleForm'].resetFields()
+    dialogClose () {
+      this.$refs.ruleForm.resetFields()
       this.dialog.form = {
         title: '',
         summary: '',
@@ -447,7 +447,7 @@ export default {
       }
     },
     //  表格校验
-    submitContent(formname) {
+    submitContent (formname) {
       this.$refs[formname].validate(valid => {
         if (valid) {
           this.save()
@@ -457,8 +457,8 @@ export default {
       })
     },
     //  向数据库保存文章信息
-    save() {
-      let params = {
+    save () {
+      const params = {
         id: this.currentArticle,
         content: this.articleInfo.content,
         summary: this.dialog.form.summary,
@@ -468,7 +468,7 @@ export default {
         subjectId: this.dialog.form.subject
       }
       if (!this.articleInfo.content) {
-        this.$message({type: 'warning', message: '文章内容不可为空'})
+        this.$message({ type: 'warning', message: '文章内容不可为空' })
         return
       }
       if (this.dialog.form.radio) {
@@ -478,7 +478,7 @@ export default {
       }
       MY.updateArticleInfo(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: 'success', message: result.message})
+          this.$message({ type: 'success', message: result.message })
           this.getArticleInfoById(this.currentArticle)
           //  跟新状态分类信息
           // this.getAllArticleByUserId()
@@ -491,9 +491,9 @@ export default {
       })
     },
     //  文章删除
-    articleDelete() {
+    articleDelete () {
       if (!this.currentArticle) {
-        this.$message({type: 'warning', message: '请指定需要删除的文章'})
+        this.$message({ type: 'warning', message: '请指定需要删除的文章' })
         return
       }
       this.$confirm('确定删除该文章吗？', '确定', {
@@ -501,52 +501,52 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let params = {
+        const params = {
           id: this.currentArticle
         }
         MY.deleteArticle(params).then(result => {
           if (result && result.code == 200) {
-            this.$message({type: 'success', message: result.message})
+            this.$message({ type: 'success', message: result.message })
             this.getAllArticleByUserId()
           }
         })
       }).catch(() => {})
     },
     //  文件上传成功
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess (res, file) {
       this.imageUrl = URL.createObjectURL(file.raw)
       //  将数据更新到 localStorage
       localStorage.setItem('userIcon', file.response.data)
     },
     //  文件上传之前钩子
-    beforeAvatarUpload(file) {
-      const isJPG_PNG = (file.type === 'image/jpeg' || file.type === 'image/png');
+    beforeAvatarUpload (file) {
+      const isJPG_PNG = (file.type === 'image/jpeg' || file.type === 'image/png')
 
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG_PNG) {
-        this.$message.warning('上传头像图片只能是 JPG 和 PNG 格式!');
+        this.$message.warning('上传头像图片只能是 JPG 和 PNG 格式!')
       }
       if (!isLt2M) {
-        this.$message.warning('上传头像图片大小不能超过 2MB!');
+        this.$message.warning('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG_PNG && isLt2M;
+      return isJPG_PNG && isLt2M
     },
     //  时间处理
-    dateReturn(time) {
+    dateReturn (time) {
       if (time) {
         return common.timeToDate(time)
       }
     },
     //  获取用户总文章篇数和总字数
-    getArticleFontCount(userId) {
+    getArticleFontCount (userId) {
       if (!userId) {
         return
       }
-      let params = {
+      const params = {
         userId: userId
       }
-      ARTICLE_DETAIL.getArticleFontCount({params}).then(result => {
+      ARTICLE_DETAIL.getArticleFontCount({ params }).then(result => {
         if (result && result.code == 200) {
           //  提交数据到 vuex
           // this.$store.commit('updateUserArticle', result.data)
@@ -556,14 +556,14 @@ export default {
       })
     },
     //  文本编辑器的图片新增
-    imgAdd(pos, file) {
-      let valid = this.beforeAvatarUpload(file)
+    imgAdd (pos, file) {
+      const valid = this.beforeAvatarUpload(file)
       if (valid) {
         // 构建上传参数，将图片上传到服务器.
-        let formdata = new FormData()
+        const formdata = new FormData()
         formdata.append('icon', file)
         MY.uploadPicture(formdata).then(result => {
-          let url =  '/static/' + result.data
+          const url = '/static/' + result.data
           if (result && result.code == 200) {
             //  设置富文本编辑器回显
             this.$refs.md_detail.$imglst2Url([[pos, url]])
@@ -572,8 +572,8 @@ export default {
       }
     },
     //  文本编辑器的图片删除
-    imgDel() {
-    },
+    imgDel () {
+    }
   }
 }
 </script>

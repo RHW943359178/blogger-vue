@@ -42,7 +42,7 @@
 import HOME from '../../api/home'
 export default {
   props: ['dialog', 'flag', 'editorContent'],
-  data() {
+  data () {
     return {
       //  分类列表
       categories: [],
@@ -52,32 +52,32 @@ export default {
       subjectList: [],
       //  文章信息
       openFlags: [
-        {key: 1, text: '公开'},
-        {key: 2, text: '不公开'},
+        { key: 1, text: '公开' },
+        { key: 2, text: '不公开' }
       ],
       currentRadia: 0,
       //  表单验证规则
       rules: {
         title: [
-          { required: true, message: '请输入活动名称', trigger: 'blur'},
-          { max: 50, message: '长度不能超过50个字符', trigger: 'blur'},
+          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { max: 50, message: '长度不能超过50个字符', trigger: 'blur' }
         ],
         category: [
-          { required: true, message: '请选择文章所属分类', trigger: 'change'},
+          { required: true, message: '请选择文章所属分类', trigger: 'change' }
         ],
         subject: [
-          { required: false, message: '请选择文章所属专题', trigger: 'change'},
-        ],
-      },
+          { required: false, message: '请选择文章所属专题', trigger: 'change' }
+        ]
+      }
     }
   },
-  mounted() {
+  mounted () {
     this.handleGetAllCategory()
     this.getAllSubjects()
   },
   methods: {
     //  表格校验
-    submitContent(formname) {
+    submitContent (formname) {
       this.$refs[formname].validate(valid => {
         if (valid) {
           // this.contentSave()
@@ -88,8 +88,8 @@ export default {
       })
     },
     //  dialog框关闭
-    dialogClose() {
-      this.$refs['ruleForm'].resetFields()
+    dialogClose () {
+      this.$refs.ruleForm.resetFields()
       this.categoryDisabled = false
       this.subjectDisabled = true
       this.dialog.form = {
@@ -102,7 +102,7 @@ export default {
       }
     },
     //  dialog 框打开时回调
-    dialogOpen() {
+    dialogOpen () {
       //           if (this.dialog.form.radio) {
       //   this.categoryDisabled = true
       //   this.subjectDisabled = false
@@ -126,7 +126,7 @@ export default {
       }
     },
     //  获取所有分类
-    handleGetAllCategory() {
+    handleGetAllCategory () {
       HOME.handleGetAllCategory().then(result => {
         if (result && result.code == 200) {
           this.categories = result.data
@@ -134,17 +134,17 @@ export default {
       })
     },
     //  获取所有专题列表
-    getAllSubjects() {
+    getAllSubjects () {
       HOME.getAllSubjects({}).then(result => {
         if (result && result.code == 200) {
           this.subjectList = result.data
         }
       })
     },
-    radioChange(val) {
+    radioChange (val) {
       this.currentRadia = val
       //  切换 raido 既移除标题校验结果
-      this.$refs['ruleForm'].clearValidate('title')
+      this.$refs.ruleForm.clearValidate('title')
       if (val) {
         this.categoryDisabled = true
         this.subjectDisabled = false
@@ -152,7 +152,7 @@ export default {
         this.rules.category[0].required = false
         this.rules.subject[0].required = true
         //  移除分类校验结果
-        this.$refs['ruleForm'].clearValidate('category')
+        this.$refs.ruleForm.clearValidate('category')
       } else {
         this.categoryDisabled = false
         this.subjectDisabled = true
@@ -160,18 +160,17 @@ export default {
         this.rules.category[0].required = true
         this.rules.subject[0].required = false
         //  移除主题校验结果
-        this.$refs['ruleForm'].clearValidate('subject')
+        this.$refs.ruleForm.clearValidate('subject')
       }
     }
   },
   computed: {
-    form() {
+    form () {
       return this.dialog.form
     }
   },
   watch: {
-    form: function(newVal, oldVal) {
-      console.log(newVal, 'newVal')
+    form: function (newVal) {
       if (newVal.category == 0 && newVal.subject != 0) {
         this.$set(this.dialog.form, 'radio', 1)
         this.dialog.form.category = ''
@@ -187,14 +186,16 @@ export default {
         this.rules.category[0].required = true
         this.rules.subject[0].required = false
       }
-      
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
+  .el-dialog__header {
+    font-weight: bold;
+  }
   .el-dialog__body {
-    padding: 10px 20px 0 20px;
+    padding: 20px 20px 10px !important;
   }
 </style>

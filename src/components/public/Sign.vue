@@ -78,42 +78,45 @@ export default {
       //  表单数据
       form: {
         username: '', //  昵称
-        email: '',  //  邮箱
-        pwd: '',    //  密码
-        cpwd: '', //    确认密码
+        email: '', //  邮箱
+        pwd: '', //  密码
+        cpwd: '' //    确认密码
       },
       rules1: {
         username: [
-          {required: true, message: '请输入昵称', trigger: 'blur'},
-          {min:2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur'},
-          {validator: (rule, value, callback) => {
+          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { min: 2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur' },
+          {
+            validator: (rule, value, callback) => {
             //  当前为登录操作时不校验
-            if (this.signType() === 1) {
-              return
-            }
-            let params = {
-              condition: this.form.username
-            }
-            //  检查用户名是否存在异步校验
-            USER.handleUsernameValidate({params}).then(result => {
-              if (result && result.code == 200) {
-                if (result.data === 0) {
-                  callback()
-                } else {
-                  callback(new Error('用户名已存在'))
-                }
+              if (this.signType() === 1) {
+                return
               }
-            })
-          }, trigger: "blur"}
+              const params = {
+                condition: this.form.username
+              }
+              //  检查用户名是否存在异步校验
+              USER.handleUsernameValidate({ params }).then(result => {
+                if (result && result.code == 200) {
+                  if (result.data === 0) {
+                    callback()
+                  } else {
+                    callback(new Error('用户名已存在'))
+                  }
+                }
+              })
+            },
+            trigger: 'blur'
+          }
         ],
         email: [
-          {validator: common.validateMailFormat(), trigger: "blur"}
+          { validator: common.validateMailFormat(), trigger: 'blur' }
         ],
         pwd: [
-          {validator: common.validatePwd(), trigger: "blur"}
+          { validator: common.validatePwd(), trigger: 'blur' }
         ],
         cpwd: [
-          {required: true, message: '请输入确认密码', trigger: 'blur'},
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
           {
             validator: (rule, value, callback) => {
               if (value === this.form.pwd) {
@@ -127,26 +130,26 @@ export default {
       },
       rules2: {
         username: [
-          {required: true, message: '请输入昵称', trigger: 'blur'},
-          {min:2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur'},
+          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { min: 2, max: 15, message: '昵称长度在2~15个字符之间', trigger: 'blur' }
         ],
         pwd: [
-          {validator: common.validatePwd(), trigger: "blur"}
+          { validator: common.validatePwd(), trigger: 'blur' }
         ]
       },
       test: 1,
       loginFlag: false,
-      jumpTime: 3,  //  跳转时间
+      jumpTime: 3 //  跳转时间
     }
   },
   computed: {
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {
     //  判断当前路由  1 登录 2 注册
-    signType() {
+    signType () {
       if (this.$route.path === '/blogger/signUp') {
         return 1
       } else {
@@ -154,7 +157,7 @@ export default {
       }
     },
     //  表单验证
-    submitForm(type, formName) {
+    submitForm (type, formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (type === 1) {
@@ -168,19 +171,19 @@ export default {
       })
     },
     //  注册
-    handleSignIn() {
-      let params = {
+    handleSignIn () {
+      const params = {
         username: this.form.username,
         email: this.form.email,
         password: this.form.pwd
       }
       USER.handleUserSave(params).then(result => {
         if (result && result.code == 200) {
-          this.$message({type: 'success', message: result.message})
+          this.$message({ type: 'success', message: result.message })
           //  注册过程中将状态置灰
           this.loginFlag = true
-          let time = setInterval(() => {
-            this.jumpTime --
+          const time = setInterval(() => {
+            this.jumpTime--
             if (this.jumpTime == 0) {
               clearInterval(time)
               //  跳转到登录页
@@ -191,8 +194,8 @@ export default {
       })
     },
     //  登录
-    handleSignUp() {
-      let params = {
+    handleSignUp () {
+      const params = {
         username: this.form.username,
         password: this.form.pwd
       }
@@ -210,7 +213,7 @@ export default {
           //  提交用户信息状态
           this.$store.dispatch('userInfo', result.data.user)
         } else {
-          this.$message({type: 'error', message: result.message})
+          this.$message({ type: 'error', message: result.message })
         }
       })
     }

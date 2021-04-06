@@ -13,20 +13,20 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
 
     }
   },
   computed: {
-    articleTitle() {
+    articleTitle () {
       return this.$store.state.articleDetail.articleTitle
     },
-    authorInfo() {
+    authorInfo () {
       return this.$store.state.articleDetail.authorInfo
     }
   },
-  mounted() {
+  mounted () {
   }
 }
 </script>
