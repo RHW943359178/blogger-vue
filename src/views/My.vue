@@ -230,7 +230,6 @@ export default {
     }
   },
   mounted() {
-    this.getAllArticleByUserId()
     if (localStorage.getItem('userIcon')) {
       this.imageUrl = '/static/' + localStorage.getItem('userIcon')
     }
@@ -284,6 +283,8 @@ export default {
         if (result && result.code == 200) {
           this.categories = result.data
         }
+      }).then(() => {
+        this.getAllArticleByUserId()
       })
     },
     //  获取所有专题列表
@@ -297,11 +298,6 @@ export default {
     //  切换类目
     categoryChange(item) {
       this.currentCategory = item.id
-      // if (item.id === 1 || item.id === 2) {
-      //   this.articleList_common = this.handleArticleData(this.articleList, item.id)
-      // } else {
-      //   this.articleList_common = this.handleArticleData(this.articleList, item.id)
-      // }
       this.articleList_common = this.handleArticleData(this.articleList, item.id)
     },
     //  获取该用户所有文章信息
@@ -311,17 +307,6 @@ export default {
           this.articleList = result.data
           //  按照分类id显示
           this.articleList_common = this.handleArticleData(result.data, 1)
-          //  按照时间显示
-          //  默认打开第一个类目的，第一篇文章
-          // if (this.articleList_category.length) {
-          //   //  当前用户下，第一个类目
-          //   let currentCategoryList = this.articleList_category[0]
-          //   currentCategoryList.flag = true
-          //   if (currentCategoryList.articleList.length) {
-          //     this.currentArticle = currentCategoryList.articleList[0].articleId
-          //     this.getArticleInfoById(this.currentArticle)
-          //   }
-          // }
         }
       })
     },
@@ -366,6 +351,7 @@ export default {
         if (categoryList.length) {
           this.currentItem = categoryList[0]
         }
+        console.log(categoryList, 123)
         return categoryList
       } else if (type === 2) {  //  按照时间排序
         let dateList = []
